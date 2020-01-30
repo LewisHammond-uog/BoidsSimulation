@@ -1,21 +1,34 @@
 
-//OpenGL Headers
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "Scene.h"
 
-//GLM Headers
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+int main()
+{
+    
+	Scene* pScene = Scene::GetInstance();
 
-//STB Headers
-#include <stb/stb_image.h>
+	if (pScene) {
 
-//Assimp Headers
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+		bool bIsInitalised = pScene->Initalise();
 
-int main() {
-	return 0;
+		if (bIsInitalised) {
+
+			bool bKeepRunning = true;
+
+			while (bKeepRunning) {
+				bKeepRunning = pScene->Update();
+				pScene->Render();
+			}
+
+			pScene->DeInitlise();
+		}
+	}
+
+	delete pScene;
+
+
+    return 0;
 }
+
+
+
+
