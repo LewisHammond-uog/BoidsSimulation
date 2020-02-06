@@ -1,5 +1,5 @@
-#ifndef __TRANSFORM_H__
-#define __TRANSFORM_H__
+#ifndef __TRANSFORM_COMPONENT_H__
+#define __TRANSFORM_COMPONENT_H__
 
 //Project Includes
 #include "Component.h"
@@ -15,11 +15,11 @@ enum MATRIX_ROW
 	POSTION_VECTOR
 };
 
-class Transform : public Component
+class TransformComponent : public Component
 {
 public:
-	Transform(Entity* a_pOwner);
-	~Transform();
+	TransformComponent(Entity* a_pOwner);
+	~TransformComponent();
 
 	//To do - remove?
 	//[TO DO] - Shared Function for Update/Draw?
@@ -33,4 +33,4 @@ private:
 	glm::mat4 m_m4EntityMatrix;
 };
 
-#endif // ! __TRANSFORM_H__
+#endif // ! __TRANSFORM_COMPONENT_H__
