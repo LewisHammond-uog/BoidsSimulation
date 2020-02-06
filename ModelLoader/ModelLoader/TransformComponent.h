@@ -26,6 +26,8 @@ public:
 	virtual void Update(float a_fDeltaTime) {};
 	virtual void Draw(Shader* a_pShader) {};
 
+	const glm::mat4& GetEntityMatrix() { return m_m4EntityMatrix; }
+
 private:
 	void SetEntityMatrixRow(MATRIX_ROW a_eRow, glm::vec3 a_v3Vec);
 	glm::vec3 GetEntityMatrixRow(MATRIX_ROW a_eRow);

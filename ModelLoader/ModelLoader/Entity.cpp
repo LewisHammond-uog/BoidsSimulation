@@ -50,6 +50,7 @@ void Entity::Draw(Shader* a_pShader)
 ///Add a component to this entity
 void Entity::AddComponent(Component* a_pComponent)
 {
+	//TO DO DUPLICATE CHECKING
 	m_apComponentList.push_back(a_pComponent);
 }
 
