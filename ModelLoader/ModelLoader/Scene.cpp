@@ -189,7 +189,15 @@ void Scene::DeInitlise() {
 	delete m_pNanoSuitModel;
 	delete ourShader;
 
-	//TO DO - DELETE ENTITY
+	//Delete entity
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+	for (xIter = Entity::GetEntityList().begin(); xIter != Entity::GetEntityList().end(); ++xIter)
+	{
+		Entity* pEntity = xIter->second;
+		if (pEntity) {
+			delete pEntity;
+		}
+	}
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------

@@ -17,6 +17,7 @@ Entity::Entity()
 
 Entity::~Entity()
 {
+	//TO DO DESTROY ALL COMPONENTS
 }
 
 ///Update this entity
