@@ -11,9 +11,16 @@
 
 #include <iostream>
 
+//Project Includes
+#include "Entity.h"
+#include "TransformComponent.h"
+#include "ModelComponent.h"
+
 //Screen Size Settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 800;
+
+const unsigned int BOID_COUINT = 5;
 
 Scene* Scene::s_pSceneInstance = nullptr;
 
@@ -84,10 +91,31 @@ bool Scene::Initalise() {
 
 	// load models
 	// -----------
-	ourModel = new Model("models/nanosuit/nanosuit.obj");
+	m_pNanoSuitModel = new Model("models/nanosuit/nanosuit.obj");
 
 	//Init Camera
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 1.0f));
+
+	//Seed RNG
+	srand(time(nullptr));
+
+	//Create entities
+	for (int i = 0; i < BOID_COUINT; i++) {
+		Entity* pEntity = new Entity();
+
+		//Transform Component
+		TransformComponent* pTransform = new TransformComponent(pEntity);
+		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(RandomBetweenRange(0, 2), 
+																			RandomBetweenRange(0, 2),
+																			RandomBetweenRange(0, 2)));
+		pEntity->AddComponent(pTransform);
+
+		//Model Component
+		ModelComponent* pModel = new ModelComponent(pEntity);
+		pModel->SetModel(m_pNanoSuitModel);
+		pModel->SetScale(0.02f);
+		pEntity->AddComponent(pModel);
+	}
 
 	return true;
 }
@@ -104,6 +132,16 @@ bool Scene::Update() {
 	// -----
 	camera->processInput(window, deltaTime);
 
+	//Update Boids
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+	for (xIter = Entity::GetEntityList().begin(); xIter != Entity::GetEntityList().end(); ++xIter) 
+	{
+		Entity* pEntity = xIter->second;
+		if (pEntity) {
+			pEntity->Update(deltaTime);
+		}
+	}
+
 	//return if we should keep running
 	return !glfwWindowShouldClose(window);
 }
@@ -111,10 +149,10 @@ bool Scene::Update() {
 void Scene::Render() {
 
 	// render
-	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (!ourShader || !ourModel) {
+	if (!ourShader || !m_pNanoSuitModel) {
 		return;
 	}
 
@@ -127,12 +165,15 @@ void Scene::Render() {
 	ourShader->setMat4("projection", projection);
 	ourShader->setMat4("view", view);
 
-	// render the loaded model
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-	ourShader->setMat4("model", model);
-	ourModel->Draw(*ourShader);
+	//Draw Boids
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+	for (xIter = Entity::GetEntityList().begin(); xIter != Entity::GetEntityList().end(); ++xIter)
+	{
+		Entity* pEntity = xIter->second;
+		if (pEntity) {
+			pEntity->Draw(ourShader);
+		}
+	};
 
 
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -145,8 +186,10 @@ void Scene::Render() {
 void Scene::DeInitlise() {
 
 	delete camera;
-	delete ourModel;
+	delete m_pNanoSuitModel;
 	delete ourShader;
+
+	//TO DO - DELETE ENTITY
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
@@ -200,4 +243,9 @@ void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	}
 
 	pScene->camera->ProcessMouseScroll(yoffset);
+}
+
+int Scene::RandomBetweenRange(int fLower, int fUpper)
+{
+	return (rand() % (glm::abs(fLower - fUpper)) + fLower);
 }

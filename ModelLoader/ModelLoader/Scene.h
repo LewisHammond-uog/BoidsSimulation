@@ -27,10 +27,13 @@ private:
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+	//TO DO REMOVE
+	int RandomBetweenRange(int fLower, int fUpper);
+
 	GLFWwindow* window;
 	Camera* camera;
 	Shader* ourShader;
-	Model* ourModel;
+	Model* m_pNanoSuitModel;
 
 	//TO DO CODING STANDARS
 	float lastX;
