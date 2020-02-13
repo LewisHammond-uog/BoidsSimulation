@@ -28,7 +28,8 @@ public:
 
 	const glm::mat4& GetEntityMatrix() { return m_m4EntityMatrix; }
 
-	//TO DO SET CURRENT POSITION FUCTION
+	//TODO SET CURRENT POSITION FUCTION
+	//TODO SET ENTIRE MATRX FUNCTION
 	void SetEntityMatrixRow(MATRIX_ROW a_eRow, glm::vec3 a_v3Vec);
 	glm::vec3 GetEntityMatrixRow(MATRIX_ROW a_eRow);
 

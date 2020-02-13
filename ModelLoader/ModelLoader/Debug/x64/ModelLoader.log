@@ -1,12 +1,2 @@
-﻿  Scene.cpp
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267:  'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(100,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(127,21): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(220,19): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(221,19): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(225,16): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(226,16): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(228,18): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(229,18): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(245,37): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
+﻿  BrainComponent.cpp
   ModelLoader.vcxproj -> N:\GitHub\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\\Debug\x64\ModelLoader.exe

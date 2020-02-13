@@ -29,6 +29,7 @@ private:
 
 	//TO DO REMOVE
 	int RandomBetweenRange(int fLower, int fUpper);
+	float RandomBetweenRange(float fLower, float fUpper);
 
 	GLFWwindow* window;
 	Camera* camera;

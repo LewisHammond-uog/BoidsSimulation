@@ -15,12 +15,13 @@
 #include "Entity.h"
 #include "TransformComponent.h"
 #include "ModelComponent.h"
+#include "BrainComponent.h"
 
 //Screen Size Settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 800;
 
-const unsigned int BOID_COUINT = 5;
+const unsigned int BOID_COUINT = 25;
 
 Scene* Scene::s_pSceneInstance = nullptr;
 
@@ -94,7 +95,7 @@ bool Scene::Initalise() {
 	m_pNanoSuitModel = new Model("models/nanosuit/nanosuit.obj");
 
 	//Init Camera
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 1.0f));
+	camera = new Camera(glm::vec3(0.0f, 1.2f, 4.0f));
 
 	//Seed RNG
 	srand(time(nullptr));
@@ -105,9 +106,9 @@ bool Scene::Initalise() {
 
 		//Transform Component
 		TransformComponent* pTransform = new TransformComponent(pEntity);
-		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(RandomBetweenRange(0, 2), 
-																			RandomBetweenRange(0, 2),
-																			RandomBetweenRange(0, 2)));
+		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(RandomBetweenRange(0.f, 2.f), 
+																			0.f,
+																			RandomBetweenRange(0.f, 2.f)));
 		pEntity->AddComponent(pTransform);
 
 		//Model Component
@@ -115,6 +116,11 @@ bool Scene::Initalise() {
 		pModel->SetModel(m_pNanoSuitModel);
 		pModel->SetScale(0.02f);
 		pEntity->AddComponent(pModel);
+
+		//Brain Component
+		BrainComponent* pBrain = new BrainComponent(pEntity);
+		pEntity->AddComponent(pBrain);
+		
 	}
 
 	return true;
@@ -256,4 +262,9 @@ void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 int Scene::RandomBetweenRange(int fLower, int fUpper)
 {
 	return (rand() % (glm::abs(fLower - fUpper)) + fLower);
+}
+
+float Scene::RandomBetweenRange(float fLower, float fUpper)
+{
+	return fLower + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (fUpper - fLower)));
 }
