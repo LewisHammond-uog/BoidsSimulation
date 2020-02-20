@@ -24,7 +24,9 @@ public:
 	void AddComponent(Component* a_pComponent);
 	Component* GetComponent(COMPONENT_TYPE a_eComponentType) const;
 
-	static const std::map<const unsigned int, Entity*>& GetEntityList() { return s_xEntityList; }
+	unsigned int GetEntityID() const { return m_uEntityID; }
+
+	static const std::map<const unsigned int, Entity*>& GetEntityMap() { return s_xEntityList; }
 
 private:
 	unsigned int m_uEntityID;

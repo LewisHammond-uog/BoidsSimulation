@@ -38,7 +38,7 @@ void Entity::Update(float a_fDeltaTime)
 void Entity::Draw(Shader* a_pShader)
 {
 	//Loop through all of the components and draw
-	std::vector<Component*>::iterator xIter;
+	std::vector<Component*>::const_iterator xIter;
 	for (xIter = m_apComponentList.begin(); xIter < m_apComponentList.end(); ++xIter)
 	{
 		Component* pComponent = *xIter;
@@ -51,7 +51,7 @@ void Entity::Draw(Shader* a_pShader)
 ///Add a component to this entity
 void Entity::AddComponent(Component* a_pComponent)
 {
-	//TO DO DUPLICATE CHECKING
+	//TODO DUPLICATE CHECKING
 	m_apComponentList.push_back(a_pComponent);
 }
 

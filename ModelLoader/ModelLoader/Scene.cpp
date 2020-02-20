@@ -106,9 +106,9 @@ bool Scene::Initalise() {
 
 		//Transform Component
 		TransformComponent* pTransform = new TransformComponent(pEntity);
-		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(RandomBetweenRange(0.f, 2.f), 
+		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(RandomBetweenRange(-5.0f, 5.0f), 
 																			0.f,
-																			RandomBetweenRange(0.f, 2.f)));
+																			RandomBetweenRange(-5.0f, 5.0f)));
 		pEntity->AddComponent(pTransform);
 
 		//Model Component
@@ -140,7 +140,7 @@ bool Scene::Update() {
 
 	//Update Boids
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
-	for (xIter = Entity::GetEntityList().begin(); xIter != Entity::GetEntityList().end(); ++xIter) 
+	for (xIter = Entity::GetEntityMap().begin(); xIter != Entity::GetEntityMap().end(); ++xIter) 
 	{
 		Entity* pEntity = xIter->second;
 		if (pEntity) {
@@ -173,7 +173,7 @@ void Scene::Render() {
 
 	//Draw Boids
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
-	for (xIter = Entity::GetEntityList().begin(); xIter != Entity::GetEntityList().end(); ++xIter)
+	for (xIter = Entity::GetEntityMap().begin(); xIter != Entity::GetEntityMap().end(); ++xIter)
 	{
 		Entity* pEntity = xIter->second;
 		if (pEntity) {
@@ -197,7 +197,7 @@ void Scene::DeInitlise() {
 
 	//Delete entity
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
-	for (xIter = Entity::GetEntityList().begin(); xIter != Entity::GetEntityList().end(); ++xIter)
+	for (xIter = Entity::GetEntityMap().begin(); xIter != Entity::GetEntityMap().end(); ++xIter)
 	{
 		Entity* pEntity = xIter->second;
 		if (pEntity) {

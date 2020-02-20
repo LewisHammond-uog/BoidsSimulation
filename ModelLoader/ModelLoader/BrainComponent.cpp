@@ -5,11 +5,13 @@
 #include "TransformComponent.h"
 
 //Constants
-static const float cfSPEED = 2.0f;
+const float fMAX_SPEED = 5.0f;
+const float fMAX_FORCE = 0.2f;
+const float fNEIGHBOURHOOD_RADIUS = 5.0f;
 
-static const float fCIRCLE_FORWARD_MUTIPLIER = 1.f; //How far forward to draw the sphere
-static const float fJITTER = 0.5f; //How much to move from the point on the spehre
-static const float fWANDER_RADIUS = 4.0f; //How large the sphere is
+const float fCIRCLE_FORWARD_MUTIPLIER = 1.f; //How far forward to draw the sphere
+const float fJITTER = 0.5f; //How much to move from the point on the spehre
+const float fWANDER_RADIUS = 4.0f; //How large the sphere is
 
 BrainComponent::BrainComponent(Entity* a_pOwner)
 	: Component(a_pOwner),
@@ -38,30 +40,30 @@ void BrainComponent::Update(float a_fDeltaTime)
 	glm::vec3 v3CurrentPos = pTransform->GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
 
 	//Calcualte forces
+	///////////////////////////////////////////////////////////
 	glm::vec3 v3NewForce(0.0f);
-	//Seek
-	//v3NewForce = CalculateSeekForce(glm::vec3(4.0f, 0.0f, 4.0f), v3CurrentPos);
-	//Flee
-	//v3NewForce = CalculateFleeForce(glm::vec3(4.0f, 0.0f, 4.0f), v3CurrentPos);
-	//Wander
-	v3NewForce = CalculateWanderForce(v3Forward, v3CurrentPos);
+
+	//glm::vec3 v3SeperationForce = CalculateSeperationForce();
+	glm::vec3 v3AlignmentForce = CalculateAlignmentForce();
+	glm::vec3 v3CohensionForce = CalculateCohensionForce();
+
+	v3NewForce = v3CohensionForce + v3AlignmentForce;
+
+	///////////////////////////////////////////////////////////
 
 	//Apply Force
 	m_v3CurrentVelocity += v3NewForce;
 
 	//Clamp Velocity
 	//TODO Make this not use magic numbers
-	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, glm::vec3(-10.0f, 0.0f, -10.0f), glm::vec3(10.0f, 0.0f, 10.0f));
+	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, glm::vec3(-fMAX_FORCE, -fMAX_FORCE, -fMAX_FORCE), glm::vec3(fMAX_FORCE, fMAX_FORCE, fMAX_FORCE));
 
 	//Apply Velocity to Position
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	
 	//Recalculate matrix rows - only normalise if not a zero vector
-	v3Forward = m_v3CurrentVelocity;
-	if (glm::length(v3Forward) > 0.0f) {
-		v3Forward = glm::normalize(v3Forward);
-	}
-
+	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize( m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
+	
 	//TODO make this calculate rather than what it currently is
 	glm::vec3 v3Up = pTransform->GetEntityMatrixRow(UP_VECTOR);
 	glm::vec3 v3Right = glm::cross(v3Up, v3Forward);
@@ -86,7 +88,7 @@ glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& v3Target, const gl
 	}
 
 	//Calc New Velocity
-	glm::vec3 v3NewVelocity = v3TargetDir * cfSPEED;
+	glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
@@ -105,7 +107,7 @@ glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& v3Target, const gl
 	}
 
 	//Calc New Velocity
-	glm::vec3 v3NewVelocity = v3TargetDir * cfSPEED;
+	glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
@@ -137,4 +139,189 @@ glm::vec3 BrainComponent::CalculateWanderForce(const glm::vec3& v3Forward, const
 	m_v3WanderPoint += glm::sphericalRand(fJITTER);
 
 	return CalculateSeekForce(m_v3WanderPoint, v3CurrentPos);
+}
+
+//TODO - Make nicer (i.e more generic code) - All in 1 funct?
+glm::vec3 BrainComponent::CalculateSeperationForce()
+{
+	//Init Values
+	glm::vec3 v3SeperationVelocity(0.0f);
+	unsigned int uNeightbourCount = 0;
+
+	//Check that we have an owner entity
+	if (!GetOwnerEntity()) {
+		return glm::vec3();
+	}
+
+	//Get the transform
+	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+	if (!pLocalTransform) {
+		return glm::vec3();
+	}
+
+	glm::vec3 v3LocalPos = pLocalTransform->GetEntityMatrixRow(POSTION_VECTOR);
+
+	//Itterate over every entity in the scene
+	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter) 
+	{
+		//Current Entity
+		const Entity* pTarget = xIter->second;
+		if (!pTarget) {
+			continue;
+		}
+
+		//Check that the entity we have is not the owner of this brain component
+		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
+			continue;
+		}
+
+		
+		//Find the distance between this entity and the target entity
+		TransformComponent* pTargetTransform = static_cast<TransformComponent*>(pTarget->GetComponent(COMPONENT_TYPE::TRANSFORM)); //TODO Make this Nicer
+		if (!pTargetTransform) {
+			continue;
+		}
+		
+		glm::vec3 v3TargetPos = pTargetTransform->GetEntityMatrixRow(POSTION_VECTOR);
+		float fDistance = glm::length(v3TargetPos - v3LocalPos);
+
+		//Check that object is within checking range and add velocity
+		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
+			v3SeperationVelocity += v3LocalPos - v3TargetPos;
+			uNeightbourCount++;
+		}
+	}
+
+	if (glm::length(v3SeperationVelocity) > 0) {
+		v3SeperationVelocity /= uNeightbourCount;
+		v3SeperationVelocity = glm::normalize(v3SeperationVelocity);
+	}
+
+	return v3SeperationVelocity;
+}
+
+//TODO - Make nicer (i.e more generic code) - All in 1 funct?
+glm::vec3 BrainComponent::CalculateAlignmentForce()
+{
+	//Init Values
+	glm::vec3 v3AlignmentVelocity(0.0f);//TODO Vec3 for average position? seperate from this?
+	unsigned int uNeightbourCount = 0;
+
+	//Check that we have an owner entity
+	if (!GetOwnerEntity()) {
+		return glm::vec3();
+	}
+
+	//Get the transform
+	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+	if (!pLocalTransform) {
+		return glm::vec3();
+	}
+
+	glm::vec3 v3LocalPos = pLocalTransform->GetEntityMatrixRow(POSTION_VECTOR);
+
+	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
+	//Itterate over every entity in the scene
+	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
+	{
+		//Current Entity
+		const Entity* pTarget = xIter->second;
+		if (!pTarget) {
+			continue;
+		}
+
+		//Check that the entity we have is not the owner of this brain component
+		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
+			continue;
+		}
+
+
+		//Find the distance between this entity and the target entity
+		TransformComponent* pTargetTransform = static_cast<TransformComponent*>(pTarget->GetComponent(COMPONENT_TYPE::TRANSFORM)); //TODO Make this Nicer
+		BrainComponent* pTargetBrain = static_cast<BrainComponent*>(pTarget->GetComponent(COMPONENT_TYPE::BRAIN));
+		if (!pTargetTransform) {
+			continue;
+		}
+
+		glm::vec3 v3TargetPos = pTargetTransform->GetEntityMatrixRow(POSTION_VECTOR);
+		float fDistance = glm::length(v3TargetPos - v3LocalPos);
+
+		//Check that object is within checking range and add velocity
+		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
+			v3AlignmentVelocity += pTargetBrain->GetCurrentVelocity();
+			uNeightbourCount++;
+		}
+	}
+
+	if (glm::length(v3AlignmentVelocity) > 0) {
+		v3AlignmentVelocity /= uNeightbourCount;
+		v3AlignmentVelocity = glm::normalize(v3AlignmentVelocity);
+	}
+
+	return v3AlignmentVelocity;
+}
+
+glm::vec3 BrainComponent::CalculateCohensionForce()
+{
+	//Init Values
+	glm::vec3 v3CohesionVelocity(0.0f);
+	unsigned int uNeightbourCount = 0;
+
+	//Check that we have an owner entity
+	if (!GetOwnerEntity()) {
+		return glm::vec3();
+	}
+
+	//Get the transform
+	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+	if (!pLocalTransform) {
+		return glm::vec3();
+	}
+
+	glm::vec3 v3LocalPos = pLocalTransform->GetEntityMatrixRow(POSTION_VECTOR);
+
+	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
+	//Itterate over every entity in the scene
+	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
+	{
+		//Current Entity
+		const Entity* pTarget = xIter->second;
+		if (!pTarget) {
+			continue;
+		}
+
+		//Check that the entity we have is not the owner of this brain component
+		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
+			continue;
+		}
+
+
+		//Find the distance between this entity and the target entity
+		TransformComponent* pTargetTransform = static_cast<TransformComponent*>(pTarget->GetComponent(COMPONENT_TYPE::TRANSFORM)); //TODO Make this Nicer
+		if (!pTargetTransform) {
+			continue;
+		}
+
+		glm::vec3 v3TargetPos = pTargetTransform->GetEntityMatrixRow(POSTION_VECTOR);
+		float fDistance = glm::length(v3TargetPos - v3LocalPos);
+
+		//Check that object is within checking range and add velocity
+		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
+			v3CohesionVelocity += v3TargetPos;
+			uNeightbourCount++;
+		}
+	}
+
+	if (glm::length(v3CohesionVelocity) > 0) {
+		v3CohesionVelocity /= uNeightbourCount;
+		v3CohesionVelocity = glm::normalize(v3CohesionVelocity - v3LocalPos);
+	}
+
+	return v3CohesionVelocity;
 }
