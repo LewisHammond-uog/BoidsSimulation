@@ -27,23 +27,25 @@ private:
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-	//TO DO REMOVE
+	//TODO REMOVE
 	int RandomBetweenRange(int fLower, int fUpper);
 	float RandomBetweenRange(float fLower, float fUpper);
 
-	GLFWwindow* window;
-	Camera* camera;
-	Shader* ourShader;
+	GLFWwindow* m_window;
+	Camera* m_camera;
+	Shader* m_ourShader;
 	Model* m_pNanoSuitModel;
 
-	//TO DO CODING STANDARS
-	float lastX;
-	float lastY;
-	bool firstMouse;
-	float deltaTime;
-	float lastFrame;
+	//Mouse Info
+	float m_fLastX; //Last X Position of the mouse
+	float m_fLastY; //Last Y Position of the mouse
+	bool m_bFirstMouse; //If this is the first time that we are geting mouse info
 
+	//Frame Time Info
+	float m_fDeltaTime; //Time that the last frame took to render
+	float m_fLastFrameTime; //The real time that the last frame started at
 
+	
 	static Scene* s_pSceneInstance; //Single instance of this scene;
 };
 

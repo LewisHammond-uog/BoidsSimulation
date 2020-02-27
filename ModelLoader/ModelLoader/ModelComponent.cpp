@@ -28,7 +28,6 @@ void ModelComponent::Draw(Shader* a_pShader)
 {
 	//Null Check shader
 	if (!a_pShader) {
-		//TO DO ERROR OUT
 		return;
 	}
 

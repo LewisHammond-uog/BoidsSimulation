@@ -21,17 +21,13 @@ public:
 	TransformComponent(Entity* a_pOwner);
 	~TransformComponent();
 
-	//To do - remove?
-	//[TO DO] - Shared Function for Update/Draw?
 	virtual void Update(float a_fDeltaTime) {};
 	virtual void Draw(Shader* a_pShader) {};
 
 	const glm::mat4& GetEntityMatrix() { return m_m4EntityMatrix; }
-
-	//TODO SET CURRENT POSITION FUCTION
-	//TODO SET ENTIRE MATRX FUNCTION
 	void SetEntityMatrixRow(MATRIX_ROW a_eRow, glm::vec3 a_v3Vec);
 	glm::vec3 GetEntityMatrixRow(MATRIX_ROW a_eRow);
+	glm::vec3 GetCurrentPosition();
 
 private:
 	glm::mat4 m_m4EntityMatrix;

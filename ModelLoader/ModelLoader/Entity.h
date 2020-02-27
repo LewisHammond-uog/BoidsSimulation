@@ -26,7 +26,7 @@ public:
 
 	unsigned int GetEntityID() const { return m_uEntityID; }
 
-	static const std::map<const unsigned int, Entity*>& GetEntityMap() { return s_xEntityList; }
+	static const std::map<const unsigned int, Entity*>& GetEntityMap() { return s_xEntityMap; }
 
 private:
 	unsigned int m_uEntityID;
@@ -34,7 +34,7 @@ private:
 
 
 	static unsigned int s_uEntityCount;
-	static std::map<const unsigned int, Entity*> s_xEntityList;
+	static std::map<const unsigned int, Entity*> s_xEntityMap;
 };
 
 #endif // ! __ENTITY_H__

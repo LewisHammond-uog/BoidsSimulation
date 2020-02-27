@@ -5,19 +5,33 @@ typedef std::pair<const unsigned int, Entity*> EntityPair;
 
 //Initalise Statics
 unsigned int Entity::s_uEntityCount = 0;
-std::map<const unsigned int, Entity*> Entity::s_xEntityList;
+std::map<const unsigned int, Entity*> Entity::s_xEntityMap;
 
 Entity::Entity()
 {
 	//Increment entity count and add to entity list
 	m_uEntityID = s_uEntityCount++;
-	s_xEntityList.insert(EntityPair(m_uEntityID, this));
+	s_xEntityMap.insert(EntityPair(m_uEntityID, this));
 	
 }
 
 Entity::~Entity()
 {
-	//TO DO DESTROY ALL COMPONENTS
+	//Loop all of the components that this object owns and delete
+	//them
+	std::vector<Component*>::const_iterator xIter;
+	for (xIter = m_apComponentList.begin(); xIter < m_apComponentList.end(); ++xIter) {
+		Component* currentComponent = *xIter;
+		if (currentComponent != nullptr) {
+			delete currentComponent;
+		}
+	}
+
+	//Remove this entity from the entity map and
+	//reduce entity count
+	//TODO - Check that the entity is in the list?
+	--s_uEntityCount;
+	s_xEntityMap.erase(m_uEntityID);
 }
 
 ///Update this entity
@@ -51,7 +65,13 @@ void Entity::Draw(Shader* a_pShader)
 ///Add a component to this entity
 void Entity::AddComponent(Component* a_pComponent)
 {
-	//TODO DUPLICATE CHECKING
+	//If we already have a component of the type we are trying
+	//to add then early out
+	if (GetComponent(a_pComponent->GetComponentType()) != nullptr) {
+		return;
+	}
+
+	//Add component to our component list
 	m_apComponentList.push_back(a_pComponent);
 }
 

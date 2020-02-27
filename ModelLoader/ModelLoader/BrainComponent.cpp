@@ -37,7 +37,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 
 	//Get vectors for calculation
 	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
-	glm::vec3 v3CurrentPos = pTransform->GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
+	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();;
 
 	//Calcualte forces
 	///////////////////////////////////////////////////////////
@@ -55,7 +55,6 @@ void BrainComponent::Update(float a_fDeltaTime)
 	m_v3CurrentVelocity += v3NewForce;
 
 	//Clamp Velocity
-	//TODO Make this not use magic numbers
 	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, glm::vec3(-fMAX_FORCE, -fMAX_FORCE, -fMAX_FORCE), glm::vec3(fMAX_FORCE, fMAX_FORCE, fMAX_FORCE));
 
 	//Apply Velocity to Position
@@ -159,7 +158,7 @@ glm::vec3 BrainComponent::CalculateSeperationForce()
 		return glm::vec3();
 	}
 
-	glm::vec3 v3LocalPos = pLocalTransform->GetEntityMatrixRow(POSTION_VECTOR);
+	glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
 
 	//Itterate over every entity in the scene
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
@@ -184,7 +183,7 @@ glm::vec3 BrainComponent::CalculateSeperationForce()
 			continue;
 		}
 		
-		glm::vec3 v3TargetPos = pTargetTransform->GetEntityMatrixRow(POSTION_VECTOR);
+		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
 		float fDistance = glm::length(v3TargetPos - v3LocalPos);
 
 		//Check that object is within checking range and add velocity
@@ -220,7 +219,7 @@ glm::vec3 BrainComponent::CalculateAlignmentForce()
 		return glm::vec3();
 	}
 
-	glm::vec3 v3LocalPos = pLocalTransform->GetEntityMatrixRow(POSTION_VECTOR);
+	glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
 
 	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
 	//Itterate over every entity in the scene
@@ -247,7 +246,7 @@ glm::vec3 BrainComponent::CalculateAlignmentForce()
 			continue;
 		}
 
-		glm::vec3 v3TargetPos = pTargetTransform->GetEntityMatrixRow(POSTION_VECTOR);
+		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
 		float fDistance = glm::length(v3TargetPos - v3LocalPos);
 
 		//Check that object is within checking range and add velocity
@@ -282,7 +281,7 @@ glm::vec3 BrainComponent::CalculateCohensionForce()
 		return glm::vec3();
 	}
 
-	glm::vec3 v3LocalPos = pLocalTransform->GetEntityMatrixRow(POSTION_VECTOR);
+	glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
 
 	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
 	//Itterate over every entity in the scene
@@ -308,7 +307,7 @@ glm::vec3 BrainComponent::CalculateCohensionForce()
 			continue;
 		}
 
-		glm::vec3 v3TargetPos = pTargetTransform->GetEntityMatrixRow(POSTION_VECTOR);
+		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
 		float fDistance = glm::length(v3TargetPos - v3LocalPos);
 
 		//Check that object is within checking range and add velocity
