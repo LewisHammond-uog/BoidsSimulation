@@ -39,3 +39,29 @@ glm::vec3 TransformComponent::GetCurrentPosition()
 {
 	return GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
 }
+
+
+void TransformComponent::Orthogonalize()
+{
+	//Get the forward and up of the input vector
+	glm::vec3 inputFWD = GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+	glm::vec3 inputUP = GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
+
+	//Get the dot product of the forwards and up vector
+	float fwdUpDot = glm::dot(inputFWD, inputUP);
+
+	//Calculate the real up vector of the the matrix
+	//upAxis = inputUp * (inputFWD - fwdUpDot)
+	glm::vec3 realUp = inputUP * (inputFWD - fwdUpDot);
+	realUp = glm::length(realUp) != 0.f ? realUp : glm::vec3(0.f, 1.f, 0.f);
+
+	//Get the right vector as the cross product of the 
+	//realUp and inputFwd
+	glm::vec3 realRight = glm::cross(realUp, inputFWD);
+	realRight = glm::length(realRight) != 0.f ? realRight : glm::vec3(1.f, 0.f, 0.f);
+
+	//Set new Real Right and Forward Values
+	SetEntityMatrixRow(MATRIX_ROW::UP_VECTOR, realUp); //Set Real UP
+	SetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR, realRight);
+
+}
