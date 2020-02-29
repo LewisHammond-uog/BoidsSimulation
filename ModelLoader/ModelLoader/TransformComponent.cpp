@@ -52,13 +52,13 @@ void TransformComponent::Orthogonalize()
 
 	//Calculate the real up vector of the the matrix
 	//upAxis = inputUp * (inputFWD - fwdUpDot)
-	glm::vec3 realUp = inputUP * (inputFWD - fwdUpDot);
-	realUp = glm::length(realUp) != 0.f ? realUp : glm::vec3(0.f, 1.f, 0.f);
+	glm::vec3 realUp = inputUP - (inputFWD * fwdUpDot);
+	realUp = glm::length(realUp) != 0.f ? glm::normalize(realUp) : glm::vec3(0.f, 1.f, 0.f);
 
 	//Get the right vector as the cross product of the 
 	//realUp and inputFwd
 	glm::vec3 realRight = glm::cross(realUp, inputFWD);
-	realRight = glm::length(realRight) != 0.f ? realRight : glm::vec3(1.f, 0.f, 0.f);
+	realRight = glm::length(realRight) != 0.f ? glm::normalize(realRight) : glm::vec3(1.f, 0.f, 0.f);
 
 	//Set new Real Right and Forward Values
 	SetEntityMatrixRow(MATRIX_ROW::UP_VECTOR, realUp); //Set Real UP

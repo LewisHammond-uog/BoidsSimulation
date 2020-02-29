@@ -1,2 +1,37 @@
 ﻿  BrainComponent.cpp
+  Component.cpp
+  Entity.cpp
+  ModelComponent.cpp
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  Scene.cpp
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(101,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(133,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(234,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(235,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(239,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(240,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(242,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(243,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Scene.cpp(259,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  TransformComponent.cpp
+  main.cpp
+  Generating Code...
+  glad.c
+  LINK : E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\\Debug\x64\ModelLoader.exe not found or not built by the last incremental link; performing full link
+glfw3.lib(context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(init.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(init.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(input.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(input.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(monitor.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(monitor.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(vulkan.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(vulkan.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(window.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(window.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_init.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_joystick.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_monitor.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_time.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_time.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_thread.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_thread.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_window.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_window.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(wgl_context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(egl_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(egl_context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(osmesa_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(osmesa_context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
   ModelLoader.vcxproj -> E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\\Debug\x64\ModelLoader.exe

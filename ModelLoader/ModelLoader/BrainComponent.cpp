@@ -61,7 +61,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	
 	//Recalculate matrix rows - only normalise if not a zero vector
-	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? m_v3CurrentVelocity : glm::vec3(0.f, 0.f, 1.f);
+	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
 	 
 	//Update our matrix
 	pTransform->SetEntityMatrixRow(FORWARD_VECTOR, v3Forward);
