@@ -30,8 +30,8 @@ Entity::~Entity()
 	//Remove this entity from the entity map and
 	//reduce entity count
 	//TODO - Check that the entity is in the list?
-	--s_uEntityCount;
 	s_xEntityMap.erase(m_uEntityID);
+	--s_uEntityCount;
 }
 
 ///Update this entity

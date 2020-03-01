@@ -347,3 +347,4 @@ MigrationBackup/
 ModelLoader/.vs/ModelLoader/v16/ipch/AutoPCH/802498532fbc69eb/SCENE.ipch
 ModelLoader/.vs/ModelLoader/v16/ipch/AutoPCH/802498532fbc69eb/SCENE.ipch
 *.ipch
+*.tlog

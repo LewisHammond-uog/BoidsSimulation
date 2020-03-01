@@ -195,9 +195,13 @@ void Scene::DeInitlise() {
 	delete m_pNanoSuitModel;
 	delete m_ourShader;
 
-	//Delete entities
+	//Delete all of the entities that exist in the scene
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
-	for (xIter = Entity::GetEntityMap().begin(); xIter != Entity::GetEntityMap().end(); ++xIter)
+	//Make a duplicate of the entity map so that we don't cause problems
+	//when itterating through it
+	std::map<const unsigned int, Entity*> existingEntityMap = Entity::GetEntityMap();
+	//Loop through all of the entities that exist and delete the
+	for (xIter = existingEntityMap.begin(); xIter != existingEntityMap.end(); ++xIter)
 	{
 		Entity* pEntity = xIter->second;
 		if (pEntity) {
