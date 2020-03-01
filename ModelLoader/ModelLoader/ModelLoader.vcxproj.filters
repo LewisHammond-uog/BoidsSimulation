@@ -19,69 +19,75 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{3e81d2f3-5e09-40e7-8fde-cbc2c0140c03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Deps">
+      <UniqueIdentifier>{84707605-e4e2-41a8-ac51-cb9f74c705e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Deps">
+      <UniqueIdentifier>{b4fd556a-fa4d-4124-be93-652de78309b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BrainComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Component.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModelComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TransformComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="BrainComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelComponent.cpp">
-      <Filter>Source Files\Components</Filter>
+      <Filter>Source Files\Deps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\deps\include\stb\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\deps\include\learnopengl\camera.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Deps</Filter>
     </ClInclude>
     <ClInclude Include="..\deps\include\learnopengl\mesh.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Deps</Filter>
     </ClInclude>
     <ClInclude Include="..\deps\include\learnopengl\model.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Deps</Filter>
     </ClInclude>
     <ClInclude Include="..\deps\include\learnopengl\shader.h">
+      <Filter>Header Files\Deps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\deps\include\stb\stb_image.h">
+      <Filter>Header Files\Deps</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BrainComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="include\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
+    <ClInclude Include="include\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="include\ModelComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BrainComponent.h">
-      <Filter>Header Files\Components</Filter>
+    <ClInclude Include="include\resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelComponent.h">
-      <Filter>Header Files\Components</Filter>
+    <ClInclude Include="include\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TransformComponent.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

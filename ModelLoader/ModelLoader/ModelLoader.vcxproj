@@ -70,25 +70,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)deps\include;$(ProjectDir)include;$(ProjectDir)source;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)deps\include;$(ProjectDir)include;$(ProjectDir)source;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)deps\include;$(ProjectDir)include;$(ProjectDir)source;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)deps\include;$(ProjectDir)include;$(ProjectDir)source;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)\$(Configuration)\$(Platform)\</IntDir>
@@ -154,14 +154,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BrainComponent.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ModelComponent.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="source\BrainComponent.cpp" />
+    <ClCompile Include="source\Component.cpp" />
+    <ClCompile Include="source\Entity.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\ModelComponent.cpp" />
+    <ClCompile Include="source\Scene.cpp" />
+    <ClCompile Include="source\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\deps\include\learnopengl\camera.h" />
@@ -169,13 +169,13 @@
     <ClInclude Include="..\deps\include\learnopengl\model.h" />
     <ClInclude Include="..\deps\include\learnopengl\shader.h" />
     <ClInclude Include="..\deps\include\stb\stb_image.h" />
-    <ClInclude Include="BrainComponent.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="ModelComponent.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="include\BrainComponent.h" />
+    <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\ModelComponent.h" />
+    <ClInclude Include="include\resource.h" />
+    <ClInclude Include="include\Scene.h" />
+    <ClInclude Include="include\TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelLoader.rc" />
