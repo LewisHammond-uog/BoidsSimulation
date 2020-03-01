@@ -11,6 +11,11 @@
 
 #include <iostream>
 
+//Imgui Includes
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 //Project Includes
 #include "Entity.h"
 #include "TransformComponent.h"
@@ -81,6 +86,18 @@ bool Scene::Initalise() {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return false;
 	}
+
+	//Set Up IMGUI
+	//Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	const char* glsl_version = "#version 150";
+	// Setup Platform/Renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+	//ImGui_ImplOpenGL3_Init(glsl_version);
 
 	// configure global opengl state
 	// -----------------------------

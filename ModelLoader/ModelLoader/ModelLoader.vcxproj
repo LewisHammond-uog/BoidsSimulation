@@ -103,7 +103,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;glm_static.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glm_static.lib;assimp-vc140-mt.lib;Imgui_Debug_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,7 +116,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;glm_static.lib;assimp-vc140-mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glm_static.lib;assimp-vc140-mt.lib;Imgui_Debug_x64.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,6 +154,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\deps\include\imgui\imgui.cpp" />
+    <ClCompile Include="..\deps\include\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\deps\include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\deps\include\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\deps\include\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\deps\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="source\BrainComponent.cpp" />
     <ClCompile Include="source\Component.cpp" />

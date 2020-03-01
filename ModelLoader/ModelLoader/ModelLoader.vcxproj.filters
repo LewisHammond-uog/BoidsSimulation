@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Deps">
       <UniqueIdentifier>{b4fd556a-fa4d-4124-be93-652de78309b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Deps\Imgui">
+      <UniqueIdentifier>{46e9d96c-89ec-463e-9669-c3db8ebb32b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -39,9 +42,6 @@
     <ClCompile Include="source\Component.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="source\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\ModelComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -50,6 +50,27 @@
     </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>Source Files\Deps</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\deps\include\imgui\imgui.cpp">
+      <Filter>Source Files\Deps\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\deps\include\imgui\imgui_demo.cpp">
+      <Filter>Source Files\Deps\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\deps\include\imgui\imgui_draw.cpp">
+      <Filter>Source Files\Deps\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\deps\include\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Deps\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\deps\include\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\Deps\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\deps\include\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\Deps\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
