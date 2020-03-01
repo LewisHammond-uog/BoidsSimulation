@@ -21,6 +21,7 @@
 #include "TransformComponent.h"
 #include "ModelComponent.h"
 #include "BrainComponent.h"
+#include "DebugUI.h"
 
 //Screen Size Settings
 const unsigned int SCR_WIDTH = 1280;
@@ -97,7 +98,7 @@ bool Scene::Initalise() {
 	const char* glsl_version = "#version 150";
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-	ImGui_ImplOpenGL3_Init(NULL);
+	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	// configure global opengl state
 	// -----------------------------
@@ -145,6 +146,11 @@ bool Scene::Initalise() {
 
 bool Scene::Update() {
 
+	//Start New Imgui Frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
 	// per-frame time logic
 	// --------------------
 	float fCurrentFrameTime = glfwGetTime();
@@ -154,25 +160,8 @@ bool Scene::Update() {
 	// input
 	// -----
 	m_camera->processInput(m_window, m_fDeltaTime);
-	
-	//------------------------//
-	//IMGUI TESTING-----------//
-	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
 
-	//Setup Imgui window size and position
-	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 windowSize = ImVec2(400.f, 250.f);
-	ImVec2 windowPos = ImVec2(io.DisplaySize.x * 0.5f - windowSize.x * 0.5f, io.DisplaySize.y * 0.5f - windowSize.y * 0.5f);
-
-	ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always);
-	ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
-
-	ImGui::Begin("TESTWINDOW");
-	ImGui::End();
-	//------------------------//
+	DebugUI::GetInstance()->Update();
 
 	//Update Boids
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
@@ -183,7 +172,6 @@ bool Scene::Update() {
 			pEntity->Update(m_fDeltaTime);
 		}
 	}
-
 
 	//return if we should keep running
 	return !glfwWindowShouldClose(m_window);

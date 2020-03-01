@@ -43,7 +43,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	///////////////////////////////////////////////////////////
 	glm::vec3 v3NewForce(0.0f);
 
-	//glm::vec3 v3SeperationForce = CalculateSeperationForce();
+	glm::vec3 v3SeperationForce = CalculateSeperationForce();
 	glm::vec3 v3AlignmentForce = CalculateAlignmentForce();
 	glm::vec3 v3CohensionForce = CalculateCohensionForce();
 
