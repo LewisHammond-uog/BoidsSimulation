@@ -77,7 +77,7 @@ bool Scene::Initalise() {
 	glfwSetScrollCallback(m_window, scroll_callback);
 
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -97,7 +97,7 @@ bool Scene::Initalise() {
 	const char* glsl_version = "#version 150";
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-	//ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui_ImplOpenGL3_Init(NULL);
 
 	// configure global opengl state
 	// -----------------------------
@@ -154,6 +154,25 @@ bool Scene::Update() {
 	// input
 	// -----
 	m_camera->processInput(m_window, m_fDeltaTime);
+	
+	//------------------------//
+	//IMGUI TESTING-----------//
+	// Start the Dear ImGui frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	//Setup Imgui window size and position
+	ImGuiIO& io = ImGui::GetIO();
+	ImVec2 windowSize = ImVec2(400.f, 250.f);
+	ImVec2 windowPos = ImVec2(io.DisplaySize.x * 0.5f - windowSize.x * 0.5f, io.DisplaySize.y * 0.5f - windowSize.y * 0.5f);
+
+	ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always);
+	ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
+
+	ImGui::Begin("TESTWINDOW");
+	ImGui::End();
+	//------------------------//
 
 	//Update Boids
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
@@ -164,6 +183,7 @@ bool Scene::Update() {
 			pEntity->Update(m_fDeltaTime);
 		}
 	}
+
 
 	//return if we should keep running
 	return !glfwWindowShouldClose(m_window);
@@ -198,6 +218,9 @@ void Scene::Render() {
 		}
 	};
 
+	//imgui Render
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	glfwSwapBuffers(m_window);
