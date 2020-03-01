@@ -1,7 +1,6 @@
 #include "DebugUI.h"
 
 //Imgui Incldues
-#include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
@@ -9,7 +8,7 @@
 DebugUI* DebugUI::s_pUIInstance = nullptr;
 
 //Default Values
-const float mc_fDefaultSeekForce = 0.0f;
+const float mc_fDefaultForce = 0.0f;
 
 ///Get singleton instance of scene
 DebugUI* DebugUI::GetInstance() {
@@ -22,29 +21,64 @@ DebugUI* DebugUI::GetInstance() {
 	return s_pUIInstance;
 }
 
+/// <summary>
+/// Updates the UI by passing ImGUI elements to draw
+/// </summary>
 void DebugUI::Update() {
 
 	//Setup Imgui window size and position
 	ImGuiIO& io = ImGui::GetIO();
-	ImVec2 windowSize = ImVec2(400.f, 250.f);
-	ImVec2 windowPos = ImVec2(io.DisplaySize.x * 0.5f - windowSize.x * 0.5f, io.DisplaySize.y * 0.5f - windowSize.y * 0.5f);
-	ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always);
-	ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(m_v2WindowPos, ImGuiCond_Always);
+	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
 
 	//Begin the drawing of the Window
 	ImGui::Begin("Flocking Values");
 
-	//Sliders and Buttons for changing force weights
-	ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, 0.0f, 100.f); //Not Implemented
-	ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, 0.0f, 100.f); //Not Implemented
-	ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohensionForce, 0.0f, 100.f); //Not Implemented
+	//Sliders for changing force weights - UI puts these values in to the appropriate varables as
+	//we pass by ref
+	ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight); //Not Implemented
+	ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight); //Not Implemented
+	ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight); //Not Implemented
 
+	//End the drawing of the window
 	ImGui::End();
+}
 
+/// <summary>
+/// Get the value that the user has input for the given
+/// type of flocking behaviour
+/// </summary>
+/// <param name="a_eBehaviourType">Behvaiour type of get value for</param>
+/// <returns>Weight of Behvaiour</returns>
+float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType)
+{
+	//TODO MAKE THIS RETURN A HASH MAP
+
+	//Switch through the different behaviour types
+	//and return the appropriate value
+	switch (a_eBehaviourType)
+	{
+	case BEHAVIOUR_SEPERATION:
+		return m_fInputSeperationForce;
+		break;
+	case BEHAVIOUR_ALIGNMENT:
+		return m_fInputAlignmentForce;
+		break;
+	case BEHAVIOUR_COHESION:
+		return m_fInputCohesionForce;
+		break;
+	default:
+		//Default (i.e invalid value), return 0 so that
+		//we don't apply that behaviour
+		return 0.f;
+		break;
+	}
 }
 
 DebugUI::DebugUI() :
-	m_fInputSeperationForce(mc_fDefaultSeekForce)
+	m_fInputSeperationForce(mc_fDefaultForce),
+	m_fInputCohesionForce(mc_fDefaultForce),
+	m_fInputAlignmentForce(mc_fDefaultForce)
 {
 }
 

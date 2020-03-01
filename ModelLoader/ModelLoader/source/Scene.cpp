@@ -125,7 +125,7 @@ bool Scene::Initalise() {
 		//Transform Component
 		TransformComponent* pTransform = new TransformComponent(pEntity);
 		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(RandomBetweenRange(-5.0f, 5.0f), 
-																			0.f,
+																			RandomBetweenRange(-5.0f, 5.0f),
 																			RandomBetweenRange(-5.0f, 5.0f)));
 		pEntity->AddComponent(pTransform);
 

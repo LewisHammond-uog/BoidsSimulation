@@ -1,14 +1,2 @@
-﻿  DebugUI.cpp
-  Scene.cpp
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(119,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(156,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(266,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(267,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(271,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(272,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(274,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(275,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(291,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
+﻿  BrainComponent.cpp
   ModelLoader.vcxproj -> E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\\Debug\x64\ModelLoader.exe

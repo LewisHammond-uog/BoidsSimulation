@@ -3,6 +3,7 @@
 //Project Incldues
 #include "Entity.h"
 #include "TransformComponent.h"
+#include "DebugUI.h"
 
 //Constants
 const float fMAX_SPEED = 5.0f;
@@ -43,11 +44,16 @@ void BrainComponent::Update(float a_fDeltaTime)
 	///////////////////////////////////////////////////////////
 	glm::vec3 v3NewForce(0.0f);
 
-	glm::vec3 v3SeperationForce = CalculateSeperationForce();
-	glm::vec3 v3AlignmentForce = CalculateAlignmentForce();
-	glm::vec3 v3CohensionForce = CalculateCohensionForce();
+	//Get the Debug UI Instance so that we can get the user input values from it
+	DebugUI* pDebugUI = DebugUI::GetInstance();
 
-	v3NewForce = v3CohensionForce + v3AlignmentForce;
+	glm::vec3 v3SeperationForce = CalculateSeperationForce() * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION);
+	glm::vec3 v3AlignmentForce = CalculateAlignmentForce()   * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
+	glm::vec3 v3CohesionForce = CalculateCohensionForce()    * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
+
+	glm::vec3 v3wander = CalculateWanderForce(v3Forward, v3CurrentPos);
+
+	v3NewForce = v3wander;
 
 	///////////////////////////////////////////////////////////
 
