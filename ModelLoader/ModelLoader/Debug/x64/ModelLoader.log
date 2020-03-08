@@ -1,2 +1,4 @@
-﻿  BrainComponent.cpp
+﻿  Application.cpp
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Application.cpp(116,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   ModelLoader.vcxproj -> E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\\Debug\x64\ModelLoader.exe

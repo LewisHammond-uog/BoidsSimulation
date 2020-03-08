@@ -23,10 +23,6 @@
 #include "BrainComponent.h"
 #include "DebugUI.h"
 
-//Screen Size Settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 800;
-
 const unsigned int BOID_COUINT = 25;
 
 Scene* Scene::s_pSceneInstance = nullptr;
@@ -43,66 +39,23 @@ Scene* Scene::GetInstance() {
 }
 
 
-Scene::Scene() {
-	//Init Values
-	m_fLastX = SCR_WIDTH / 2.0f;
-	m_fLastY = SCR_HEIGHT / 2.0f;
-	m_bFirstMouse = true;
+Scene::Scene() : Application() {
+	//Init camera
 	m_camera = nullptr;
-	m_window = nullptr;
-	m_fDeltaTime = 0.0f;
-	m_fLastFrameTime = 0.0f;
 }
 
-bool Scene::Initalise() {
+bool Scene::Initalise(){
 
-	// glfw: initialize and configure
-	// ------------------------------
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	// glfw window creation
-	// --------------------
-	m_window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-	if (m_window == NULL)
-	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
+	//Call Application Init Function
+	if (!Application::Initalise()) {
+		//return false if application did not
+		//initalise properly
 		return false;
 	}
-	glfwMakeContextCurrent(m_window);
-	glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+
+	//Init Callback functions for mouse move/scroll
 	glfwSetCursorPosCallback(m_window, mouse_callback);
 	glfwSetScrollCallback(m_window, scroll_callback);
-
-	// tell GLFW to capture our mouse
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-	// glad: load all OpenGL function pointers
-	// ---------------------------------------
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return false;
-	}
-
-	//Set Up IMGUI
-	//Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	const char* glsl_version = "#version 150";
-	// Setup Platform/Renderer bindings
-	ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-	ImGui_ImplOpenGL3_Init(glsl_version);
-
-	// configure global opengl state
-	// -----------------------------
-	glEnable(GL_DEPTH_TEST);
 
 	// build and compile shaders
 	// -------------------------
@@ -146,21 +99,13 @@ bool Scene::Initalise() {
 
 bool Scene::Update() {
 
-	//Start New Imgui Frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	// per-frame time logic
-	// --------------------
-	float fCurrentFrameTime = glfwGetTime();
-	m_fDeltaTime = fCurrentFrameTime - m_fLastFrameTime;
-	m_fLastFrameTime = fCurrentFrameTime;
-
+	//Update the application values
+	Application::Update();
 	// input
 	// -----
 	m_camera->processInput(m_window, m_fDeltaTime);
 
+	//Update the Debug UI
 	DebugUI::GetInstance()->Update();
 
 	//Update Boids
@@ -178,10 +123,9 @@ bool Scene::Update() {
 }
 
 void Scene::Render() {
-
-	// render
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	//Call Render on Application
+	Application::Render();
 
 	if (!m_ourShader || !m_pNanoSuitModel) {
 		return;
@@ -204,20 +148,18 @@ void Scene::Render() {
 		if (pEntity) {
 			pEntity->Draw(m_ourShader);
 		}
-	};
-
-	//imgui Render
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
 
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
-
 }
 
 
 void Scene::DeInitlise() {
+
+	//Deinitalise Appluication
+	Application::Deinitalise();
 
 	delete m_camera;
 	delete m_pNanoSuitModel;
@@ -237,21 +179,7 @@ void Scene::DeInitlise() {
 		}
 	}
 
-	// glfw: terminate, clearing all previously allocated GLFW resources.
-	// ------------------------------------------------------------------
-	glfwTerminate();
-
 }
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void Scene::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
-}
-
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
 void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
