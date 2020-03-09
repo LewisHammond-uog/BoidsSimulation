@@ -51,9 +51,9 @@ void BrainComponent::Update(float a_fDeltaTime)
 	glm::vec3 v3AlignmentForce = CalculateAlignmentForce()   * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
 	glm::vec3 v3CohesionForce = CalculateCohensionForce()    * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
 
-	glm::vec3 v3wander = CalculateWanderForce(v3Forward, v3CurrentPos);
+	//glm::vec3 v3wander = CalculateWanderForce(v3Forward, v3CurrentPos);
 
-	v3NewForce = v3wander;
+	v3NewForce = v3SeperationForce + v3AlignmentForce + v3CohesionForce;
 
 	///////////////////////////////////////////////////////////
 
