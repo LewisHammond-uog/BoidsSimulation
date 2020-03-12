@@ -4,8 +4,10 @@
 //Project Includes
 #include "Component.h"
 
-class ColliderComponent : public Component {
+#include <ReactPhysics3D/reactphysics3d.h>
 
+class ColliderComponent : public Component {
+	
 };
 
 #endif // !__COLLIDER_COMPONENT_H__
