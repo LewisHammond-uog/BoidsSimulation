@@ -51,7 +51,7 @@ void TransformComponent::Orthogonalize()
 	float fwdUpDot = glm::dot(inputFWD, inputUP);
 
 	//Calculate the real up vector of the the matrix
-	//upAxis = inputUp * (inputFWD - fwdUpDot)
+	//upAxis = inputUp - (inputFWD * fwdUpDot)
 	glm::vec3 realUp = inputUP - (inputFWD * fwdUpDot);
 	realUp = glm::length(realUp) != 0.f ? glm::normalize(realUp) : glm::vec3(0.f, 1.f, 0.f);
 
