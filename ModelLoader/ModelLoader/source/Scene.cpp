@@ -23,6 +23,8 @@
 #include "BrainComponent.h"
 #include "DebugUI.h"
 
+#include "ColliderComponent.h"
+
 const unsigned int BOID_COUINT = 25;
 
 Scene* Scene::s_pSceneInstance = nullptr;

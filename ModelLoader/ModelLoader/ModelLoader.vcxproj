@@ -161,6 +161,7 @@
     <ClCompile Include="..\deps\include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\deps\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="include\ColliderComponent.cpp" />
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\BrainComponent.cpp" />
     <ClCompile Include="source\Component.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\deps\include\stb\stb_image.h" />
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\BrainComponent.h" />
+    <ClInclude Include="include\ColliderComponent.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\DebugUI.h" />
     <ClInclude Include="include\Entity.h" />
