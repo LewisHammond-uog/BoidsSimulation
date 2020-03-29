@@ -4,6 +4,9 @@
 //Parent Class include
 #include "Application.h"
 
+//React Physics Includes
+#include <ReactPhysics3D/reactphysics3d.h>
+
 //Foward Declares
 class Camera;
 class Shader;
@@ -18,6 +21,9 @@ public:
 	bool Update();
 	void Render();
 	void DeInitlise();
+
+	//Get the collision world - used for collider components
+	rp3d::CollisionWorld* GetCollisionWorld();
 
 private:
 	Scene();
@@ -35,6 +41,9 @@ private:
 	Camera* m_camera;
 	Shader* m_ourShader;
 	Model* m_pNanoSuitModel;
+
+	//Collision World
+	rp3d::CollisionWorld* m_pSceneCollisionWorld;
 
 	//Mouse Info
 	float m_fLastX; //Last X Position of the mouse

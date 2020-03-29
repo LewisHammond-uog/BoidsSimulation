@@ -9,21 +9,21 @@
 #include <learnopengl/camera.h>
 #include <learnopengl/model.h>
 
-#include <iostream>
-
 //Imgui Includes
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
+
+//C++ Includes
+#include <iostream>
 
 //Project Includes
 #include "Entity.h"
 #include "TransformComponent.h"
 #include "ModelComponent.h"
 #include "BrainComponent.h"
-#include "DebugUI.h"
-
 #include "ColliderComponent.h"
+#include "DebugUI.h"
 
 const unsigned int BOID_COUINT = 25;
 
@@ -73,6 +73,10 @@ bool Scene::Initalise(){
 	//Seed RNG
 	srand(time(nullptr));
 
+	//Create a collision world - this is the physics simulation that all of our physics will
+	//occour in
+	m_pSceneCollisionWorld = new rp3d::CollisionWorld;
+
 	//Create entities
 	for (int i = 0; i < BOID_COUINT; i++) {
 		Entity* pEntity = new Entity();
@@ -93,6 +97,10 @@ bool Scene::Initalise(){
 		//Brain Component
 		BrainComponent* pBrain = new BrainComponent(pEntity);
 		pEntity->AddComponent(pBrain);
+
+		//Collider Component
+		ColliderComponent* pCollider = new ColliderComponent(pEntity, m_pSceneCollisionWorld);
+		pEntity->AddComponent(pCollider);
 		
 	}
 
@@ -160,12 +168,18 @@ void Scene::Render() {
 
 void Scene::DeInitlise() {
 
-	//Deinitalise Appluication
+	//Deinitalise Application
 	Application::Deinitalise();
 
-	delete m_camera;
-	delete m_pNanoSuitModel;
-	delete m_ourShader;
+	if (m_camera != nullptr) {
+		delete m_camera;
+	}
+	if (m_pNanoSuitModel != nullptr) {
+		delete m_pNanoSuitModel;
+	}
+	if (m_ourShader != nullptr) {
+		delete m_ourShader;
+	}
 
 	//Delete all of the entities that exist in the scene
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
@@ -181,6 +195,16 @@ void Scene::DeInitlise() {
 		}
 	}
 
+	//Destory Collision World
+	if (m_pSceneCollisionWorld != nullptr) {
+
+		delete m_pSceneCollisionWorld;
+	}
+
+}
+rp3d::CollisionWorld* Scene::GetCollisionWorld()
+{
+	return m_pSceneCollisionWorld;
 }
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------

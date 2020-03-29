@@ -20,10 +20,6 @@ ModelComponent::ModelComponent(Entity* a_pOwner):
 {
 }
 
-ModelComponent::~ModelComponent()
-{
-}
-
 void ModelComponent::Draw(Shader* a_pShader)
 {
 	//Null Check shader

@@ -11,6 +11,7 @@ enum COMPONENT_TYPE {
 	TRANSFORM,
 	MODEL,
 	BRAIN,
+	COLLIDER
 };
 
 class Component
