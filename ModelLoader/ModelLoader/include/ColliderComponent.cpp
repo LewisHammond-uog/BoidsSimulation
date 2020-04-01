@@ -46,7 +46,7 @@ ColliderComponent::~ColliderComponent()
 	//We don't need to delete the pointer to the collision shape as 
 	//"It is not necessary to manually remove all the collision shapes 
 	//from a body at the end of your application. They will automatically 
-	//be removed when you destroy the body." - Section 10.7 (https://www.reactphysics3d.com/usermanual.html#x1-3800010)
+	//be removed when you destroy the body." - Section 10.7 (https://www.reactphysics3d.com/usermanual.html#x1-4500010.7)
 }
 
 /// <summary>
@@ -59,37 +59,132 @@ void ColliderComponent::Update(float a_fDeltaTime)
 	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));//TODO Make this Nicer
 	m_pCollisionBody->setTransform(GetPhysicsTransform(pLocalTransform));
 
-	//TODO Cleanup
-	//Test for collisions with every entity
-	//Itterate over every entity in the scene
-	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
-	std::map<const unsigned int, Entity*>::const_iterator xIter;
-	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
-	{
-		//Current Entity
-		const Entity* pTarget = xIter->second;
-		if (!pTarget) {
-			continue;
-		}
-
-		//Check that the entity we have is not the owner of this brain component
-		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
-			continue;
-		}
-
-		ColliderComponent* pTargetCollider = static_cast<ColliderComponent*>(pTarget->GetComponent(COMPONENT_TYPE::COLLIDER)); //TODO Make this Nicer
-
-		//Test this bodies AABB against the currrent targets aabb
-		if (m_pCollisionBody->testAABBOverlap(pTargetCollider->m_pCollisionBody->getAABB())) {
-			int i = 0;
-		}
-
-	}
 }
 
 void ColliderComponent::Draw(Shader* a_pShader)
 {
 	//Blank
+}
+
+/// <summary>
+/// Gets if we are colliding with any object in the world
+/// </summary>
+/// <param name="a_bUseAABB">Whether we should use AABB testing for collisions, rather than more
+/// precise methods (i.e mesh)</param>
+/// <returns></returns>
+bool ColliderComponent::IsColliding(bool a_bUseAABB)
+{
+	//Create a map to itterate through all of our entities
+	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+
+	//TODO - Make Nicer
+	//Loop through all of the entites that we have
+	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
+	{
+		//Get the current entity that are on and check that it is not nullptr
+		const Entity* pTarget = xIter->second;
+		if (!pTarget) {
+			continue;
+		}
+
+		//Check that our target entity is not ourself, as we should not check
+		//if we are collding with ourselves
+		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
+			continue;
+		}
+
+		//Get the collider component
+		ColliderComponent* pTargetCollider = static_cast<ColliderComponent*>(pTarget->GetComponent(COMPONENT_TYPE::COLLIDER));
+		if (pTargetCollider == nullptr) {
+			return false;
+		}
+		
+		//If we find a collision return true
+		if (IsColliding(pTargetCollider, a_bUseAABB)) {
+			return true;
+		}
+
+	}
+
+	//We have reached the end of the loop and not found a collision,
+	//thus return false
+	return false;
+}
+
+
+/// <summary>
+/// Checks if this object is colliding with another collision body
+/// </summary>
+/// <param name="a_pOtherCollider">The other collider to check</param>
+/// <param name="a_bUseAABB">Whether we should use AABB testing for collisions, rather than more
+/// precise methods (i.e mesh)</param>
+/// <returns>If a collision is occouring</returns>
+bool ColliderComponent::IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB)
+{
+	//Check if the collision check is valid - all pointers are not null
+	if (IsCollisionCheckValid(a_pOtherCollider)) {
+
+		//Choose which methold to use by the users selection (to use AABB or not)
+		//then perform the collision check
+		if (a_bUseAABB) {
+			return m_pCollisionBody->testAABBOverlap(a_pOtherCollider->m_pCollisionBody->getAABB());
+		}
+		else {
+			return m_pCollisionWorld->testOverlap(m_pCollisionBody, a_pOtherCollider->m_pCollisionBody);
+		}
+	}
+
+	//Collision check is invalid - return false
+	return false;
+}
+
+CollisionInfo* ColliderComponent::GetCollisionInfo()
+{
+	//Call the test collision function which will populate
+	//collisionInfo with a linked list of all of the collision
+	//infomation from all collisions in the world
+	CollisionInfo* collisionInfo = new CollisionInfo();
+	m_pCollisionWorld->testCollision(collisionInfo);
+	return collisionInfo;
+}
+
+CollisionInfo* ColliderComponent::GetCollisionInfo(ColliderComponent* a_pOtherCollider)
+{
+
+	//Check if the collision check is valid - all pointers are not null
+	if (IsCollisionCheckValid(a_pOtherCollider)) {
+
+		//Return the collision info from our collision test - this will
+		//be nullptr if no collision occours
+		CollisionInfo* collisionInfo = new CollisionInfo();
+		m_pCollisionWorld->testCollision(m_pCollisionBody, a_pOtherCollider->m_pCollisionBody, collisionInfo);
+		return collisionInfo;
+	}
+
+	//Collision check is invalid - return nullptr
+	return nullptr;
+}
+
+rp3d::RaycastInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
+{
+	//Create a ray from the given start and end point
+	rp3d::Vector3 v3StartPoint(a_v3StartPoint.x, a_v3StartPoint.y, a_v3StartPoint.z);
+	rp3d::Vector3 v3EndPoint(a_v3StartPoint.x, a_v3StartPoint.y, a_v3StartPoint.z);
+	rp3d::Ray raycastRay(v3StartPoint, v3EndPoint);
+
+	//Call function that takes ray as parameter and return the result of that
+	return RayCast(&raycastRay);
+}
+
+rp3d::RaycastInfo* ColliderComponent::RayCast(rp3d::Ray* a_Ray)
+{
+	//Create raycast info for the result
+	rp3d::RaycastInfo* raycastInfo = new rp3d::RaycastInfo();
+
+	//Perform Raycast and return the resulting info
+	m_pCollisionBody->raycast(*a_Ray, *raycastInfo);
+	return raycastInfo;
 }
 
 rp3d::Transform ColliderComponent::GetPhysicsTransform(TransformComponent* a_pTransform)
@@ -114,4 +209,33 @@ rp3d::Transform ColliderComponent::GetPhysicsTransform(TransformComponent* a_pTr
 
 
 	return rp3d::Transform(v3PosVector, m3RotVector);
+}
+
+bool ColliderComponent::IsCollisionCheckValid(ColliderComponent* a_pOtherCollider)
+{
+	//Check that the collision world exists
+	if (m_pCollisionWorld == nullptr) {
+		return false;
+	}
+
+	//Null check the collider we have been passed - return
+	//false aas we cannot have a collision with a collider that 
+	//does not exist
+	if (a_pOtherCollider == nullptr) {
+		return false;
+	}
+
+	//Check that the collider component has a collision body - no
+	//collision without a colliision body
+	if (a_pOtherCollider->m_pCollisionBody == nullptr) {
+		return false;
+	}
+
+	//All checks passed
+	return true;
+}
+
+void CollisionInfo::notifyContact(const CollisionCallbackInfo& collisionCallbackInfo)
+{
+	m_vContactList.push_back(collisionCallbackInfo);
 }

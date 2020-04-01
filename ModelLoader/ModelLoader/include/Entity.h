@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 
-//project includes
+//Project Includes
 #include "Component.h"
 
 //Forward Declare
