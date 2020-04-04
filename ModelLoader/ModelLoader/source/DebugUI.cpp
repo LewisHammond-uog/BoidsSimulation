@@ -36,9 +36,14 @@ void DebugUI::Update() {
 
 	//Sliders for changing force weights - UI puts these values in to the appropriate varables as
 	//we pass by ref
-	ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight); //Not Implemented
-	ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight); //Not Implemented
-	ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight); //Not Implemented
+	ImGui::Text("Simulation Values");
+	ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+	ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+	ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+
+	//Tickbox of whether to draw colliders
+	ImGui::Text("Debug Drawing");
+	ImGui::Checkbox("Draw Collider Bounds", &m_bShowColliders);
 
 	//End the drawing of the window
 	ImGui::End();
@@ -50,9 +55,9 @@ void DebugUI::Update() {
 /// </summary>
 /// <param name="a_eBehaviourType">Behvaiour type of get value for</param>
 /// <returns>Weight of Behvaiour</returns>
-float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType)
+float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType) const
 {
-	//TODO MAKE THIS RETURN A HASH MAP
+	//TODO MAKE THIS RETURN A HASH MAP?
 
 	//Switch through the different behaviour types
 	//and return the appropriate value
@@ -75,10 +80,20 @@ float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType)
 	}
 }
 
+/// <summary>
+/// Get if should draw colliders on our entities
+/// </summary>
+/// <returns></returns>
+bool DebugUI::GetShowColliders() const
+{
+	return m_bShowColliders;
+}
+
 DebugUI::DebugUI() :
 	m_fInputSeperationForce(mc_fDefaultForce),
 	m_fInputCohesionForce(mc_fDefaultForce),
-	m_fInputAlignmentForce(mc_fDefaultForce)
+	m_fInputAlignmentForce(mc_fDefaultForce),
+	m_bShowColliders(false)
 {
 }
 

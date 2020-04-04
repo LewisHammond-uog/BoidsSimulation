@@ -82,7 +82,7 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="source\Gizmos.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Deps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +132,7 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\Gizmos.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files\Deps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

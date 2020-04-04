@@ -7,7 +7,7 @@
 
 //Constants
 const float fMAX_SPEED = 5.0f;
-const float fMAX_FORCE = 0.02f;
+const float fMAX_FORCE = 0.2f;
 const float fNEIGHBOURHOOD_RADIUS = 5.0f;
 
 const float fCIRCLE_FORWARD_MUTIPLIER = 1.f; //How far forward to draw the sphere

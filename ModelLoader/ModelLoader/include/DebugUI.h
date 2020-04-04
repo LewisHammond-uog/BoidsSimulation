@@ -23,7 +23,8 @@ public:
 
 	//Function to get value about flocking
 	//that the user has input in to the UI
-	float GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType);
+	float GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType) const;
+	bool GetShowColliders() const;
 
 private:
 	//Private Constructors/Destructors
@@ -47,6 +48,7 @@ private:
 	float m_fInputSeperationForce;
 	float m_fInputAlignmentForce;
 	float m_fInputCohesionForce;
+	bool m_bShowColliders;
 
 };
 

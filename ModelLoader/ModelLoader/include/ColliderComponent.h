@@ -11,9 +11,9 @@
 
 class CollisionInfo : public rp3d::CollisionCallback {
 public:
-	virtual void notifyContact(const CollisionCallbackInfo& collisionCallbackInfo);
+	virtual void notifyContact(const CollisionCallbackInfo& a_collisionCallbackInfo);
 private:
-	std::vector<Entity*> m_aCollisionEntities[2];
+	std::vector<Entity*> m_aCollisionEntities;
 	bool m_bCollisionIsValid = false; 
 };
 
@@ -32,8 +32,8 @@ public:
 	bool IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB) const;
 
 	//Functions to get collision info from a collision
-	std::vector<CollisionInfo*> GetCollisionInfo();
-	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
+	std::vector<CollisionInfo> GetCollisionInfo();
+	CollisionInfo GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
 
 	//TODO - Fix this? Never hits anything
 	//Functions to do raycasting
@@ -44,19 +44,20 @@ private:
 	rp3d::CollisionBody* m_pCollisionBody;
 	rp3d::CollisionWorld* m_pCollisionWorld;
 	
-	const float m_fColliderRadius = 2.5f;
-
-	//Convert from our transform to the rp3d transform
-	static rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);
-
-	//Checks if a collision check between 2 colliders is valid - performs null checks on
-	//colliding components
-	bool IsCollisionCheckValid(ColliderComponent* a_pOtherCollider) const;
+	const float m_fColliderRadius = .25f;
 
 	//Collision Shapes - physical shape that we use and the proxy shape,
 	//used by the collision system
 	rp3d::SphereShape* m_pCollisionShape; //Physical properties of the collision shape
 	rp3d::ProxyShape* m_pProxyShape; //Proxy shape is the collision shape with mass and transform infomation
+
+	//Convert from our transform to the rp3d transform
+	static rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);
+	//Checks if a collision check between 2 colliders is valid - performs null checks on
+	//colliding components
+	bool IsCollisionCheckValid(ColliderComponent* a_pOtherCollider) const;
+
+
 };
 
 #endif // !__COLLIDER_COMPONENT_H__
