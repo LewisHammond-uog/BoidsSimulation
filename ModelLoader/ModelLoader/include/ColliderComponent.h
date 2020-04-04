@@ -24,33 +24,34 @@ public:
 	~ColliderComponent();
 
 
-	virtual void Update(float a_fDeltaTime);
-	virtual void Draw(Shader* a_pShader);
+	void Update(float a_fDeltaTime) override;
+	void Draw(Shader* a_pShader) override;
 
 	//Functions to check for a collision
 	bool IsColliding(bool a_bUseAABB);
-	bool IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB);
+	bool IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB) const;
 
 	//Functions to get collision info from a collision
-	CollisionInfo* GetCollisionInfo();
-	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider);
+	std::vector<CollisionInfo*> GetCollisionInfo();
+	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
 
+	//TODO - Fix this? Never hits anything
 	//Functions to do raycasting
-	rp3d::RaycastInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
-	rp3d::RaycastInfo* RayCast(rp3d::Ray* a_Ray);
+	//rp3d::RaycastInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
+	//rp3d::RaycastInfo* RayCast(rp3d::Ray* a_Ray);
 
 private:
 	rp3d::CollisionBody* m_pCollisionBody;
 	rp3d::CollisionWorld* m_pCollisionWorld;
-
-	const float m_fColliderRadius = .25f;
+	
+	const float m_fColliderRadius = 0.25f;
 
 	//Convert from our transform to the rp3d transform
-	rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);
+	static rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);
 
 	//Checks if a collision check between 2 colliders is valid - performs null checks on
 	//colliding components
-	bool IsCollisionCheckValid(ColliderComponent* a_pOtherCollider);
+	bool IsCollisionCheckValid(ColliderComponent* a_pOtherCollider) const;
 
 	//Collision Shapes - physical shape that we use and the proxy shape,
 	//used by the collision system
