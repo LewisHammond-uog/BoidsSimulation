@@ -5,6 +5,7 @@
 #include "TransformComponent.h"
 #include "DebugUI.h"
 
+//TODO Clean UP
 //Constants
 const float fMAX_SPEED = 5.0f;
 const float fMAX_FORCE = 0.2f;

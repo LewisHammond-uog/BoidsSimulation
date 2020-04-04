@@ -104,6 +104,7 @@ bool Scene::Initalise(){
 
 		//Collider Component
 		ColliderComponent* pCollider = new ColliderComponent(pEntity, m_pSceneCollisionWorld);
+		pCollider->AddSphereCollider(0.25f, glm::vec3(0.0f));
 		pEntity->AddComponent(pCollider);
 		
 	}

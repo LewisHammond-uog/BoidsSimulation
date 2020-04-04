@@ -11,7 +11,7 @@
 
 class CollisionInfo : public rp3d::CollisionCallback {
 public:
-	virtual void notifyContact(const CollisionCallbackInfo& a_collisionCallbackInfo);
+	virtual void notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo);
 private:
 	std::vector<Entity*> m_aCollisionEntities;
 	bool m_bCollisionIsValid = false; 
@@ -27,6 +27,10 @@ public:
 	void Update(float a_fDeltaTime) override;
 	void Draw(Shader* a_pShader) override;
 
+	//Functions to add collider shapes
+	void AddBoxCollider(glm::vec3 a_v3BoxSize, glm::vec3 a_v3Offset);
+	void AddSphereCollider(float a_fSphereSize, glm::vec3 a_v3Offset);
+
 	//Functions to check for a collision
 	bool IsColliding(bool a_bUseAABB);
 	bool IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB) const;
@@ -41,15 +45,13 @@ public:
 	//rp3d::RaycastInfo* RayCast(rp3d::Ray* a_Ray);
 
 private:
-	rp3d::CollisionBody* m_pCollisionBody;
-	rp3d::CollisionWorld* m_pCollisionWorld;
-	
-	const float m_fColliderRadius = .25f;
+	rp3d::CollisionBody* m_pCollisionBody; //Pointer to the rp3d collision body that is used in the physics system
+	rp3d::CollisionWorld* m_pCollisionWorld; //Pointer to the physics world that this object is using
 
 	//Collision Shapes - physical shape that we use and the proxy shape,
 	//used by the collision system
-	rp3d::SphereShape* m_pCollisionShape; //Physical properties of the collision shape
-	rp3d::ProxyShape* m_pProxyShape; //Proxy shape is the collision shape with mass and transform infomation
+	std::vector<rp3d::CollisionShape*> m_apCollisionShapes; //List of physical shapes used
+	std::vector<rp3d::ProxyShape*> m_apProxyShapes; //List of proxy shapes. Proxy shape is the collision shape with mass and transform info
 
 	//Convert from our transform to the rp3d transform
 	static rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);
