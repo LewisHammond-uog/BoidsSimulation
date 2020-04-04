@@ -81,6 +81,9 @@
     <ClCompile Include="include\ColliderComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="source\Gizmos.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\deps\include\learnopengl\camera.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="include\Component.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Gizmos.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

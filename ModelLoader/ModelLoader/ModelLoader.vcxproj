@@ -98,6 +98,7 @@
     <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\DebugUI.cpp" />
     <ClCompile Include="source\Entity.cpp" />
+    <ClCompile Include="source\Gizmos.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\ModelComponent.cpp" />
     <ClCompile Include="source\Scene.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\DebugUI.h" />
     <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\Gizmos.h" />
     <ClInclude Include="include\ModelComponent.h" />
     <ClInclude Include="include\resource.h" />
     <ClInclude Include="include\Scene.h" />

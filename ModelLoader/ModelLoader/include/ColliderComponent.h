@@ -7,18 +7,18 @@
 //Project Includes
 #include "Component.h"
 #include "TransformComponent.h"
-
-
-
 #include <ReactPhysics3D/reactphysics3d.h>
 
 class CollisionInfo : public rp3d::CollisionCallback {
 public:
 	virtual void notifyContact(const CollisionCallbackInfo& collisionCallbackInfo);
-	std::vector<CollisionCallbackInfo> m_vContactList;
+private:
+	std::vector<Entity*> m_aCollisionEntities[2];
+	bool m_bCollisionIsValid = false; 
 };
 
 class ColliderComponent : public Component {
+	friend class CollisionInfo;
 public:
 	ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_pCollisionWorld);
 	~ColliderComponent();
@@ -44,7 +44,7 @@ private:
 	rp3d::CollisionBody* m_pCollisionBody;
 	rp3d::CollisionWorld* m_pCollisionWorld;
 	
-	const float m_fColliderRadius = 0.25f;
+	const float m_fColliderRadius = 2.5f;
 
 	//Convert from our transform to the rp3d transform
 	static rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);

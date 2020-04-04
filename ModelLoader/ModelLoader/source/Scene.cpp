@@ -4,6 +4,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+//Gizmo Includes
+#include <Gizmos.h>
+
 //Learn Open GL Includes
 #include <learnopengl/shader.h>
 #include <learnopengl/camera.h>
@@ -54,7 +57,8 @@ bool Scene::Initalise(){
 		//initalise properly
 		return false;
 	}
-
+	Gizmos::create();
+	
 	//Init Callback functions for mouse move/scroll
 	glfwSetCursorPosCallback(m_window, mouse_callback);
 	glfwSetScrollCallback(m_window, scroll_callback);
@@ -111,6 +115,10 @@ bool Scene::Update() {
 
 	//Update the application values
 	Application::Update();
+
+	//Clear the Gizmos from last frame
+	Gizmos::clear();
+	
 	// input
 	// -----
 	m_camera->processInput(m_window, m_fDeltaTime);
@@ -160,6 +168,9 @@ void Scene::Render() {
 		}
 	}
 
+	//Draw Gizmos
+	Gizmos::draw(view, projection);
+
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
@@ -200,6 +211,9 @@ void Scene::DeInitlise() {
 
 		delete m_pSceneCollisionWorld;
 	}
+
+	//Destory Gizmos
+	Gizmos::destroy();
 
 }
 rp3d::CollisionWorld* Scene::GetCollisionWorld()

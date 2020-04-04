@@ -26,12 +26,10 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 
 	//TO DO Cleanup
 	//Create a collision shape
-	rp3d::decimal fShapeRadius = rp3d::decimal(m_fColliderRadius);
+	const rp3d::decimal fShapeRadius = rp3d::decimal(m_fColliderRadius);
 	m_pCollisionShape = new rp3d::SphereShape(fShapeRadius);
 	//Transform the collision the shape at the origin of the body local-space 
-	rp3d::Transform transform = rp3d::Transform::identity();
-	//0 Mass Collision Shape
-	rp3d::decimal mass = rp3d::decimal(0.f);
+	const rp3d::Transform transform = rp3d::Transform::identity();
 	//Add the shape to the collision body - proxy shape is not copied to needs to be maintained properly
 	m_pProxyShape = m_pCollisionBody->addCollisionShape(m_pCollisionShape, transform);
 }
@@ -59,7 +57,7 @@ void ColliderComponent::Update(float a_fDeltaTime)
 	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));//TODO Make this Nicer
 	m_pCollisionBody->setTransform(GetPhysicsTransform(pLocalTransform));
 
-	GetCollisionInfo();
+	std::vector<CollisionInfo*> t = GetCollisionInfo();
 }
 
 void ColliderComponent::Draw(Shader* a_pShader)
@@ -140,6 +138,12 @@ bool ColliderComponent::IsColliding(ColliderComponent* a_pOtherCollider, bool a_
 	return false;
 }
 
+/// <summary>
+/// Gets all of the Collision Info about all of the collisions that occour with this
+/// object this frame
+/// </summary>
+/// <returns>A list of collision info's with every object that collided with this one
+/// this frame</returns>
 std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo()
 {
 	//Store the current collision info
@@ -173,10 +177,10 @@ std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo()
 
 		//If we find a collision then add it to our list
 		CollisionInfo* currentCollision = GetCollisionInfo(pTargetCollider);
-		if(!currentCollision->m_vContactList.empty())
-		{
+		//if(!currentCollision->m_vContactList.empty())
+		//{
 			objectCollisions.push_back(currentCollision);
-		}
+		//}
 
 	}
 
@@ -185,6 +189,12 @@ std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo()
 	return objectCollisions;
 }
 
+/// <summary>
+/// Get's the collision info between this and another specified collider 
+/// </summary>
+/// <param name="a_pOtherCollider">Other Collider to test</param>
+/// <returns>Collision Info about collision, which may be null if no collision occoured or
+/// nullptr if the collision parameters are invalid</returns>
 CollisionInfo* ColliderComponent::GetCollisionInfo(ColliderComponent* a_pOtherCollider) const
 {
 
@@ -252,7 +262,28 @@ bool ColliderComponent::IsCollisionCheckValid(ColliderComponent* a_pOtherCollide
 
 void CollisionInfo::notifyContact(const CollisionCallbackInfo& collisionCallbackInfo)
 {
-	m_vContactList.push_back(collisionCallbackInfo);
+	//Create a map to itterate through all of our entities
+	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
+	std::map<const unsigned int, Entity*>::const_iterator xIter;
+
+	//Loop through all of the entites that we have
+	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
+	{
+		//Get the current entity that are on and check that it is not nullptr
+		const Entity* pTarget = xIter->second;
+		if (!pTarget) {
+			continue;
+		}
+
+		//Get the collider component
+		ColliderComponent* pTargetCollider = static_cast<ColliderComponent*>(pTarget->GetComponent(COMPONENT_TYPE::COLLIDER));
+		if (pTargetCollider == nullptr) {
+			continue;
+		}
+
+
+		
+	}
 }
 
 
