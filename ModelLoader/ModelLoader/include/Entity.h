@@ -11,7 +11,6 @@
 //Forward Declare
 class Shader;
 
-
 class Entity
 {
 public:
@@ -19,7 +18,7 @@ public:
 	~Entity();
 
 	virtual void Update(float a_fDeltaTime);
-	virtual void Draw(Shader* a_fDeltaTime);
+	virtual void Draw(Shader* a_pShader);
 
 	void AddComponent(Component* a_pComponent);
 	Component* GetComponent(COMPONENT_TYPE a_eComponentType) const;

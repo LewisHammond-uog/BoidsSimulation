@@ -58,6 +58,10 @@ void ColliderComponent::Update(float a_fDeltaTime)
 		return;
 	}
 	m_pCollisionBody->setTransform(GetPhysicsTransform(pLocalTransform));
+
+	const glm::vec3 startPoint = glm::vec3(pLocalTransform->GetCurrentPosition());
+	const glm::vec3 endPoint = glm::vec3(pLocalTransform->GetCurrentPosition()) + pLocalTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR) * 1.f;
+	RayCast(startPoint, endPoint);
 }
 
 void ColliderComponent::Draw(Shader* a_pShader)
@@ -70,7 +74,7 @@ void ColliderComponent::Draw(Shader* a_pShader)
 		{
 			return;
 		}
-		glm::vec3 v3CurrentPosition = pLocalTransform->GetCurrentPosition();
+		const glm::vec3 v3CurrentPosition = pLocalTransform->GetCurrentPosition();
 
 		//Draw all of the sub-colliders that are part of this collider
 		for (unsigned int i = 0; i < m_apCollisionShapes.size(); ++i)
@@ -337,7 +341,7 @@ bool ColliderComponent::IsCollisionCheckValid(ColliderComponent* a_pOtherCollide
 	}
 
 	//Check that the collider component has a collision body - no
-	//collision without a colliision body
+	//collision without a collision body
 	if (a_pOtherCollider->m_pCollisionBody == nullptr) {
 		return false;
 	}
@@ -384,13 +388,15 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 }
 
 
-/*
+
 rp3d::RaycastInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
 {
 	//Create a ray from the given start and end point
 	const rp3d::Vector3 v3StartPoint(a_v3StartPoint.x, a_v3StartPoint.y, a_v3StartPoint.z);
 	const rp3d::Vector3 v3EndPoint(a_v3EndPoint.x, a_v3EndPoint.y, a_v3EndPoint.z);
 	rp3d::Ray raycastRay(v3StartPoint, v3EndPoint);
+
+	Gizmos::addLine(a_v3StartPoint, a_v3EndPoint, glm::vec4(1));
 
 	//Call function that takes ray as parameter and return the result of that
 	return RayCast(&raycastRay);
@@ -399,10 +405,12 @@ rp3d::RaycastInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec
 rp3d::RaycastInfo* ColliderComponent::RayCast(rp3d::Ray* a_Ray)
 {
 	//Create raycast info for the result
+	//TODO remove
 	rp3d::RaycastInfo* raycastInfo = new rp3d::RaycastInfo();
 
+	RaycastCallbackInfo callback;
+
 	//Perform Raycast and return the resulting info
-	m_pCollisionBody->raycast(*a_Ray, *raycastInfo);
+	m_pCollisionWorld->raycast(*a_Ray, &callback);
 	return raycastInfo;
 }
-*/
