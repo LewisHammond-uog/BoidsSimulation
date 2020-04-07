@@ -12,6 +12,10 @@
 //Typedefs
 typedef Component PARENT;
 
+//todo remove
+#include "BrainComponent.h"
+#include "BoxPrimitiveComponent.h"
+
 ModelComponent::ModelComponent(Entity* a_pOwner): 
 	PARENT(a_pOwner),
 	m_pModelData(nullptr),
@@ -37,6 +41,10 @@ void ModelComponent::Draw(Shader* a_pShader)
 		return;
 	}
 
+	TransformComponent* test = m_pOwnerEntity->GetComponentT<TransformComponent*>();
+	BrainComponent* brain = m_pOwnerEntity->GetComponentT<BrainComponent*>();
+	BoxPrimitiveComponent* nulllllll = m_pOwnerEntity->GetComponentT<BoxPrimitiveComponent*>();
+	
 	glm::mat4 modelMatrix = pTransform->GetEntityMatrix();
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_fModelScale, m_fModelScale, m_fModelScale));
 	a_pShader->setMat4("model", modelMatrix);

@@ -75,6 +75,7 @@ void Entity::AddComponent(Component* a_pComponent)
 	m_apComponentList.push_back(a_pComponent);
 }
 
+[[deprecated]]
 Component* Entity::GetComponent(COMPONENT_TYPE a_eComponentType) const
 {
 	//Loop through all of the components see if they have a component
