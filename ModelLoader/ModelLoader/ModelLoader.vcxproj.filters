@@ -28,6 +28,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Components\Primitives">
+      <UniqueIdentifier>{c90ef039-928e-456c-81b9-43fdc2db6a23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Primitives">
+      <UniqueIdentifier>{e5a531a6-e04f-468f-bde3-8b4a7386bd56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -78,11 +84,20 @@
     <ClCompile Include="source\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\ColliderComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="source\Gizmos.cpp">
       <Filter>Source Files\Deps</Filter>
+    </ClCompile>
+    <ClCompile Include="include\PrimitiveComponent.cpp">
+      <Filter>Source Files\Components\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BoxPrimitiveComponent.cpp">
+      <Filter>Source Files\Components\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ColliderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SpherePrimitiveComponent.cpp">
+      <Filter>Source Files\Components\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +148,15 @@
     </ClInclude>
     <ClInclude Include="include\Gizmos.h">
       <Filter>Header Files\Deps</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BoxPrimitiveComponent.h">
+      <Filter>Header Files\Components\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PrimitiveComponent.h">
+      <Filter>Header Files\Components\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SpherePrimitiveComponent.h">
+      <Filter>Header Files\Components\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

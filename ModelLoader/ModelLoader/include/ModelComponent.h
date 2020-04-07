@@ -17,7 +17,7 @@ public:
 	virtual void Draw(Shader* a_pShader);
 
 	void SetModel(Model* a_pNewModel) { m_pModelData = a_pNewModel; };
-	void SetScale(float a_fNewScale) { m_fModelScale = a_fNewScale; };
+	void SetScale(const float a_fNewScale) { m_fModelScale = a_fNewScale; };
 
 private:
 	Model* m_pModelData;

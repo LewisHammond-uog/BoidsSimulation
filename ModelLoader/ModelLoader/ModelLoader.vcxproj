@@ -92,9 +92,11 @@
     <ClCompile Include="..\deps\include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\deps\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="include\ColliderComponent.cpp" />
+    <ClCompile Include="include\PrimitiveComponent.cpp" />
     <ClCompile Include="source\Application.cpp" />
+    <ClCompile Include="source\BoxPrimitiveComponent.cpp" />
     <ClCompile Include="source\BrainComponent.cpp" />
+    <ClCompile Include="source\ColliderComponent.cpp" />
     <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\DebugUI.cpp" />
     <ClCompile Include="source\Entity.cpp" />
@@ -102,6 +104,7 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\ModelComponent.cpp" />
     <ClCompile Include="source\Scene.cpp" />
+    <ClCompile Include="source\SpherePrimitiveComponent.cpp" />
     <ClCompile Include="source\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +114,7 @@
     <ClInclude Include="..\deps\include\learnopengl\shader.h" />
     <ClInclude Include="..\deps\include\stb\stb_image.h" />
     <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\BoxPrimitiveComponent.h" />
     <ClInclude Include="include\BrainComponent.h" />
     <ClInclude Include="include\ColliderComponent.h" />
     <ClInclude Include="include\Component.h" />
@@ -118,8 +122,10 @@
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\Gizmos.h" />
     <ClInclude Include="include\ModelComponent.h" />
+    <ClInclude Include="include\PrimitiveComponent.h" />
     <ClInclude Include="include\resource.h" />
     <ClInclude Include="include\Scene.h" />
+    <ClInclude Include="include\SpherePrimitiveComponent.h" />
     <ClInclude Include="include\TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>

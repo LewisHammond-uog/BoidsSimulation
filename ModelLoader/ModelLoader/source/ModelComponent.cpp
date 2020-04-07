@@ -15,8 +15,7 @@ typedef Component PARENT;
 ModelComponent::ModelComponent(Entity* a_pOwner): 
 	PARENT(a_pOwner),
 	m_pModelData(nullptr),
-	m_fModelScale(0.0f)
-																
+	m_fModelScale(0.0f)																
 {
 }
 

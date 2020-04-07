@@ -22,11 +22,14 @@
 
 //Project Includes
 #include "Entity.h"
+#include "DebugUI.h"
+//Components
 #include "TransformComponent.h"
 #include "ModelComponent.h"
 #include "BrainComponent.h"
 #include "ColliderComponent.h"
-#include "DebugUI.h"
+#include "SpherePrimitiveComponent.h"
+
 
 const unsigned int BOID_COUINT = 25;
 
@@ -106,7 +109,6 @@ bool Scene::Initalise(){
 		ColliderComponent* pCollider = new ColliderComponent(pEntity, m_pSceneCollisionWorld);
 		pCollider->AddSphereCollider(0.25f, glm::vec3(0.0f));
 		pEntity->AddComponent(pCollider);
-		
 	}
 
 	return true;

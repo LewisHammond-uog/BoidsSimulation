@@ -5,13 +5,14 @@
 class Entity;
 class Shader;
 
-
 enum COMPONENT_TYPE {
 	NONE,
 	TRANSFORM,
 	MODEL,
 	BRAIN,
-	COLLIDER
+	COLLIDER,
+	PRIMITIVE_BOX,
+	PRIMITIVE_SPHERE
 };
 
 class Component
