@@ -25,7 +25,7 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 	*/
 
 	//Create collision body at object transform
-	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	m_pCollisionBody = m_pCollisionWorld->createCollisionBody(GetPhysicsTransform(pLocalTransform));
 }
 
@@ -52,7 +52,7 @@ ColliderComponent::~ColliderComponent()
 void ColliderComponent::Update(float a_fDeltaTime)
 {
 	//Get new position and transform of the physics body
-	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));//TODO Make this Nicer
+	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (pLocalTransform == nullptr)
 	{
 		return;
@@ -69,7 +69,7 @@ void ColliderComponent::Draw(Shader* a_pShader)
 	if (DebugUI::GetInstance()->GetShowColliders()) {
 		//Get the current position of the object - all colliders positions are relative
 		//to this
-		TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+		TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 		if (pLocalTransform == nullptr)
 		{
 			return;
@@ -176,7 +176,7 @@ bool ColliderComponent::IsColliding(const bool a_bUseAABB)
 		}
 
 		//Get the collider component
-		ColliderComponent* pTargetCollider = static_cast<ColliderComponent*>(pTarget->GetComponent(COMPONENT_TYPE::COLLIDER));
+		ColliderComponent* pTargetCollider = pTarget->GetComponent<ColliderComponent*>();
 		if (pTargetCollider == nullptr) {
 			return false;
 		}
@@ -252,7 +252,7 @@ std::vector<CollisionInfo> ColliderComponent::GetCollisionInfo()
 		}
 
 		//Get the collider component
-		ColliderComponent* pTargetCollider = static_cast<ColliderComponent*>(pTarget->GetComponent(COMPONENT_TYPE::COLLIDER));
+		ColliderComponent* pTargetCollider = pTarget->GetComponent<ColliderComponent*>();
 		if (pTargetCollider == nullptr) {
 			continue;
 		}
@@ -371,7 +371,7 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 		}
 
 		//Get the collider component
-		ColliderComponent* pTargetCollider = static_cast<ColliderComponent*>(pTarget->GetComponent(COMPONENT_TYPE::COLLIDER));
+		ColliderComponent* pTargetCollider = pTarget->GetComponent<ColliderComponent*>();
 		if (pTargetCollider == nullptr) {
 			continue;
 		}

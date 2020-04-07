@@ -43,7 +43,7 @@ void BoxPrimitiveComponent::Update(float a_fDeltaTime)
 void BoxPrimitiveComponent::Draw(Shader* a_pShader)
 {
 	//Get the transform component - so that we can create the box at our position
-	TransformComponent* pTransform = static_cast<TransformComponent*>(m_pOwnerEntity->GetComponent(TRANSFORM));
+	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pTransform) {
 		return;
 	}

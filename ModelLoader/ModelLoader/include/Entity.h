@@ -7,7 +7,6 @@
 
 //Project Includes
 #include "Component.h"
-#include "TransformComponent.h"
 
 //Forward Declare
 class Shader;
@@ -22,11 +21,11 @@ public:
 	virtual void Draw(Shader* a_pShader);
 
 	void AddComponent(Component* a_pComponent);
-	Component* GetComponent(COMPONENT_TYPE a_eComponentType) const;
+	//todo remove component function?
 
 	//Function for getting a component of this entity based on it's return type
 	template<class returnType>
-	returnType GetComponentT();
+	returnType GetComponent() const;
 
 	unsigned int GetEntityID() const { return m_uEntityID; }
 
@@ -43,16 +42,21 @@ private:
 
 /// <summary>
 /// Template Function that returns a pointer to a component, based on the
-/// template arguments, for example GetComponent<TransformComponent>() will return
-/// a pointer to the transform component of the calling entity
-/// Will return nullptr 
+/// template argument (returnType), for example GetComponent<TransformComponent*>() will return
+/// a pointer to the transform component of the calling entity.
+/// Template Type must be a a Component* (e.g TransformComponent*, ModelComponent*)
+/// Will return nullptr if there is not a component of returnType attached to this entity 
 /// </summary>
-/// <returns></returns>
+/// <returns>Pointer to the component of the returnType attached to this entity or
+/// nullptr if one is not attached</returns>
 template<class returnType>
-returnType Entity::GetComponentT()
+returnType Entity::GetComponent() const
 {
-	//Loop through all of our components and if we find the type
-	//we are looking for then return it, otherwise return a nullptr
+	//Loop through all of the components that we have,
+	//try and cast each one to the returnType, if we can cast to it
+	//then it is a component of the type that we are looking to return, so return it.
+	//If we go through all of the components that we have and have not succesfully
+	//cast then we do not have a component of returnType, so return nullptr.
 	std::vector<Component*>::const_iterator xIter;
 	for (xIter = m_apComponentList.begin(); xIter < m_apComponentList.end(); ++xIter)
 	{

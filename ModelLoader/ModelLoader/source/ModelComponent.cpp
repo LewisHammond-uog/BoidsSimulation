@@ -36,14 +36,11 @@ void ModelComponent::Draw(Shader* a_pShader)
 	}
 
 	//Get the transform component
-	TransformComponent* pTransform = static_cast<TransformComponent*>(m_pOwnerEntity->GetComponent(TRANSFORM));
+	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pTransform) {
 		return;
 	}
 
-	TransformComponent* test = m_pOwnerEntity->GetComponentT<TransformComponent*>();
-	BrainComponent* brain = m_pOwnerEntity->GetComponentT<BrainComponent*>();
-	BoxPrimitiveComponent* nulllllll = m_pOwnerEntity->GetComponentT<BoxPrimitiveComponent*>();
 	
 	glm::mat4 modelMatrix = pTransform->GetEntityMatrix();
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_fModelScale, m_fModelScale, m_fModelScale));

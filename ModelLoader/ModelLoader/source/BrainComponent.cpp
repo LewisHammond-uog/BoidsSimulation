@@ -32,7 +32,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	}
 
 	//Get transform component
-	TransformComponent* pTransform = static_cast<TransformComponent*>(pEntity->GetComponent(TRANSFORM));
+	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pTransform) {
 		return;
 	}
@@ -156,7 +156,7 @@ glm::vec3 BrainComponent::CalculateSeperationForce()
 	}
 
 	//Get the transform
-	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pLocalTransform) {
 		return glm::vec3();
 	}
@@ -181,7 +181,7 @@ glm::vec3 BrainComponent::CalculateSeperationForce()
 
 		
 		//Find the distance between this entity and the target entity
-		TransformComponent* pTargetTransform = static_cast<TransformComponent*>(pTarget->GetComponent(COMPONENT_TYPE::TRANSFORM)); //TODO Make this Nicer
+		TransformComponent* pTargetTransform = pTarget->GetComponent<TransformComponent*>();
 		if (!pTargetTransform) {
 			continue;
 		}
@@ -217,7 +217,7 @@ glm::vec3 BrainComponent::CalculateAlignmentForce()
 	}
 
 	//Get the transform
-	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pLocalTransform) {
 		return glm::vec3();
 	}
@@ -243,8 +243,8 @@ glm::vec3 BrainComponent::CalculateAlignmentForce()
 
 
 		//Find the distance between this entity and the target entity
-		TransformComponent* pTargetTransform = static_cast<TransformComponent*>(pTarget->GetComponent(COMPONENT_TYPE::TRANSFORM)); //TODO Make this Nicer
-		BrainComponent* pTargetBrain = static_cast<BrainComponent*>(pTarget->GetComponent(COMPONENT_TYPE::BRAIN));
+		TransformComponent* pTargetTransform = pTarget->GetComponent<TransformComponent*>();
+		BrainComponent* pTargetBrain = pTarget->GetComponent<BrainComponent*>();
 		if (!pTargetTransform) {
 			continue;
 		}
@@ -279,7 +279,7 @@ glm::vec3 BrainComponent::CalculateCohensionForce()
 	}
 
 	//Get the transform
-	TransformComponent* pLocalTransform = static_cast<TransformComponent*>(GetOwnerEntity()->GetComponent(COMPONENT_TYPE::TRANSFORM));
+	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pLocalTransform) {
 		return glm::vec3();
 	}
@@ -305,7 +305,7 @@ glm::vec3 BrainComponent::CalculateCohensionForce()
 
 
 		//Find the distance between this entity and the target entity
-		TransformComponent* pTargetTransform = static_cast<TransformComponent*>(pTarget->GetComponent(COMPONENT_TYPE::TRANSFORM)); //TODO Make this Nicer
+		TransformComponent* pTargetTransform = pTarget->GetComponent<TransformComponent*>();
 		if (!pTargetTransform) {
 			continue;
 		}

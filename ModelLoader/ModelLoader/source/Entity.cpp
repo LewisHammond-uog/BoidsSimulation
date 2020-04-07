@@ -65,30 +65,8 @@ void Entity::Draw(Shader* a_pShader)
 ///Add a component to this entity
 void Entity::AddComponent(Component* a_pComponent)
 {
-	//If we already have a component of the type we are trying
-	//to add then early out
-	if (GetComponent(a_pComponent->GetComponentType()) != nullptr) {
-		return;
-	}
-
+	//todo - check we don't already have a component of the given type
+	
 	//Add component to our component list
 	m_apComponentList.push_back(a_pComponent);
-}
-
-[[deprecated]]
-Component* Entity::GetComponent(COMPONENT_TYPE a_eComponentType) const
-{
-	//Loop through all of the components see if they have a component
-	std::vector<Component*>::const_iterator xIter;
-	for (xIter = m_apComponentList.begin(); xIter < m_apComponentList.end(); ++xIter)
-	{
-		Component* pComponent = *xIter;
-		if (pComponent && pComponent->GetComponentType() == a_eComponentType) {
-			return pComponent;
-		}
-	}
-
-	//No component found, nullptr
-	return nullptr;
-
 }
