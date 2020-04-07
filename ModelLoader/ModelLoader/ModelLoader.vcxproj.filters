@@ -87,9 +87,6 @@
     <ClCompile Include="source\Gizmos.cpp">
       <Filter>Source Files\Deps</Filter>
     </ClCompile>
-    <ClCompile Include="include\PrimitiveComponent.cpp">
-      <Filter>Source Files\Components\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="source\BoxPrimitiveComponent.cpp">
       <Filter>Source Files\Components\Primitives</Filter>
     </ClCompile>
@@ -97,6 +94,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\SpherePrimitiveComponent.cpp">
+      <Filter>Source Files\Components\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PrimitiveComponent.cpp">
       <Filter>Source Files\Components\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
