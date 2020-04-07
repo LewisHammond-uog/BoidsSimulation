@@ -1,5 +1,5 @@
-#ifndef __BOX_PRIMITIVE_COMPONENT_H__
-#define __BOX_PRIMITIVE_COMPONENT_H__
+#ifndef __SPHERE_PRIMITIVE_COMPONENT_H__
+#define __SPHERE_PRIMITIVE_COMPONENT_H__
 
 //Project Includes
 #include <glm/glm.hpp>
@@ -28,4 +28,4 @@ private:
 };
 
 
-#endif //!__BOX_PRIMITIVE_COMPONENT_H__
+#endif //!__SPHERE_PRIMITIVE_COMPONENT_H__
