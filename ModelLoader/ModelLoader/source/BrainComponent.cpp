@@ -41,20 +41,19 @@ void BrainComponent::Update(float a_fDeltaTime)
 	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();;
 
-	//Calcualte forces
+	//Calculate forces
 	///////////////////////////////////////////////////////////
 	glm::vec3 v3NewForce(0.0f);
 
 	//Get the Debug UI Instance so that we can get the user input values from it
 	DebugUI* pDebugUI = DebugUI::GetInstance();
 
-	glm::vec3 v3SeperationForce = CalculateSeperationForce() * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION);
-	glm::vec3 v3AlignmentForce = CalculateAlignmentForce()   * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
-	glm::vec3 v3CohesionForce = CalculateCohensionForce()    * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
+	const glm::vec3 v3SeperationForce = CalculateSeperationForce() * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION);
+	const glm::vec3 v3AlignmentForce = CalculateAlignmentForce()   * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
+	const glm::vec3 v3CohesionForce = CalculateCohensionForce()    * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
+	const glm::vec3 v3WanderForce = CalculateWanderForce(v3Forward, v3CurrentPos) * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_WANDER);
 
-	//glm::vec3 v3wander = CalculateWanderForce(v3Forward, v3CurrentPos);
-
-	v3NewForce = v3SeperationForce + v3AlignmentForce + v3CohesionForce;
+	v3NewForce = v3SeperationForce + v3AlignmentForce + v3CohesionForce + v3WanderForce;
 
 	///////////////////////////////////////////////////////////
 
@@ -90,7 +89,7 @@ glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& v3Target, const gl
 	}
 
 	//Calc New Velocity
-	glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
+	const glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
@@ -109,7 +108,7 @@ glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& v3Target, const gl
 	}
 
 	//Calc New Velocity
-	glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
+	const glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
@@ -118,21 +117,21 @@ glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& v3Target, const gl
 glm::vec3 BrainComponent::CalculateWanderForce(const glm::vec3& v3Forward, const glm::vec3& v3CurrentPos)
 {
 	//Project a point in front of us for the center of our sphere
-	glm::vec3 v3SphereOrigin = v3CurrentPos + (v3Forward * fCIRCLE_FORWARD_MUTIPLIER);
+	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3Forward * fCIRCLE_FORWARD_MUTIPLIER);
 
 	//If the magnitude of the vector is 0 then initalize our
 	//first wander point
 	if (glm::length(m_v3WanderPoint) == 0.0f) 
 	{
 		//Find a random point omn a sphere
-		glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(fWANDER_RADIUS);
+		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(fWANDER_RADIUS);
 
 		//Add this point on a sphere to the sphere we are casting out infront of us
 		m_v3WanderPoint = v3SphereOrigin + v3RandomPointOnSphere;
 	}
 
 	//Calculate direction to move to
-	glm::vec3 v3DirectionToTarget = glm::normalize(m_v3WanderPoint - v3SphereOrigin) * fWANDER_RADIUS;
+	const glm::vec3 v3DirectionToTarget = glm::normalize(m_v3WanderPoint - v3SphereOrigin) * fWANDER_RADIUS;
 
 	//Find out final target point
 	m_v3WanderPoint = v3SphereOrigin + v3DirectionToTarget;
@@ -161,7 +160,7 @@ glm::vec3 BrainComponent::CalculateSeperationForce()
 		return glm::vec3();
 	}
 
-	glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
+	const glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
 
 	//Itterate over every entity in the scene
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
@@ -187,7 +186,7 @@ glm::vec3 BrainComponent::CalculateSeperationForce()
 		}
 		
 		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
-		float fDistance = glm::length(v3TargetPos - v3LocalPos);
+		const float fDistance = glm::length(v3TargetPos - v3LocalPos);
 
 		//Check that object is within checking range and add velocity
 		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
@@ -222,7 +221,7 @@ glm::vec3 BrainComponent::CalculateAlignmentForce()
 		return glm::vec3();
 	}
 
-	glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
+	const glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
 
 	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
 	//Itterate over every entity in the scene
@@ -250,7 +249,7 @@ glm::vec3 BrainComponent::CalculateAlignmentForce()
 		}
 
 		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
-		float fDistance = glm::length(v3TargetPos - v3LocalPos);
+		const float fDistance = glm::length(v3TargetPos - v3LocalPos);
 
 		//Check that object is within checking range and add velocity
 		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
@@ -284,7 +283,7 @@ glm::vec3 BrainComponent::CalculateCohensionForce()
 		return glm::vec3();
 	}
 
-	glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
+	const glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
 
 	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
 	//Itterate over every entity in the scene
@@ -311,7 +310,7 @@ glm::vec3 BrainComponent::CalculateCohensionForce()
 		}
 
 		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
-		float fDistance = glm::length(v3TargetPos - v3LocalPos);
+		const float fDistance = glm::length(v3TargetPos - v3LocalPos);
 
 		//Check that object is within checking range and add velocity
 		if (fDistance < fNEIGHBOURHOOD_RADIUS) {

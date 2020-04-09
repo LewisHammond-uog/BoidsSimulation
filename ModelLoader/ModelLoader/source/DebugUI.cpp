@@ -40,6 +40,7 @@ void DebugUI::Update() {
 	ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 	ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 	ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+	ImGui::SliderFloat("Wander Force Weight", &m_fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 
 	//Tickbox of whether to draw colliders
 	ImGui::Text("Debug Drawing");
@@ -57,7 +58,7 @@ void DebugUI::Update() {
 /// <returns>Weight of Behvaiour</returns>
 float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType) const
 {
-	//TODO MAKE THIS RETURN A HASH MAP?
+	//TODO MAKE THIS RETURN A HASH MAP so that we only request it once
 
 	//Switch through the different behaviour types
 	//and return the appropriate value
@@ -71,6 +72,9 @@ float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType) const
 		break;
 	case BEHAVIOUR_COHESION:
 		return m_fInputCohesionForce;
+		break;
+	case BEHAVIOUR_WANDER:
+		return m_fInputWanderForce;
 		break;
 	default:
 		//Default (i.e invalid value), return 0 so that
@@ -93,6 +97,7 @@ DebugUI::DebugUI() :
 	m_fInputSeperationForce(mc_fDefaultForce),
 	m_fInputCohesionForce(mc_fDefaultForce),
 	m_fInputAlignmentForce(mc_fDefaultForce),
+	m_fInputWanderForce(mc_fDefaultForce),
 	m_bShowColliders(false)
 {
 }

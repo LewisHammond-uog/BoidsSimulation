@@ -8,7 +8,8 @@
 typedef enum FlockingBehaviourType {
 	BEHAVIOUR_SEPERATION,
 	BEHAVIOUR_ALIGNMENT,
-	BEHAVIOUR_COHESION
+	BEHAVIOUR_COHESION,
+	BEHAVIOUR_WANDER
 }FlockingBehaviourType;
 
 class DebugUI {
@@ -37,7 +38,7 @@ private:
 
 	//UI Position
 	const ImVec2 m_v2WindowPos = ImVec2(0, 0);
-	const ImVec2 m_v2WindowSize = ImVec2(300, 300);
+	const ImVec2 m_v2WindowSize = ImVec2(300, 600);
 
 	//Max and min values
 	const float mc_fMinForceWeight = 0.0f;
@@ -48,6 +49,7 @@ private:
 	float m_fInputSeperationForce;
 	float m_fInputAlignmentForce;
 	float m_fInputCohesionForce;
+	float m_fInputWanderForce;
 	bool m_bShowColliders;
 
 };
