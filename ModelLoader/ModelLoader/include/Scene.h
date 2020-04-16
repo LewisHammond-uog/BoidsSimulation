@@ -30,6 +30,9 @@ private:
 	Scene(const Scene&); //Overload Copy Constructor - no implementation
 	Scene& operator=(const Scene&); //Overload Equals Operator - no implementation
 
+	//Function to generate our bounds volume
+	void GenerateBoundsVolume(float a_fBoundsSize);
+	
 	//OpenGL Callback functions
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);

@@ -87,126 +87,10 @@ bool Scene::Initalise(){
 	//occour in
 	m_pSceneCollisionWorld = new rp3d::CollisionWorld;
 
-	//-----------------1------------------//
+
+	//Create our world bounds
+	GenerateBoundsVolume(10.f);
 	
-	//Create containment volume
-	const glm::vec3 v3WallSize = glm::vec3(10.f, 10.f, 0.1f);
-	Entity* pWall = new Entity();
-
-	//Transform Component
-	TransformComponent* pWallTransform = new TransformComponent(pWall);
-	pWallTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0,0,10));
-	pWall->AddComponent(pWallTransform);
-
-	//Collider Component
-	ColliderComponent* pWallCollider = new ColliderComponent(pWall, m_pSceneCollisionWorld);
-	pWallCollider->AddBoxCollider(v3WallSize, glm::vec3(0, 0, 0));
-	pWall->AddComponent(pWallCollider);
-	
-	//Wall Component
-	BoxPrimitiveComponent* pWallDraw = new BoxPrimitiveComponent(pWall, v3WallSize);
-	pWall->AddComponent(pWallDraw);
-
-	//-----------------2------------------//
-
-	//Create containment volume
-	const glm::vec3 v3WallSize2 = glm::vec3(10.f, 10.f, 0.1f);
-	Entity* pWall2 = new Entity();
-
-	//Transform Component
-	TransformComponent* pWallTransform2 = new TransformComponent(pWall2);
-	pWallTransform2->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0, 0, -10));
-	pWall2->AddComponent(pWallTransform2);
-
-	//Collider Component
-	ColliderComponent* pWallCollider2 = new ColliderComponent(pWall2, m_pSceneCollisionWorld);
-	pWallCollider2->AddBoxCollider(v3WallSize2, glm::vec3(0, 0, 0));
-	pWall2->AddComponent(pWallCollider2);
-
-	//Wall Component
-	BoxPrimitiveComponent* pWallDraw2 = new BoxPrimitiveComponent(pWall2, v3WallSize);
-	pWall2->AddComponent(pWallDraw2);
-
-	//-----------------3------------------//
-
-	//Create containment volume
-	const glm::vec3 v3WallSize3 = glm::vec3(10.f, .1f, 10.f);
-	Entity* pWall3 = new Entity();
-
-	//Transform Component
-	TransformComponent* pWallTransform3 = new TransformComponent(pWall3);
-	pWallTransform3->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0, -10, 0));
-	pWall3->AddComponent(pWallTransform3);
-
-	//Collider Component
-	ColliderComponent* pWallCollider3 = new ColliderComponent(pWall3, m_pSceneCollisionWorld);
-	pWallCollider3->AddBoxCollider(v3WallSize3, glm::vec3(0, 0, 0));
-	pWall3->AddComponent(pWallCollider3);
-
-	//Wall Component
-	BoxPrimitiveComponent* pWallDraw3 = new BoxPrimitiveComponent(pWall3, v3WallSize3);
-	pWall3->AddComponent(pWallDraw3);
-
-	//-----------------4------------------//
-
-	//Create containment volume
-	const glm::vec3 v3WallSize4 = glm::vec3(10.f, .1f, 10.f);
-	Entity* pWall4 = new Entity();
-
-	//Transform Component
-	TransformComponent* pWallTransform4 = new TransformComponent(pWall4);
-	pWallTransform4->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0, 10, 0));
-	pWall4->AddComponent(pWallTransform4);
-
-	//Collider Component
-	ColliderComponent* pWallCollider4 = new ColliderComponent(pWall4, m_pSceneCollisionWorld);
-	pWallCollider4->AddBoxCollider(v3WallSize4, glm::vec3(0, 0, 0));
-	pWall4->AddComponent(pWallCollider4);
-
-	//Wall Component
-	BoxPrimitiveComponent* pWallDraw4 = new BoxPrimitiveComponent(pWall4, v3WallSize4);
-	pWall4->AddComponent(pWallDraw4);
-
-	//-----------------5------------------//
-
-	//Create containment volume
-	const glm::vec3 v3WallSize5 = glm::vec3(.1f, 10.f, 10.f);
-	Entity* pWall5 = new Entity();
-
-	//Transform Component
-	TransformComponent* pWallTransform5 = new TransformComponent(pWall5);
-	pWallTransform5->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(10, 0, 0));
-	pWall5->AddComponent(pWallTransform5);
-
-	//Collider Component
-	ColliderComponent* pWallCollider5 = new ColliderComponent(pWall5, m_pSceneCollisionWorld);
-	pWallCollider5->AddBoxCollider(v3WallSize5, glm::vec3(0, 0, 0));
-	pWall5->AddComponent(pWallCollider5);
-
-	//Wall Component
-	BoxPrimitiveComponent* pWallDraw5 = new BoxPrimitiveComponent(pWall5, v3WallSize5);
-	pWall5->AddComponent(pWallDraw5);
-
-	//-----------------6------------------//
-
-	//Create containment volume
-	const glm::vec3 v3WallSize6 = glm::vec3(.1f, 10.f, 10.f);
-	Entity* pWall6 = new Entity();
-
-	//Transform Component
-	TransformComponent* pWallTransform6 = new TransformComponent(pWall6);
-	pWallTransform6->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(-10, 0, 0));
-	pWall6->AddComponent(pWallTransform6);
-
-	//Collider Component
-	ColliderComponent* pWallCollider6 = new ColliderComponent(pWall6, m_pSceneCollisionWorld);
-	pWallCollider6->AddBoxCollider(v3WallSize6, glm::vec3(0, 0, 0));
-	pWall5->AddComponent(pWallCollider6);
-
-	//Wall Component
-	BoxPrimitiveComponent* pWallDraw6 = new BoxPrimitiveComponent(pWall6, v3WallSize6);
-	pWall5->AddComponent(pWallDraw6);
-
 	//Create entities
 	for (int i = 0; i < BOID_COUINT; i++) {
 		Entity* pEntity = new Entity();
@@ -280,8 +164,8 @@ void Scene::Render() {
 	m_ourShader->use();
 
 	// view/projection transformations
-	glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	glm::mat4 view = m_camera->GetViewMatrix();
+	const glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	const glm::mat4 view = m_camera->GetViewMatrix();
 	m_ourShader->setMat4("projection", projection);
 	m_ourShader->setMat4("view", view);
 
@@ -347,10 +231,61 @@ void Scene::DeInitlise() {
 	Gizmos::destroy();
 
 }
+
+/// <summary>
+/// Get the collision world that the scene is using
+/// </summary>
+/// <returns></returns>
 rp3d::CollisionWorld* Scene::GetCollisionWorld() const
 {
 	return m_pSceneCollisionWorld;
 }
+
+/// <summary>
+/// Generate a square bounds volume of the given size
+/// </summary>
+/// <param name="a_fBoundsSize"></param>
+void Scene::GenerateBoundsVolume(float a_fBoundsSize)
+{
+	constexpr float fWallThickness = 0.1f;
+	constexpr int iWallCount = 6;
+
+	//todo - there has to be a better way to do this
+	//Array of the wall sizes and positions that we need
+	glm::vec3 aV3wallSizes[3] = {	glm::vec3(a_fBoundsSize,a_fBoundsSize,fWallThickness),
+									glm::vec3(a_fBoundsSize,fWallThickness,a_fBoundsSize),
+									glm::vec3(fWallThickness,a_fBoundsSize,a_fBoundsSize) };
+	glm::vec3 aV3wallPositions[iWallCount] = {	glm::vec3(0.f,0.f,a_fBoundsSize), glm::vec3(0.f,0.f,-a_fBoundsSize),
+										glm::vec3(0.f,a_fBoundsSize,0.0f), glm::vec3(0.f,-a_fBoundsSize,0.f),
+										glm::vec3(a_fBoundsSize,0.0f,0.0f), glm::vec3(-a_fBoundsSize,0.0f,0.f), };
+
+	
+	for(int i = 0; i < iWallCount; ++i)
+	{
+		//Get the size of the current wall
+		glm::vec3 currentWallSize = aV3wallSizes[i / 2];
+		//Get the position of the current Wall
+		glm::vec3 currentWallPosition = aV3wallPositions[i];
+
+		//Create an entity to represent our wall
+		Entity* pWallEntity = new Entity();
+
+		//Create a transfrom so our wall has position and give it our wall psoition
+		TransformComponent* pWallTransform = new TransformComponent(pWallEntity);
+		pWallTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, currentWallPosition);
+
+		//Create a our collider to our entities can collider with this
+		ColliderComponent* pWallCollider = new ColliderComponent(pWallEntity, m_pSceneCollisionWorld);
+		pWallCollider->AddBoxCollider(currentWallSize, glm::vec3(0, 0, 0));
+
+		//Add components to our wall entity
+		pWallEntity->AddComponent(pWallTransform);
+		pWallEntity->AddComponent(pWallCollider);
+		
+	}
+	
+}
+
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
 void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -367,8 +302,8 @@ void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		pScene->m_bFirstMouse = false;
 	}
 
-	float xoffset = xpos - pScene->m_fLastX;
-	float yoffset = pScene->m_fLastY - ypos; // reversed since y-coordinates go from bottom to top
+	const float xoffset = xpos - pScene->m_fLastX;
+	const float yoffset = pScene->m_fLastY - ypos; // reversed since y-coordinates go from bottom to top
 
 	pScene->m_fLastX = xpos;
 	pScene->m_fLastY = ypos;
