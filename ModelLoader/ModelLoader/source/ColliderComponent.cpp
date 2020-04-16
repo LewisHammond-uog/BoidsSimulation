@@ -58,10 +58,6 @@ void ColliderComponent::Update(float a_fDeltaTime)
 		return;
 	}
 	m_pCollisionBody->setTransform(GetPhysicsTransform(pLocalTransform));
-
-	const glm::vec3 startPoint = glm::vec3(pLocalTransform->GetCurrentPosition());
-	const glm::vec3 endPoint = glm::vec3(pLocalTransform->GetCurrentPosition()) + pLocalTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR) * 1.f;
-	RayCast(startPoint, endPoint);
 }
 
 /// <summary>
@@ -157,7 +153,7 @@ void ColliderComponent::AddSphereCollider(const float a_fSphereSize, const glm::
 /// </summary>
 /// <param name="a_bUseAABB">Whether we should use AABB testing for collisions, rather than more
 /// precise methods (i.e mesh)</param>
-/// <returns></returns>
+/// <returns>If we are colliding with any other object in the scene</returns>
 bool ColliderComponent::IsColliding(const bool a_bUseAABB)
 {
 	//Create a map to itterate through all of our entities
@@ -396,7 +392,12 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 	return nullptr;
 }
 
-
+/// <summary>
+/// Ray casts between 2 points in the world
+/// </summary>
+/// <param name="a_v3StartPoint">World Start Point</param>
+/// <param name="a_v3EndPoint">World End Point</param>
+/// <returns>Infomation about all of the objects that the raycast has hit</returns>
 RaycastCallbackInfo ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
 {
 	//Create a ray from the given start and end point

@@ -20,21 +20,19 @@ public:
 	virtual void Update(float a_fDeltaTime);
 	virtual void Draw(Shader* a_pShader);
 
-	void AddComponent(Component* a_pComponent);
-	//todo remove component function?
+	void AddComponent(Component* a_pComponentToAdd);
+	void RemoveComponent(Component* a_pComponentToRemove);
 
 	//Function for getting a component of this entity based on it's return type
 	template<class returnType>
 	returnType GetComponent() const;
-
+	
 	unsigned int GetEntityID() const { return m_uEntityID; }
-
 	static const std::map<const unsigned int, Entity*>& GetEntityMap() { return s_xEntityMap; }
 
 private:
 	unsigned int m_uEntityID;
 	std::vector<Component*> m_apComponentList;
-
 
 	static unsigned int s_uEntityCount;
 	static std::map<const unsigned int, Entity*> s_xEntityMap;

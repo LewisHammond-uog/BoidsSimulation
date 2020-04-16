@@ -1,14 +1,15 @@
 #include "BrainComponent.h"
 
 //Project Incldues
+#include "ColliderComponent.h"
 #include "Entity.h"
 #include "TransformComponent.h"
 #include "DebugUI.h"
 
-//TODO Clean UP
+//TODO Clean UP/Remove
 //Constants
 const float fMAX_SPEED = 5.0f;
-const float fMAX_FORCE = 0.2f;
+const float fMAX_FORCE = 1.0f;
 const float fNEIGHBOURHOOD_RADIUS = 5.0f;
 
 const float fCIRCLE_FORWARD_MUTIPLIER = 1.f; //How far forward to draw the sphere
@@ -24,12 +25,9 @@ BrainComponent::BrainComponent(Entity* a_pOwner)
 }
 
 void BrainComponent::Update(float a_fDeltaTime)
-{
-	//Get our entity owner
-	Entity* pEntity = GetOwnerEntity();
-	if (!pEntity) {
-		return;
-	}
+{	
+	//Get the Debug UI Instance so that we can get the user input values from it
+	DebugUI* pDebugUI = DebugUI::GetInstance();
 
 	//Get transform component
 	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
@@ -41,40 +39,37 @@ void BrainComponent::Update(float a_fDeltaTime)
 	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();;
 
-	//Calculate forces
-	///////////////////////////////////////////////////////////
+	//Create an array of force values in the order that we want to apply them
+	glm::vec3 afForceValues[] = {	CalculateSeperationForce() * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION),
+									CalculateAlignmentForce()* pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT),
+									CalculateCohensionForce()* pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION),
+									CalculateWanderForce(v3Forward, v3CurrentPos)* pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_WANDER) };
+
+
+	//Loop through all of the forces, only adding them if the do not excede the maximum force
 	glm::vec3 v3NewForce(0.0f);
-
-	//Get the Debug UI Instance so that we can get the user input values from it
-	DebugUI* pDebugUI = DebugUI::GetInstance();
-
-	const glm::vec3 v3SeperationForce = CalculateSeperationForce() * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION);
-	const glm::vec3 v3AlignmentForce = CalculateAlignmentForce()   * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
-	const glm::vec3 v3CohesionForce = CalculateCohensionForce()    * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
-	const glm::vec3 v3WanderForce = CalculateWanderForce(v3Forward, v3CurrentPos) * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_WANDER);
-
-	v3NewForce = v3SeperationForce + v3AlignmentForce + v3CohesionForce + v3WanderForce;
-
-	///////////////////////////////////////////////////////////
+	for (glm::vec3 currentForceValue : afForceValues)
+	{
+		if(glm::length(v3NewForce + currentForceValue) < fMAX_FORCE)
+		{
+			v3NewForce += currentForceValue;
+		}
+	}
 
 	//Apply Force
 	m_v3CurrentVelocity += v3NewForce;
-
-	//Clamp Velocity
 	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, glm::vec3(-fMAX_FORCE, -fMAX_FORCE, -fMAX_FORCE), glm::vec3(fMAX_FORCE, fMAX_FORCE, fMAX_FORCE));
-
 	//Apply Velocity to Position
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
-	
-	//Recalculate matrix rows - only normalise if not a zero vector
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
 	 
 	//Update our matrix
 	pTransform->SetEntityMatrixRow(FORWARD_VECTOR, v3Forward);
 	pTransform->SetEntityMatrixRow(POSTION_VECTOR, v3CurrentPos);
 	pTransform->Orthogonalize();
-
 }
+
+
 
 //TODO Restructure so that we don't repeat ourselves - CalculateFleeForce
 glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const
@@ -285,7 +280,6 @@ glm::vec3 BrainComponent::CalculateCohensionForce()
 
 	const glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
 
-	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
 	//Itterate over every entity in the scene
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
 	std::map<const unsigned int, Entity*>::const_iterator xIter;

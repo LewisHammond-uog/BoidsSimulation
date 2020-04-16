@@ -21,10 +21,7 @@ Entity::~Entity()
 	//them
 	std::vector<Component*>::const_iterator xIter;
 	for (xIter = m_apComponentList.begin(); xIter < m_apComponentList.end(); ++xIter) {
-		Component* currentComponent = *xIter;
-		if (currentComponent != nullptr) {
-			delete currentComponent;
-		}
+		delete *xIter;
 	}
 
 	//Remove this entity from the entity map and
@@ -62,11 +59,32 @@ void Entity::Draw(Shader* a_pShader)
 	}
 }
 
-///Add a component to this entity
-void Entity::AddComponent(Component* a_pComponent)
+/// <summary>
+/// Adds a component to this entity
+/// </summary>
+/// <param name="a_pComponentToAdd">Component to Add</param>
+void Entity::AddComponent(Component* a_pComponentToAdd)
 {
-	//todo - check we don't already have a component of the given type
+	
 	
 	//Add component to our component list
-	m_apComponentList.push_back(a_pComponent);
+	m_apComponentList.push_back(a_pComponentToAdd);
+}
+
+/// <summary>
+/// Remove a component from this entity 
+/// </summary>
+/// <param name="a_pComponentToRemove">Component to Remove</param>
+void Entity::RemoveComponent(Component* a_pComponentToRemove)
+{
+	//Loop through all of the components and check to see if we
+	//have the component if we do the remove it
+	std::vector<Component*>::const_iterator xIter;
+	for (xIter = m_apComponentList.begin(); xIter < m_apComponentList.end(); ++xIter)
+	{
+		Component* pComponent = *xIter;
+		if (pComponent == a_pComponentToRemove) {
+			m_apComponentList.erase(xIter);
+		}
+	}
 }

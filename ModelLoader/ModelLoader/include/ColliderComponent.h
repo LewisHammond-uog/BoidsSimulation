@@ -38,7 +38,6 @@ public:
 	std::vector<CollisionInfo*> GetCollisionInfo();
 	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
 
-	//TODO - Fix this? Never hits anything
 	//Functions to do raycasting
 	RaycastCallbackInfo RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
 	RaycastCallbackInfo RayCast(rp3d::Ray* a_Ray);
@@ -83,10 +82,9 @@ private:
 /// </summary>
 struct RayCastHit
 {
-	//Entity that we have hit
-	Entity* m_pHitEntity;
-	//Point in space that we hit the entity
-	glm::vec3 m_v3HitPoint;
+	Entity* m_pHitEntity; //Entity that we have hit
+	glm::vec3 m_v3HitPoint; //Point in space that we hit the entity
+	float m_fHitFraction; //Fraction of the distance that we hit the object in the ray cast (range 0-1)
 };
 
 //todo move
@@ -102,6 +100,10 @@ public:
 		RayCastHit* hit = new RayCastHit();
 		hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(info.body);
 		hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
+		hit->m_fHitFraction = info.hitFraction;
+
+		//Add to hits list
+		m_vRayCastHits.push_back(hit);
 
 		// Return a fraction of 1.0 to gather all hits 
 		return reactphysics3d::decimal(1.f);

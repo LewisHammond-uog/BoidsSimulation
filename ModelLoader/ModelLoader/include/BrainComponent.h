@@ -20,6 +20,7 @@ public:
 	glm::vec3 GetCurrentVelocity() const { return m_v3CurrentVelocity; }
 
 private:
+	
 	//Steering Behaviours
 	glm::vec3 CalculateSeekForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const;
 	glm::vec3 CalculateFleeForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const;
