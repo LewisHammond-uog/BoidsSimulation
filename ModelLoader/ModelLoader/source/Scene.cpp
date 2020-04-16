@@ -30,6 +30,7 @@
 #include "BrainComponent.h"
 #include "ColliderComponent.h"
 #include "BoxPrimitiveComponent.h"
+#include "MathsUtils.h"
 #include "SpherePrimitiveComponent.h"
 
 
@@ -212,9 +213,9 @@ bool Scene::Initalise(){
 
 		//Transform Component
 		TransformComponent* pTransform = new TransformComponent(pEntity);
-		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(RandomBetweenRange(-5.0f, 5.0f), 
-																			RandomBetweenRange(-5.0f, 5.0f),
-																			RandomBetweenRange(-5.0f, 5.0f)));
+		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(	MathsUtils::RandomRange(-5.0f, 5.0f), 
+																				MathsUtils::RandomRange(-5.0f, 5.0f),
+																				MathsUtils::RandomRange(-5.0f, 5.0f)));
 		pEntity->AddComponent(pTransform);
 
 		//Model Component
@@ -346,7 +347,7 @@ void Scene::DeInitlise() {
 	Gizmos::destroy();
 
 }
-rp3d::CollisionWorld* Scene::GetCollisionWorld()
+rp3d::CollisionWorld* Scene::GetCollisionWorld() const
 {
 	return m_pSceneCollisionWorld;
 }
@@ -387,14 +388,4 @@ void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	}
 
 	pScene->m_camera->ProcessMouseScroll(yoffset);
-}
-
-int Scene::RandomBetweenRange(int fLower, int fUpper)
-{
-	return (rand() % (glm::abs(fLower - fUpper)) + fLower);
-}
-
-float Scene::RandomBetweenRange(float fLower, float fUpper)
-{
-	return fLower + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (fUpper - fLower)));
 }

@@ -158,6 +158,9 @@
     <ClInclude Include="include\SpherePrimitiveComponent.h">
       <Filter>Header Files\Components\Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="include\MathsUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelLoader.rc">

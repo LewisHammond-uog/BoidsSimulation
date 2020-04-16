@@ -23,7 +23,7 @@ public:
 	void DeInitlise();
 
 	//Get the collision world - used for collider components
-	rp3d::CollisionWorld* GetCollisionWorld();
+	rp3d::CollisionWorld* GetCollisionWorld() const;
 
 private:
 	Scene();
@@ -33,10 +33,6 @@ private:
 	//OpenGL Callback functions
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-	//TODO REMOVE
-	int RandomBetweenRange(int fLower, int fUpper);
-	float RandomBetweenRange(float fLower, float fUpper);
 
 	Camera* m_camera;
 	Shader* m_ourShader;
