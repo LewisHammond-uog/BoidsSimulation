@@ -23,11 +23,13 @@
 //Project Includes
 #include "Entity.h"
 #include "DebugUI.h"
+
 //Components
 #include "TransformComponent.h"
 #include "ModelComponent.h"
 #include "BrainComponent.h"
 #include "ColliderComponent.h"
+#include "BoxPrimitiveComponent.h"
 #include "SpherePrimitiveComponent.h"
 
 
@@ -83,6 +85,126 @@ bool Scene::Initalise(){
 	//Create a collision world - this is the physics simulation that all of our physics will
 	//occour in
 	m_pSceneCollisionWorld = new rp3d::CollisionWorld;
+
+	//-----------------1------------------//
+	
+	//Create containment volume
+	const glm::vec3 v3WallSize = glm::vec3(10.f, 10.f, 0.1f);
+	Entity* pWall = new Entity();
+
+	//Transform Component
+	TransformComponent* pWallTransform = new TransformComponent(pWall);
+	pWallTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0,0,10));
+	pWall->AddComponent(pWallTransform);
+
+	//Collider Component
+	ColliderComponent* pWallCollider = new ColliderComponent(pWall, m_pSceneCollisionWorld);
+	pWallCollider->AddBoxCollider(v3WallSize, glm::vec3(0, 0, 0));
+	pWall->AddComponent(pWallCollider);
+	
+	//Wall Component
+	BoxPrimitiveComponent* pWallDraw = new BoxPrimitiveComponent(pWall, v3WallSize);
+	pWall->AddComponent(pWallDraw);
+
+	//-----------------2------------------//
+
+	//Create containment volume
+	const glm::vec3 v3WallSize2 = glm::vec3(10.f, 10.f, 0.1f);
+	Entity* pWall2 = new Entity();
+
+	//Transform Component
+	TransformComponent* pWallTransform2 = new TransformComponent(pWall2);
+	pWallTransform2->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0, 0, -10));
+	pWall2->AddComponent(pWallTransform2);
+
+	//Collider Component
+	ColliderComponent* pWallCollider2 = new ColliderComponent(pWall2, m_pSceneCollisionWorld);
+	pWallCollider2->AddBoxCollider(v3WallSize2, glm::vec3(0, 0, 0));
+	pWall2->AddComponent(pWallCollider2);
+
+	//Wall Component
+	BoxPrimitiveComponent* pWallDraw2 = new BoxPrimitiveComponent(pWall2, v3WallSize);
+	pWall2->AddComponent(pWallDraw2);
+
+	//-----------------3------------------//
+
+	//Create containment volume
+	const glm::vec3 v3WallSize3 = glm::vec3(10.f, .1f, 10.f);
+	Entity* pWall3 = new Entity();
+
+	//Transform Component
+	TransformComponent* pWallTransform3 = new TransformComponent(pWall3);
+	pWallTransform3->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0, -10, 0));
+	pWall3->AddComponent(pWallTransform3);
+
+	//Collider Component
+	ColliderComponent* pWallCollider3 = new ColliderComponent(pWall3, m_pSceneCollisionWorld);
+	pWallCollider3->AddBoxCollider(v3WallSize3, glm::vec3(0, 0, 0));
+	pWall3->AddComponent(pWallCollider3);
+
+	//Wall Component
+	BoxPrimitiveComponent* pWallDraw3 = new BoxPrimitiveComponent(pWall3, v3WallSize3);
+	pWall3->AddComponent(pWallDraw3);
+
+	//-----------------4------------------//
+
+	//Create containment volume
+	const glm::vec3 v3WallSize4 = glm::vec3(10.f, .1f, 10.f);
+	Entity* pWall4 = new Entity();
+
+	//Transform Component
+	TransformComponent* pWallTransform4 = new TransformComponent(pWall4);
+	pWallTransform4->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(0, 10, 0));
+	pWall4->AddComponent(pWallTransform4);
+
+	//Collider Component
+	ColliderComponent* pWallCollider4 = new ColliderComponent(pWall4, m_pSceneCollisionWorld);
+	pWallCollider4->AddBoxCollider(v3WallSize4, glm::vec3(0, 0, 0));
+	pWall4->AddComponent(pWallCollider4);
+
+	//Wall Component
+	BoxPrimitiveComponent* pWallDraw4 = new BoxPrimitiveComponent(pWall4, v3WallSize4);
+	pWall4->AddComponent(pWallDraw4);
+
+	//-----------------5------------------//
+
+	//Create containment volume
+	const glm::vec3 v3WallSize5 = glm::vec3(.1f, 10.f, 10.f);
+	Entity* pWall5 = new Entity();
+
+	//Transform Component
+	TransformComponent* pWallTransform5 = new TransformComponent(pWall5);
+	pWallTransform5->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(10, 0, 0));
+	pWall5->AddComponent(pWallTransform5);
+
+	//Collider Component
+	ColliderComponent* pWallCollider5 = new ColliderComponent(pWall5, m_pSceneCollisionWorld);
+	pWallCollider5->AddBoxCollider(v3WallSize5, glm::vec3(0, 0, 0));
+	pWall5->AddComponent(pWallCollider5);
+
+	//Wall Component
+	BoxPrimitiveComponent* pWallDraw5 = new BoxPrimitiveComponent(pWall5, v3WallSize5);
+	pWall5->AddComponent(pWallDraw5);
+
+	//-----------------6------------------//
+
+	//Create containment volume
+	const glm::vec3 v3WallSize6 = glm::vec3(.1f, 10.f, 10.f);
+	Entity* pWall6 = new Entity();
+
+	//Transform Component
+	TransformComponent* pWallTransform6 = new TransformComponent(pWall6);
+	pWallTransform6->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(-10, 0, 0));
+	pWall6->AddComponent(pWallTransform6);
+
+	//Collider Component
+	ColliderComponent* pWallCollider6 = new ColliderComponent(pWall6, m_pSceneCollisionWorld);
+	pWallCollider6->AddBoxCollider(v3WallSize6, glm::vec3(0, 0, 0));
+	pWall5->AddComponent(pWallCollider6);
+
+	//Wall Component
+	BoxPrimitiveComponent* pWallDraw6 = new BoxPrimitiveComponent(pWall6, v3WallSize6);
+	pWall5->AddComponent(pWallDraw6);
 
 	//Create entities
 	for (int i = 0; i < BOID_COUINT; i++) {
@@ -147,6 +269,7 @@ void Scene::Render() {
 	
 	//Call Render on Application
 	Application::Render();
+	
 
 	if (!m_ourShader || !m_pNanoSuitModel) {
 		return;
@@ -173,6 +296,10 @@ void Scene::Render() {
 
 	//Draw Gizmos
 	Gizmos::draw(view, projection);
+
+	//imgui Render
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	glfwSwapBuffers(m_window);

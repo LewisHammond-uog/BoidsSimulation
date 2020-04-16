@@ -244,7 +244,7 @@ glm::vec3 BrainComponent::CalculateAlignmentForce()
 		//Find the distance between this entity and the target entity
 		TransformComponent* pTargetTransform = pTarget->GetComponent<TransformComponent*>();
 		BrainComponent* pTargetBrain = pTarget->GetComponent<BrainComponent*>();
-		if (!pTargetTransform) {
+		if (!pTargetTransform || !pTargetBrain) {
 			continue;
 		}
 

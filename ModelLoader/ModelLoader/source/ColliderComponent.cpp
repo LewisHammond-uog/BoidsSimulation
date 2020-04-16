@@ -396,8 +396,6 @@ rp3d::RaycastInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec
 	const rp3d::Vector3 v3EndPoint(a_v3EndPoint.x, a_v3EndPoint.y, a_v3EndPoint.z);
 	rp3d::Ray raycastRay(v3StartPoint, v3EndPoint);
 
-	Gizmos::addLine(a_v3StartPoint, a_v3EndPoint, glm::vec4(1));
-
 	//Call function that takes ray as parameter and return the result of that
 	return RayCast(&raycastRay);
 }
