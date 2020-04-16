@@ -11,34 +11,13 @@
 #include "TransformComponent.h"
 #include <ReactPhysics3D/reactphysics3d.h>
 
-class CollisionInfo : public rp3d::CollisionCallback {
-public:
-	virtual void notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo);
-private:
-	std::vector<Entity*> m_aCollisionEntities;
-	bool m_bCollisionIsValid = false; 
-};
-
-class RaycastCallbackInfo : public rp3d::RaycastCallback
-{
-public:
-
-	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info) {
-
-		// Display the world hit point coordinates 
-		std::cout << "Hit point : " <<
-			info.worldPoint.x <<
-			info.worldPoint.y <<
-			info.worldPoint.z <<
-			std::endl;
-
-		// Return a fraction of 1.0 to gather all hits 
-		return reactphysics3d::decimal(1.0);
-	}
-};
+//Forward Declare
+class CollisionInfo;
+class RaycastCallbackInfo;
 
 class ColliderComponent : public Component {
 	friend class CollisionInfo;
+	friend class RaycastCallbackInfo;
 public:
 	ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_pCollisionWorld);
 	~ColliderComponent();
@@ -56,21 +35,25 @@ public:
 	bool IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB) const;
 
 	//Functions to get collision info from a collision
-	std::vector<CollisionInfo> GetCollisionInfo();
-	CollisionInfo GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
+	std::vector<CollisionInfo*> GetCollisionInfo();
+	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
 
 	//TODO - Fix this? Never hits anything
 	//Functions to do raycasting
-	rp3d::RaycastInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
-	rp3d::RaycastInfo* RayCast(rp3d::Ray* a_Ray);
+	RaycastCallbackInfo RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
+	RaycastCallbackInfo RayCast(rp3d::Ray* a_Ray);
 
 private:
 
 	//Convert from our transform to the rp3d transform
 	static rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);
+	
 	//Checks if a collision check between 2 colliders is valid - performs null checks on
 	//colliding components
 	bool IsCollisionCheckValid(ColliderComponent* a_pOtherCollider) const;
+
+	//Function to get a entity from a collision body
+	static Entity* GetEntityFromCollisionBody(rp3d::CollisionBody* a_collisionBody);
 	
 	rp3d::CollisionBody* m_pCollisionBody; //Pointer to the rp3d collision body that is used in the physics system
 	rp3d::CollisionWorld* m_pCollisionWorld; //Pointer to the physics world that this object is using
@@ -80,6 +63,52 @@ private:
 	std::vector<rp3d::CollisionShape*> m_apCollisionShapes; //List of physical shapes used
 	std::vector<rp3d::ProxyShape*> m_apProxyShapes; //List of proxy shapes. Proxy shape is the collision shape with mass and transform info
 
+};
+
+
+//todo move
+//todo make these names better
+class CollisionInfo : public rp3d::CollisionCallback {
+public:
+	virtual void notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo);
+private:
+	std::vector<Entity*> m_aCollisionEntities;
+};
+
+//todo move
+//todo make these names better
+/// <summary>
+/// Class which represents a hit of a raycast
+/// Includes the hit body and the point that the hit occoured at
+/// </summary>
+struct RayCastHit
+{
+	//Entity that we have hit
+	Entity* m_pHitEntity;
+	//Point in space that we hit the entity
+	glm::vec3 m_v3HitPoint;
+};
+
+//todo move
+//todo make these names better
+class RaycastCallbackInfo : public rp3d::RaycastCallback
+{
+public:
+
+	//Function called when the ray cast hits a collider in the world
+	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info) {
+
+		//Create a raycast hit and fill it with our info
+		RayCastHit* hit = new RayCastHit();
+		hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(info.body);
+		hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
+
+		// Return a fraction of 1.0 to gather all hits 
+		return reactphysics3d::decimal(1.f);
+	}
+
+	//List of hits from this raycast
+	std::vector<RayCastHit*> m_vRayCastHits;
 };
 
 #endif // !__COLLIDER_COMPONENT_H__

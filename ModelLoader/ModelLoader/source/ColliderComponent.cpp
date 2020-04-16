@@ -64,6 +64,11 @@ void ColliderComponent::Update(float a_fDeltaTime)
 	RayCast(startPoint, endPoint);
 }
 
+/// <summary>
+/// Draw the collider shapes of this component
+/// Only drawn when the tickbox is selected in the debug UI
+/// </summary>
+/// <param name="a_pShader"></param>
 void ColliderComponent::Draw(Shader* a_pShader)
 {
 	if (DebugUI::GetInstance()->GetShowColliders()) {
@@ -223,13 +228,14 @@ bool ColliderComponent::IsColliding(ColliderComponent* a_pOtherCollider, bool a_
 /// <summary>
 /// Gets all of the Collision Info about all of the collisions that occour with this
 /// object this frame
+/// IMPORTANT: You must delete any collision info that is returned by this function
 /// </summary>
 /// <returns>A list of collision info's with every object that collided with this one
 /// this frame</returns>
-std::vector<CollisionInfo> ColliderComponent::GetCollisionInfo()
+std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo()
 {
 	//Store the current collision info in a vector
-	std::vector<CollisionInfo> vObjectCollisions;
+	std::vector<CollisionInfo*> vObjectCollisions;
 	
 	//Create a map to itterate through all of our entities
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
@@ -258,7 +264,7 @@ std::vector<CollisionInfo> ColliderComponent::GetCollisionInfo()
 		}
 
 		//If we find a collision then add it to our list
-		CollisionInfo currentCollision = GetCollisionInfo(pTargetCollider);
+		CollisionInfo* currentCollision = GetCollisionInfo(pTargetCollider);
 		//TODO Make this check that collision is valid
 		vObjectCollisions.push_back(currentCollision);
 	}
@@ -269,12 +275,13 @@ std::vector<CollisionInfo> ColliderComponent::GetCollisionInfo()
 }
 
 /// <summary>
-/// Get's the collision info between this and another specified collider 
+/// Get's the collision info between this and another specified collider
+/// IMPORTANT: You must delete any collision info that is returned by this function
 /// </summary>
 /// <param name="a_pOtherCollider">Other Collider to test</param>
 /// <returns>Collision Info about collision, which may be null if no collision occoured or
 /// nullptr if the collision parameters are invalid</returns>
-CollisionInfo ColliderComponent::GetCollisionInfo(ColliderComponent* a_pOtherCollider) const
+CollisionInfo* ColliderComponent::GetCollisionInfo(ColliderComponent* a_pOtherCollider) const
 {
 
 	//Check if the collision check is valid - all pointers are not null
@@ -282,13 +289,13 @@ CollisionInfo ColliderComponent::GetCollisionInfo(ColliderComponent* a_pOtherCol
 
 		//Return the collision info from our collision test - this will
 		//be nullptr if no collision occours
-		CollisionInfo collisionInfo = CollisionInfo();
-		m_pCollisionWorld->testCollision(m_pCollisionBody, a_pOtherCollider->m_pCollisionBody, &collisionInfo);
-		return collisionInfo;
+		CollisionInfo* pCollisionInfo =  new CollisionInfo();
+		m_pCollisionWorld->testCollision(m_pCollisionBody, a_pOtherCollider->m_pCollisionBody, pCollisionInfo);
+		return pCollisionInfo;
 	}
 
 	//Collision check is invalid - return blank collision info
-	return CollisionInfo();
+	return nullptr;
 }
 
 /// <summary>
@@ -312,10 +319,9 @@ rp3d::Transform ColliderComponent::GetPhysicsTransform(TransformComponent* a_pTr
 	const glm::vec3 v3Right = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR);
 	const glm::vec3 v3Up = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
 	const glm::vec3 v3Forward = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
-	const rp3d::Matrix3x3 m3RotVector = rp3d::Matrix3x3(v3Right.x, v3Right.y, v3Right.z,
-		v3Up.x, v3Up.y, v3Up.z,
-		v3Forward.x, v3Forward.y, v3Up.z);
-
+	const rp3d::Matrix3x3 m3RotVector = rp3d::Matrix3x3(v3Right.x,	v3Right.y,	v3Right.z,
+														v3Up.x,		v3Up.y,		v3Up.z,
+														v3Forward.x, v3Forward.y,	v3Forward.z);
 
 	return rp3d::Transform(v3PosVector, m3RotVector);
 }
@@ -351,16 +357,17 @@ bool ColliderComponent::IsCollisionCheckValid(ColliderComponent* a_pOtherCollide
 }
 
 /// <summary>
-/// Function to implement required virtual function in CollisionCallbackInfo class
-/// Triggered whenever we detect a collision between 2 collision bodies.
+/// Gets the entity attached to a given collision body
 /// </summary>
-/// <param name="a_pCollisionCallbackInfo"></param>
-void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo)
+/// <param name="a_collisionBody">Collision Body to get entity from</param>
+/// <returns>Entity attached to collision body</returns>
+Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_collisionBody)
 {
 	//Create a map to itterate through all of our entities
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
 
+	//TODO - Make Nicer
 	//Loop through all of the entites that we have
 	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
 	{
@@ -376,20 +383,21 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 			continue;
 		}
 
-		//If this object's collider component's physics body matches any of the bodies that we have collided
-		//with then add it as a entity involved in the collision
-		if(a_pCollisionCallbackInfo.body1 == pTargetCollider->m_pCollisionBody ||
-			a_pCollisionCallbackInfo.body2 == pTargetCollider->m_pCollisionBody)
+		//If this object's collider component's physics body matches the one we
+		//are looking for then return it
+		if (a_collisionBody == pTargetCollider->m_pCollisionBody)
 		{
-			m_aCollisionEntities.push_back(pTarget);
+			return pTarget;
 		}
-		
+
 	}
+
+	//There is no entity attached to this collision body
+	return nullptr;
 }
 
 
-
-rp3d::RaycastInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
+RaycastCallbackInfo ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
 {
 	//Create a ray from the given start and end point
 	const rp3d::Vector3 v3StartPoint(a_v3StartPoint.x, a_v3StartPoint.y, a_v3StartPoint.z);
@@ -400,15 +408,34 @@ rp3d::RaycastInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec
 	return RayCast(&raycastRay);
 }
 
-rp3d::RaycastInfo* ColliderComponent::RayCast(rp3d::Ray* a_Ray)
+RaycastCallbackInfo ColliderComponent::RayCast(rp3d::Ray* a_Ray)
 {
-	//Create raycast info for the result
-	//TODO remove
-	rp3d::RaycastInfo* raycastInfo = new rp3d::RaycastInfo();
-
 	RaycastCallbackInfo callback;
 
 	//Perform Raycast and return the resulting info
 	m_pCollisionWorld->raycast(*a_Ray, &callback);
-	return raycastInfo;
+	return callback;
+}
+
+
+//todo move
+/// <summary>
+/// Function to implement required virtual function in CollisionCallbackInfo class
+/// Triggered whenever we detect a collision between 2 collision bodies.
+/// </summary>
+/// <param name="a_pCollisionCallbackInfo"></param>
+void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo)
+{
+	//Get the entities for each of the bodies involved in the collision if they are both
+	//not nullptrs (as we need to have 2 bodies in a collision for it to be valid)
+	//then add them to the list
+	Entity* collisionEntity1 = ColliderComponent::GetEntityFromCollisionBody(a_pCollisionCallbackInfo.body1);
+	Entity* collisionEntity2 = ColliderComponent::GetEntityFromCollisionBody(a_pCollisionCallbackInfo.body2);
+
+	if(collisionEntity1 && collisionEntity2)
+	{
+		m_aCollisionEntities.push_back(collisionEntity1);
+		m_aCollisionEntities.push_back(collisionEntity2);
+	}
+	
 }

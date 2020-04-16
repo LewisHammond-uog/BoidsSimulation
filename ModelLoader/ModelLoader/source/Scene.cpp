@@ -155,7 +155,6 @@ void Scene::Render() {
 	//Call Render on Application
 	Application::Render();
 	
-
 	if (!m_ourShader || !m_pNanoSuitModel) {
 		return;
 	}
@@ -244,8 +243,8 @@ rp3d::CollisionWorld* Scene::GetCollisionWorld() const
 /// <summary>
 /// Generate a square bounds volume of the given size
 /// </summary>
-/// <param name="a_fBoundsSize"></param>
-void Scene::GenerateBoundsVolume(float a_fBoundsSize)
+/// <param name="a_fBoundsSize">Size of the bounds to generate</param>
+void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 {
 	constexpr float fWallThickness = 0.1f;
 	constexpr int iWallCount = 6;
@@ -263,9 +262,9 @@ void Scene::GenerateBoundsVolume(float a_fBoundsSize)
 	for(int i = 0; i < iWallCount; ++i)
 	{
 		//Get the size of the current wall
-		glm::vec3 currentWallSize = aV3wallSizes[i / 2];
+		const glm::vec3 currentWallSize = aV3wallSizes[i / 2];
 		//Get the position of the current Wall
-		glm::vec3 currentWallPosition = aV3wallPositions[i];
+		const glm::vec3 currentWallPosition = aV3wallPositions[i];
 
 		//Create an entity to represent our wall
 		Entity* pWallEntity = new Entity();

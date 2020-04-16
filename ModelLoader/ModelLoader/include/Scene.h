@@ -31,7 +31,7 @@ private:
 	Scene& operator=(const Scene&); //Overload Equals Operator - no implementation
 
 	//Function to generate our bounds volume
-	void GenerateBoundsVolume(float a_fBoundsSize);
+	void GenerateBoundsVolume(float a_fBoundsSize) const;
 	
 	//OpenGL Callback functions
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
