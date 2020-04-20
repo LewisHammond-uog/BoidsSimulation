@@ -13,5 +13,10 @@ Component::Component(Entity* a_pOwner) : m_pOwnerEntity(a_pOwner),
 
 Component::~Component()
 {
-	
+	//When we are destroyed remove ourselves from our
+	//owners components
+	if(m_pOwnerEntity)
+	{
+		m_pOwnerEntity->RemoveComponent(this);
+	}
 }

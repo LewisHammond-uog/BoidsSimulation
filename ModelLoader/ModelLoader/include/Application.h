@@ -1,5 +1,5 @@
 #ifndef __APPLICATION_H__
-#define __APLICATION_H__
+#define __APPLICATION_H__
 
 //Forward Declares
 struct GLFWwindow;
@@ -12,7 +12,6 @@ struct GLFWwindow;
 class Application
 {
 protected:
-	//static Application* GetInstance();
 
 	Application();
 	virtual ~Application();
@@ -42,7 +41,6 @@ private:
 	//OpenGL Callback functions
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-	//static Application* s_pAppInstance; //Single instance of this application
 
 };
 
