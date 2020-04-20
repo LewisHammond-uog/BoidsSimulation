@@ -84,7 +84,8 @@ void Entity::RemoveComponent(Component* a_pComponentToRemove)
 	{
 		Component* pComponent = *xIter;
 		if (pComponent == a_pComponentToRemove) {
-			m_apComponentList.erase(xIter);
+			xIter = m_apComponentList.erase(xIter);
+			break;
 		}
 	}
 }
