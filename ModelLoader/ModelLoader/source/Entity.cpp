@@ -18,18 +18,20 @@ Entity::Entity() :
 
 Entity::~Entity()
 {
-	//Loop all of the components that this object owns and delete
-	//them
-	std::vector<Component*>::const_iterator xIter;
-	for (xIter = m_apComponentList.begin(); xIter < m_apComponentList.end(); ++xIter) {
-		delete *xIter;
+	//Loop all of the components that this object owns and remove them
+	for (unsigned int i = 0; i < m_apComponentList.size(); i++)
+	{
+		m_apComponentList[i]->RemoveOwnerEntity();
+		delete m_apComponentList[i];
 	}
+	m_apComponentList.clear();
 
 	//Remove this entity from the entity map and
 	//reduce entity count
-	//TODO - Check that the entity is in the list?
-	s_xEntityMap.erase(m_uEntityID);
-	--s_uEntityCount;
+	if (s_xEntityMap.count(m_uEntityID) > 0) {
+		s_xEntityMap.erase(m_uEntityID);
+		--s_uEntityCount;
+	}
 }
 
 ///Update this entity

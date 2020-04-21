@@ -20,3 +20,20 @@ Component::~Component()
 		m_pOwnerEntity->RemoveComponent(this);
 	}
 }
+
+/// <summary>
+/// Gets the entity that owns this component
+/// </summary>
+/// <returns>Owner Entity</returns>
+Entity* Component::GetOwnerEntity() const
+{
+	return m_pOwnerEntity;
+}
+
+/// <summary>
+/// Remove the owner entity from this component
+/// </summary>
+void Component::RemoveOwnerEntity()
+{
+	m_pOwnerEntity = nullptr;
+}

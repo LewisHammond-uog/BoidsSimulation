@@ -25,8 +25,10 @@ public:
 	virtual void Update(float a_fDeltaTime) = 0; //Pure Virtual Function
 	virtual void Draw(Shader* a_pShader) = 0; //Pure Virtual Function
 
-	Entity* GetOwnerEntity() { return m_pOwnerEntity; }
+	Entity* GetOwnerEntity() const;
+	void RemoveOwnerEntity();
 	inline COMPONENT_TYPE GetComponentType() { return m_eComponentType; }
+
 
 protected:
 	Entity* m_pOwnerEntity;
