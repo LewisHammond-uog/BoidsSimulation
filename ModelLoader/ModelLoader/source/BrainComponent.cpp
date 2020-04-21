@@ -23,7 +23,7 @@ BrainComponent::BrainComponent(Entity* a_pOwner)
 	m_v3CurrentVelocity(0.0f),
 	m_v3WanderPoint(0.0f)
 {
-	m_eComponentType = BRAIN;
+
 }
 
 void BrainComponent::Update(float a_fDeltaTime)

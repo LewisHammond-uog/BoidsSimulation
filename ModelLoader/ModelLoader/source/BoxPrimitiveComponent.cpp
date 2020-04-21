@@ -14,8 +14,7 @@ BoxPrimitiveComponent::BoxPrimitiveComponent(Entity* a_pOwner, const glm::vec3 a
 	PARENT(a_pOwner),
 	m_v3BoxDimensions(a_v3BoxDimensions)
 {
-	//Set our Component Type
-	m_eComponentType = PRIMITIVE_BOX;
+
 	//Set our Primitive type
 	m_ePrimitiveType = PrimitiveTypes::BOX;
 

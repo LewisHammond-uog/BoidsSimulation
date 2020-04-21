@@ -7,7 +7,7 @@ TransformComponent::TransformComponent(Entity* a_pOwner) :
 	PARENT(a_pOwner),
 	m_m4EntityMatrix(glm::mat4(1.0f))
 {
-	m_eComponentType = TRANSFORM;
+
 }
 
 /// <summary>

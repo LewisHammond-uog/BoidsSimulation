@@ -16,7 +16,7 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 	PARENT(a_pOwner),
 	m_pCollisionWorld(a_pCollisionWorld)
 {
-	m_eComponentType = COLLIDER;
+
 
 	/*
 	* Create the collision body, used by rp3d at the transform of

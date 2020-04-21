@@ -13,8 +13,7 @@ SpherePrimitiveComponent::SpherePrimitiveComponent(Entity* a_pOwner, float a_fSp
 	PARENT(a_pOwner),
 	m_fSphereRadius(a_fSphereRadius)
 {
-	//Set our Component Type
-	m_eComponentType = PRIMITIVE_SPHERE;
+
 	//Set our Primitive type
 	m_ePrimitiveType = PrimitiveTypes::SPHERE;
 }
