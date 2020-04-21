@@ -9,7 +9,7 @@
 //TODO Clean UP/Remove
 //Constants
 const float fMAX_SPEED = 5.0f;
-const float fMAX_FORCE = 1.0f;
+const float fMAX_FORCE = 0.2f;
 const float fNEIGHBOURHOOD_RADIUS = 5.0f;
 
 const float fCIRCLE_FORWARD_MUTIPLIER = 1.f; //How far forward to draw the sphere
@@ -18,6 +18,7 @@ const float fWANDER_RADIUS = 4.0f; //How large the sphere is
 
 BrainComponent::BrainComponent(Entity* a_pOwner)
 	: Component(a_pOwner),
+	m_pDebugUI(DebugUI::GetInstance()),
 	m_v3CurrentVelocity(0.0f),
 	m_v3WanderPoint(0.0f)
 {
@@ -26,9 +27,6 @@ BrainComponent::BrainComponent(Entity* a_pOwner)
 
 void BrainComponent::Update(float a_fDeltaTime)
 {	
-	//Get the Debug UI Instance so that we can get the user input values from it
-	DebugUI* pDebugUI = DebugUI::GetInstance();
-
 	//Get transform component
 	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pTransform) {
@@ -38,27 +36,14 @@ void BrainComponent::Update(float a_fDeltaTime)
 	//Get vectors for calculation
 	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();;
-
-	//Create an array of force values in the order that we want to apply them
-	glm::vec3 afForceValues[] = {	CalculateSeperationForce() * pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION),
-									CalculateAlignmentForce()* pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT),
-									CalculateCohensionForce()* pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION),
-									CalculateWanderForce(v3Forward, v3CurrentPos)* pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_WANDER) };
-
-
-	//Loop through all of the forces, only adding them if the do not excede the maximum force
-	glm::vec3 v3NewForce(0.0f);
-	for (glm::vec3 currentForceValue : afForceValues)
-	{
-		if(glm::length(v3NewForce + currentForceValue) < fMAX_FORCE)
-		{
-			v3NewForce += currentForceValue;
-		}
-	}
+	
+	//Get all of our flocking values - we call the function by ref so the values are populated
+	glm::vec3 v3SeparationForce, v3AlignmentForce, v3CohesionForce = glm::vec3(0.f);
+	CalculateFlockingForces(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
+	ApplyFlockingWeights(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 
 	//Apply Force
-	m_v3CurrentVelocity += v3NewForce;
-	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, glm::vec3(-fMAX_FORCE, -fMAX_FORCE, -fMAX_FORCE), glm::vec3(fMAX_FORCE, fMAX_FORCE, fMAX_FORCE));
+	m_v3CurrentVelocity += 0;
 	//Apply Velocity to Position
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
@@ -137,186 +122,120 @@ glm::vec3 BrainComponent::CalculateWanderForce(const glm::vec3& v3Forward, const
 	return CalculateSeekForce(m_v3WanderPoint, v3CurrentPos);
 }
 
-//TODO - Make nicer (i.e more generic code) - All in 1 funct?
-glm::vec3 BrainComponent::CalculateSeperationForce()
+
+
+/// <summary>
+/// Calculates all of the flocking forces
+/// Does not take in to account any weighting of values
+/// from the UI
+/// </summary>
+/// <param name="a_v3SeparationForce">ByRef Separation Force to fill with value</param>
+/// <param name="a_v3AlignmentForce">ByRef Alignment Force to fill with value</param>
+/// <param name="a_v3CohesionForce">ByRef Cohesion Force to fill with value</param>
+/// <returns>Total (unweighted) force</returns>
+glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const
 {
-	//Init Values
-	glm::vec3 v3SeperationVelocity(0.0f);
-	unsigned int uNeightbourCount = 0;
-
-	//Check that we have an owner entity
-	if (!GetOwnerEntity()) {
-		return glm::vec3();
-	}
-
-	//Get the transform
-	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
-	if (!pLocalTransform) {
-		return glm::vec3();
-	}
-
-	const glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
-
-	//Itterate over every entity in the scene
-	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
-	std::map<const unsigned int, Entity*>::const_iterator xIter;
-	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter) 
+	//Store the number of neighbours we are interacted with - so we can avg. forces
+	int iNeighbourCount = 0;
+	
+	//Null Check our owner
+	if (m_pOwnerEntity == nullptr)
 	{
-		//Current Entity
-		const Entity* pTarget = xIter->second;
-		if (!pTarget) {
-			continue;
-		}
-
-		//Check that the entity we have is not the owner of this brain component
-		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
-			continue;
-		}
-
-		
-		//Find the distance between this entity and the target entity
-		TransformComponent* pTargetTransform = pTarget->GetComponent<TransformComponent*>();
-		if (!pTargetTransform) {
-			continue;
-		}
-		
-		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
-		const float fDistance = glm::length(v3TargetPos - v3LocalPos);
-
-		//Check that object is within checking range and add velocity
-		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
-			v3SeperationVelocity += v3LocalPos - v3TargetPos;
-			uNeightbourCount++;
-		}
+		return glm::vec3(0.f);
 	}
 
-	if (glm::length(v3SeperationVelocity) > 0) {
-		v3SeperationVelocity /= uNeightbourCount;
-		v3SeperationVelocity = glm::normalize(v3SeperationVelocity);
+	//Get our transform
+	TransformComponent* pOwnerTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+	if(pOwnerTransform == nullptr)
+	{
+		return glm::vec3(0.f);
 	}
+	//Get our position it is the only part of the transform we use
+	glm::vec3 v3OwnerPos = pOwnerTransform->GetCurrentPosition();
 
-	return v3SeperationVelocity;
-}
-
-//TODO - Make nicer (i.e more generic code) - All in 1 funct?
-glm::vec3 BrainComponent::CalculateAlignmentForce()
-{
-	//Init Values
-	glm::vec3 v3AlignmentVelocity(0.0f);//TODO Vec3 for average position? seperate from this?
-	unsigned int uNeightbourCount = 0;
-
-	//Check that we have an owner entity
-	if (!GetOwnerEntity()) {
-		return glm::vec3();
-	}
-
-	//Get the transform
-	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
-	if (!pLocalTransform) {
-		return glm::vec3();
-	}
-
-	const glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
-
-	//TODO FUNCTION FOR LIST OF ALL ENTITYS/NEIGHBOURS
-	//Itterate over every entity in the scene
+	/*
+	Loop through all of our entities and calculate
+	Separation, Alignment, Cohesion forces
+	*/
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
 	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
 	{
-		//Current Entity
+		//Get the current target entity, make sure it is valid
 		const Entity* pTarget = xIter->second;
 		if (!pTarget) {
 			continue;
 		}
-
-		//Check that the entity we have is not the owner of this brain component
-		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
+		//Check that our target is not this entity
+		if(pTarget == m_pOwnerEntity)
+		{
 			continue;
 		}
-
-
-		//Find the distance between this entity and the target entity
+		
+		//Get the targets transform and check it is valid
 		TransformComponent* pTargetTransform = pTarget->GetComponent<TransformComponent*>();
+		//Get the targets brain - used for alignment force
 		BrainComponent* pTargetBrain = pTarget->GetComponent<BrainComponent*>();
-		if (!pTargetTransform || !pTargetBrain) {
+
+		//Null Check the components we just got
+		if(!pTargetTransform || !pTargetBrain)
+		{
 			continue;
 		}
 
+		//Get the values we want from the components we just go
 		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
-		const float fDistance = glm::length(v3TargetPos - v3LocalPos);
+		glm::vec3 v3TargetVelocity = pTargetBrain->GetCurrentVelocity();
 
-		//Check that object is within checking range and add velocity
-		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
-			v3AlignmentVelocity += pTargetBrain->GetCurrentVelocity();
-			uNeightbourCount++;
+		//Get the distance to our target entity and make sure it is within our search radius
+		float fDistanceToTarget = glm::length(v3TargetPos - v3OwnerPos);
+		if(fDistanceToTarget < fNEIGHBOURHOOD_RADIUS)
+		{
+			/*Calculate seperate forces in the manner that they should*/
+			a_v3SeparationForce += v3OwnerPos - v3TargetPos; //Replusion force
+			a_v3AlignmentForce += v3TargetVelocity; //Align our velocity to others
+			a_v3CohesionForce += v3TargetPos; //Bring us closer to other boids
+
+			++iNeighbourCount;
 		}
 	}
 
-	if (glm::length(v3AlignmentVelocity) > 0) {
-		v3AlignmentVelocity /= uNeightbourCount;
-		v3AlignmentVelocity = glm::normalize(v3AlignmentVelocity);
+	//todo seperate function?
+	//Our forces should be an average all of the influences we have so we need to
+	//divide the current value by the number of influences we had
+	if(iNeighbourCount > 0)
+	{
+		a_v3SeparationForce /= iNeighbourCount;
+		a_v3AlignmentForce /= iNeighbourCount;
+		a_v3CohesionForce /= iNeighbourCount;
+
+		a_v3SeparationForce = glm::length(a_v3SeparationForce) != 0 ? glm::normalize(a_v3SeparationForce) : a_v3SeparationForce;
+		a_v3AlignmentForce = glm::length(a_v3AlignmentForce) != 0 ? glm::normalize(a_v3AlignmentForce) : a_v3AlignmentForce;
+		a_v3CohesionForce = glm::length(a_v3CohesionForce) != 0 ? glm::normalize(a_v3CohesionForce) : a_v3CohesionForce;
 	}
 
-	return v3AlignmentVelocity;
+	//Return the final total force
+	return a_v3SeparationForce + a_v3AlignmentForce + a_v3CohesionForce;
 }
 
-glm::vec3 BrainComponent::CalculateCohensionForce()
+/// <summary>
+/// Apply Flocking weights (that we get from the debug UI) to the given force values
+/// </summary>
+/// <param name="a_v3SeparationForce">ByRef Separation Force to modify</param>
+/// <param name="a_v3AlignmentForce">ByRef Alignment Force to modify</param>
+/// <param name="a_v3CohesionForce">ByRef Cohesion Force to modify</param>
+/// <param name="a_pDebugUI">Debug UI instance to use to get weights</param>
+/// <returns></returns>
+void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const
 {
-	//Init Values
-	glm::vec3 v3CohesionVelocity(0.0f);
-	unsigned int uNeightbourCount = 0;
-
-	//Check that we have an owner entity
-	if (!GetOwnerEntity()) {
-		return glm::vec3();
-	}
-
-	//Get the transform
-	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
-	if (!pLocalTransform) {
-		return glm::vec3();
-	}
-
-	const glm::vec3 v3LocalPos = pLocalTransform->GetCurrentPosition();
-
-	//Itterate over every entity in the scene
-	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
-	std::map<const unsigned int, Entity*>::const_iterator xIter;
-	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
+	if(m_pDebugUI == nullptr)
 	{
-		//Current Entity
-		const Entity* pTarget = xIter->second;
-		if (!pTarget) {
-			continue;
-		}
-
-		//Check that the entity we have is not the owner of this brain component
-		if (pTarget->GetEntityID() == GetOwnerEntity()->GetEntityID()) {
-			continue;
-		}
-
-
-		//Find the distance between this entity and the target entity
-		TransformComponent* pTargetTransform = pTarget->GetComponent<TransformComponent*>();
-		if (!pTargetTransform) {
-			continue;
-		}
-
-		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
-		const float fDistance = glm::length(v3TargetPos - v3LocalPos);
-
-		//Check that object is within checking range and add velocity
-		if (fDistance < fNEIGHBOURHOOD_RADIUS) {
-			v3CohesionVelocity += v3TargetPos;
-			uNeightbourCount++;
-		}
+		return;
 	}
-
-	if (glm::length(v3CohesionVelocity) > 0) {
-		v3CohesionVelocity /= uNeightbourCount;
-		v3CohesionVelocity = glm::normalize(v3CohesionVelocity - v3LocalPos);
-	}
-
-	return v3CohesionVelocity;
+		
+	
+	//Apply the UI weights to the forces
+	a_v3SeparationForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION);
+	a_v3AlignmentForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
+	a_v3CohesionForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
 }

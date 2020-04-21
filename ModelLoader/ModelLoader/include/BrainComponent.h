@@ -5,9 +5,10 @@
 
 #include <glm/glm.hpp>
 
-//Forward Declate
+//Forward Declare
 class Entity;
 class Shader;
+class DebugUI;
 
 class BrainComponent : public Component
 {
@@ -27,9 +28,11 @@ private:
 	glm::vec3 CalculateWanderForce(const glm::vec3& v3Forward, const glm::vec3& v3CurrentPos);
 
 	//Flocking Behaviours
-	glm::vec3 CalculateSeperationForce();
-	glm::vec3 CalculateAlignmentForce();
-	glm::vec3 CalculateCohensionForce();
+	glm::vec3 CalculateFlockingForces(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;
+	void ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;
+
+	//Debug UI Instance used to apply weights
+	DebugUI* m_pDebugUI;
 
 	glm::vec3 m_v3CurrentVelocity; 
 	glm::vec3 m_v3WanderPoint;

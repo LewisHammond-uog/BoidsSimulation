@@ -40,7 +40,11 @@ glm::vec3 TransformComponent::GetCurrentPosition()
 	return GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
 }
 
-
+/// <summary>
+/// Orthogonalize the matrix so that the forward, right and up vectors are facing in their respective
+/// directions.
+/// This uses the Gram-Schmidt process (https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process)
+/// </summary>
 void TransformComponent::Orthogonalize()
 {
 	//Get the forward and up of the input vector

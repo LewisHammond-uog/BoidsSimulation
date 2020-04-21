@@ -7,6 +7,8 @@
 //Lib Includes
 #include <glm/ext.hpp>
 
+//todo this needs a big cleanup
+
 enum MATRIX_ROW 
 {
 	RIGHT_VECTOR,
@@ -27,7 +29,7 @@ public:
 	void Orthogonalize();
 
 	//Get and set Matrix Row
-	const glm::mat4& GetEntityMatrix() { return m_m4EntityMatrix; }
+	const glm::mat4& GetEntityMatrix() const { return m_m4EntityMatrix; }
 	void SetEntityMatrixRow(MATRIX_ROW a_eRow, glm::vec3 a_v3Vec);
 	glm::vec3 GetEntityMatrixRow(MATRIX_ROW a_eRow);
 	glm::vec3 GetCurrentPosition();

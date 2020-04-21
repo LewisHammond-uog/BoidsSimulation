@@ -17,4 +17,52 @@ E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\
               V=reactphysics3d::bodyindexpair
           ]
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\CollisionDetection.h(89): message : see reference to class template instantiation 'reactphysics3d::Set<reactphysics3d::bodyindexpair>' being compiled
+  ModelComponent.cpp
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  Scene.cpp
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\engine\DynamicsWorld.h(387,31): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\engine\DynamicsWorld.h(395,26): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\HalfEdgeStructure.h(135,32): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\shapes\HeightFieldShape.h(256,104): warning C4244: 'return': conversion from 'double' to 'reactphysics3d::decimal', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\shapes\HeightFieldShape.h(264,19): warning C4244: 'return': conversion from 'reactphysics3d::decimal' to 'int', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\TriangleMesh.h(95,34): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(84,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(300,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(301,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(305,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(305,22): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(306,41): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(306,22): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(308,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(309,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(325,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\containers\Set.h(502,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\containers\Set.h(449): message : while compiling class template member function 'void reactphysics3d::Set<reactphysics3d::bodyindexpair>::add(const V &)'
+          with
+          [
+              V=reactphysics3d::bodyindexpair
+          ]
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\CollisionDetection.h(265): message : see reference to function template instantiation 'void reactphysics3d::Set<reactphysics3d::bodyindexpair>::add(const V &)' being compiled
+          with
+          [
+              V=reactphysics3d::bodyindexpair
+          ]
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\CollisionDetection.h(89): message : see reference to class template instantiation 'reactphysics3d::Set<reactphysics3d::bodyindexpair>' being compiled
+  Generating Code...
+glfw3.lib(context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(init.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(init.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(input.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(input.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(monitor.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(monitor.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(vulkan.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(vulkan.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(window.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(window.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_init.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_joystick.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_monitor.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_time.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_time.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_thread.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_thread.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(win32_window.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(win32_window.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(wgl_context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(egl_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(egl_context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
+glfw3.lib(osmesa_context.obj) : warning LNK4099: PDB 'glfw.pdb' was not found with 'glfw3.lib(osmesa_context.obj)' or at 'E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\Debug\x64\glfw.pdb'; linking object as if no debug info
   ModelLoader.vcxproj -> E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\\Debug\x64\ModelLoader.exe

@@ -65,8 +65,6 @@ void Entity::Draw(Shader* a_pShader)
 /// <param name="a_pComponentToAdd">Component to Add</param>
 void Entity::AddComponent(Component* a_pComponentToAdd)
 {
-	
-	
 	//Add component to our component list
 	m_apComponentList.push_back(a_pComponentToAdd);
 }
@@ -75,7 +73,8 @@ void Entity::AddComponent(Component* a_pComponentToAdd)
 /// Remove a component from this entity 
 /// </summary>
 /// <param name="a_pComponentToRemove">Component to Remove</param>
-void Entity::RemoveComponent(Component* a_pComponentToRemove)
+/// <param name="deleteComponent">If we should delete this component after it is removed</param>
+void Entity::RemoveComponent(Component* a_pComponentToRemove, const bool a_bDeleteComponent /*= false*/)
 {
 	//Loop through all of the components and check to see if we
 	//have the component if we do the remove it
@@ -85,6 +84,11 @@ void Entity::RemoveComponent(Component* a_pComponentToRemove)
 		Component* pComponent = *xIter;
 		if (pComponent == a_pComponentToRemove) {
 			xIter = m_apComponentList.erase(xIter);
+
+			if(a_bDeleteComponent)
+			{
+				delete* xIter;
+			}
 			break;
 		}
 	}

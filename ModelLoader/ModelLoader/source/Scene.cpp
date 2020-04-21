@@ -268,7 +268,7 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 
 		//Create an entity to represent our wall
 		Entity* pWallEntity = new Entity();
-		pWallEntity->m_isContainter = true;
+		//pWallEntity->m_isContainter = true;
 
 		//Create a transfrom so our wall has position and give it our wall psoition
 		TransformComponent* pWallTransform = new TransformComponent(pWallEntity);

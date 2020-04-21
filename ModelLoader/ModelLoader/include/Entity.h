@@ -21,7 +21,7 @@ public:
 	virtual void Draw(Shader* a_pShader);
 
 	void AddComponent(Component* a_pComponentToAdd);
-	void RemoveComponent(Component* a_pComponentToRemove);
+	void RemoveComponent(Component* a_pComponentToRemove, bool a_bDeleteComponent = false);
 
 	//Function for getting a component of this entity based on it's return type
 	template<class returnType>
