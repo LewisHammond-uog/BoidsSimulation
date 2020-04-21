@@ -94,6 +94,7 @@ bool Scene::Initalise(){
 	//Create entities
 	for (int i = 0; i < BOID_COUINT; i++) {
 		Entity* pEntity = new Entity();
+		pEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_BOID);
 
 		//Transform Component
 		TransformComponent* pTransform = new TransformComponent(pEntity);
@@ -268,7 +269,7 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 
 		//Create an entity to represent our wall
 		Entity* pWallEntity = new Entity();
-		//pWallEntity->m_isContainter = true;
+		pWallEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_CONTAINER);
 
 		//Create a transfrom so our wall has position and give it our wall psoition
 		TransformComponent* pWallTransform = new TransformComponent(pWallEntity);

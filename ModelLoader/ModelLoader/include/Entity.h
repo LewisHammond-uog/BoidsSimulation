@@ -11,18 +11,32 @@
 //Forward Declare
 class Shader;
 
+//Enum for Types of entity
+enum class ENTITY_TYPE
+{
+	ENTITY_TYPE_UNDEFINED,
+	ENTITY_TYPE_BOID,
+	ENTITY_TYPE_CONTAINER,
+
+	ENTITY_TYPE_COUNT //Total number of entity types
+};
+
 class Entity
 {
 public:
 	Entity();
-	~Entity();
+	virtual ~Entity();
 
 	virtual void Update(float a_fDeltaTime);
 	virtual void Draw(Shader* a_pShader);
 
+	//Entity Type Functions
+	void SetEntityType(ENTITY_TYPE a_eType);
+	ENTITY_TYPE GetEntityType() const;
+
+	//Component Functions
 	void AddComponent(Component* a_pComponentToAdd);
 	void RemoveComponent(Component* a_pComponentToRemove, bool a_bDeleteComponent = false);
-
 	//Function for getting a component of this entity based on it's return type
 	template<class returnType>
 	returnType GetComponent() const;
@@ -31,6 +45,9 @@ public:
 	static const std::map<const unsigned int, Entity*>& GetEntityMap() { return s_xEntityMap; }
 
 private:
+
+	ENTITY_TYPE m_eEntityType;
+	
 	unsigned int m_uEntityID;
 	std::vector<Component*> m_apComponentList;
 

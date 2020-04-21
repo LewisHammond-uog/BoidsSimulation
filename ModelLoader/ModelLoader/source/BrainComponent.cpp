@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "TransformComponent.h"
 #include "DebugUI.h"
+#include "Gizmos.h"
 
 //TODO Clean UP/Remove
 //Constants
@@ -35,15 +36,30 @@ void BrainComponent::Update(float a_fDeltaTime)
 
 	//Get vectors for calculation
 	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
-	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();;
-	
+	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();
+
+	/*~~~~COLLISION AVOIDANCE~~~~*/
+	//Do a raycast so that we can pass it's info to both functions
+	glm::vec3 v3ContainmentForce = glm::vec3(0.0f);
+	ColliderComponent* pCollider = m_pOwnerEntity->GetComponent<ColliderComponent*>();
+	if(pCollider)
+	{
+		RaycastCallbackInfo rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + v3Forward);
+		v3ContainmentForce = CalculateContainmentForce(&rayHit);
+	}
+
+	/*~~~~FLOCKING~~~~*/
 	//Get all of our flocking values - we call the function by ref so the values are populated
 	glm::vec3 v3SeparationForce, v3AlignmentForce, v3CohesionForce = glm::vec3(0.f);
 	CalculateFlockingForces(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 	ApplyFlockingWeights(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 
+	/*~~~~WANDER~~~~*/
+	//Get and weight wander force
+	glm::vec3 v3WanderForce = CalculateWanderForce() * m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_WANDER);
+	
 	//Apply Force
-	m_v3CurrentVelocity += 0;
+	m_v3CurrentVelocity += v3WanderForce + v3ContainmentForce;
 	//Apply Velocity to Position
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
@@ -51,6 +67,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	//Update our matrix
 	pTransform->SetEntityMatrixRow(FORWARD_VECTOR, v3Forward);
 	pTransform->SetEntityMatrixRow(POSTION_VECTOR, v3CurrentPos);
+	//When we update our transform make sure we Orthogonalize the matrix
 	pTransform->Orthogonalize();
 }
 
@@ -94,10 +111,29 @@ glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& v3Target, const gl
 	return (v3NewVelocity - m_v3CurrentVelocity);
 }
 
-glm::vec3 BrainComponent::CalculateWanderForce(const glm::vec3& v3Forward, const glm::vec3& v3CurrentPos)
+/// <summary>
+/// Calculate the wander force by casting a sphere and choosing a point on it
+/// </summary>
+/// <returns>Force to apply for wander</returns>
+glm::vec3 BrainComponent::CalculateWanderForce()
 {
+	//Check that parent is not null
+	if(m_pOwnerEntity == nullptr)
+	{
+		return glm::vec3(0.f);
+	}
+	
+	//Get our current position and forward
+	TransformComponent* pParentTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+	if(pParentTransform == nullptr)
+	{
+		return glm::vec3(0.f);
+	}
+	const glm::vec3 v3CurrentPos = pParentTransform->GetCurrentPosition();
+	const glm::vec3 v3CurrentForward = pParentTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+	
 	//Project a point in front of us for the center of our sphere
-	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3Forward * fCIRCLE_FORWARD_MUTIPLIER);
+	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * fCIRCLE_FORWARD_MUTIPLIER);
 
 	//If the magnitude of the vector is 0 then initalize our
 	//first wander point
@@ -191,7 +227,7 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 		float fDistanceToTarget = glm::length(v3TargetPos - v3OwnerPos);
 		if(fDistanceToTarget < fNEIGHBOURHOOD_RADIUS)
 		{
-			/*Calculate seperate forces in the manner that they should*/
+			/*Calculate the forces in the manner that they should*/
 			a_v3SeparationForce += v3OwnerPos - v3TargetPos; //Replusion force
 			a_v3AlignmentForce += v3TargetVelocity; //Align our velocity to others
 			a_v3CohesionForce += v3TargetPos; //Bring us closer to other boids
@@ -233,9 +269,48 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 		return;
 	}
 		
-	
 	//Apply the UI weights to the forces
 	a_v3SeparationForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION);
 	a_v3AlignmentForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
 	a_v3CohesionForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
+}
+
+/// <summary>
+/// Calulates the amount of force needed to keep the boid
+/// within the containment volume
+/// </summary>
+/// <returns>(Unweighted) force to turn away from hitting a container</returns>
+glm::vec3 BrainComponent::CalculateContainmentForce(RaycastCallbackInfo* a_rayResults) const
+{
+	//Store our containment force - init to 0 so we can return this var if we don't hit
+	glm::vec3 v3ContainmentForce(0.0f);
+	
+	//Work out if we hit a containtment object, point to it if we have so
+	//we can get more infomation
+	RayCastHit* containerHit = nullptr;
+	if(!a_rayResults->m_vRayCastHits.empty())
+	{
+		for (RayCastHit* m_vRayCastHit : a_rayResults->m_vRayCastHits)
+		{
+			Entity* hitEntity = m_vRayCastHit->m_pHitEntity;
+			if (hitEntity) {
+				if (hitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
+				{
+					containerHit = m_vRayCastHit;
+				}
+			}
+		}
+	}
+	
+	//If we have hit a container then calculate our force otherwise we will just return 0
+	if (containerHit != nullptr)
+	{
+		//Get the normal and return our force in that direction so we turn away from the object,
+		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
+		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
+		v3ContainmentForce = containerHit->m_v3HitNormal * (1.f - containerHit->m_fHitFraction); 
+		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
+	}
+
+	return v3ContainmentForce;
 }

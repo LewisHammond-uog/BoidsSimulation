@@ -29,12 +29,20 @@ public:
 	void Orthogonalize();
 
 	//Get and set Matrix Row
-	const glm::mat4& GetEntityMatrix() const { return m_m4EntityMatrix; }
+	const glm::mat4& GetEntityMatrix() const;
 	void SetEntityMatrixRow(MATRIX_ROW a_eRow, glm::vec3 a_v3Vec);
 	glm::vec3 GetEntityMatrixRow(MATRIX_ROW a_eRow);
 	glm::vec3 GetCurrentPosition();
 
 private:
+
+	/*
+	Constants for default values (i.e those that make up and
+	identity matrix)
+	*/
+	const glm::vec3 mc_v3WorldUp = glm::vec3(0.f, 1.f, 0.f);
+	const glm::vec3 mc_v3WorldRight = glm::vec3(1.f, 0.f, 0.f);
+	
 	glm::mat4 m_m4EntityMatrix;
 };
 

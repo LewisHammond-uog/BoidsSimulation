@@ -15,9 +15,9 @@ TransformComponent::TransformComponent(Entity* a_pOwner) :
 /// </summary>
 /// <param name="a_eRow">Row to set</param>
 /// <param name="a_v3Vec">Vector 3 to fill row with</param>
-void TransformComponent::SetEntityMatrixRow(MATRIX_ROW a_eRow, glm::vec3 a_v3Vec)
+void TransformComponent::SetEntityMatrixRow(MATRIX_ROW a_eRow, const glm::vec3 a_v3Vec)
 {
-	float finalVec4Value = a_eRow == POSTION_VECTOR ? 1.f : 0.0f;
+	const float finalVec4Value = a_eRow == POSTION_VECTOR ? 1.f : 0.0f;
 	m_m4EntityMatrix[a_eRow] = glm::vec4(a_v3Vec, finalVec4Value);
 }
 
@@ -48,11 +48,11 @@ glm::vec3 TransformComponent::GetCurrentPosition()
 void TransformComponent::Orthogonalize()
 {
 	//Get the forward and up of the input vector
-	glm::vec3 v3InputFWD = GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
-	glm::vec3 v3InputUP = GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
+	const glm::vec3 v3InputFWD = GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+	const glm::vec3 v3InputUP = GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
 
 	//Get the dot product of the forwards and up vector
-	float fFwdUpDot = glm::dot(v3InputFWD, v3InputUP);
+	const float fFwdUpDot = glm::dot(v3InputFWD, v3InputUP);
 
 	//Calculate the real up vector of the the matrix
 	//upAxis = inputUp - (inputFWD * fwdUpDot)
@@ -68,4 +68,13 @@ void TransformComponent::Orthogonalize()
 	SetEntityMatrixRow(MATRIX_ROW::UP_VECTOR, v3RealUp); //Set Real UP
 	SetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR, v3RealRight);
 
+}
+
+/// <summary>
+/// Get the entity matrix
+/// </summary>
+/// <returns>Entity Matrix 4x4</returns>
+const glm::mat4& TransformComponent::GetEntityMatrix() const
+{
+	return m_m4EntityMatrix;
 }

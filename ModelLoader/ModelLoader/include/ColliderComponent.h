@@ -84,6 +84,7 @@ struct RayCastHit
 {
 	Entity* m_pHitEntity; //Entity that we have hit
 	glm::vec3 m_v3HitPoint; //Point in space that we hit the entity
+	glm::vec3 m_v3HitNormal; //The normal of the point that we hit
 	float m_fHitFraction; //Fraction of the distance that we hit the object in the ray cast (range 0-1)
 };
 
@@ -100,7 +101,9 @@ public:
 		RayCastHit* hit = new RayCastHit();
 		hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(info.body);
 		hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
+		hit->m_v3HitNormal = glm::vec3(info.worldNormal.x, info.worldNormal.y, info.worldNormal.z);
 		hit->m_fHitFraction = info.hitFraction;
+		
 
 		//Add to hits list
 		m_vRayCastHits.push_back(hit);

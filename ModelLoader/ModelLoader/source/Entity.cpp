@@ -7,7 +7,8 @@ typedef std::pair<const unsigned int, Entity*> EntityPair;
 unsigned int Entity::s_uEntityCount = 0;
 std::map<const unsigned int, Entity*> Entity::s_xEntityMap;
 
-Entity::Entity()
+Entity::Entity() :
+	m_eEntityType(ENTITY_TYPE::ENTITY_TYPE_UNDEFINED)
 {
 	//Increment entity count and add to entity list
 	m_uEntityID = s_uEntityCount++;
@@ -57,6 +58,27 @@ void Entity::Draw(Shader* a_pShader)
 			pComponent->Draw(a_pShader);
 		}
 	}
+}
+
+/// <summary>
+/// Set this entity's type
+/// </summary>
+/// <param name="a_eType">Type to set</param>
+void Entity::SetEntityType(ENTITY_TYPE a_eType)
+{
+	if(a_eType < ENTITY_TYPE::ENTITY_TYPE_COUNT)
+	{
+		m_eEntityType = a_eType;
+	}
+}
+
+/// <summary>
+/// Get this entity's type
+/// </summary>
+/// <returns></returns>
+ENTITY_TYPE Entity::GetEntityType() const
+{
+	return m_eEntityType;
 }
 
 /// <summary>
