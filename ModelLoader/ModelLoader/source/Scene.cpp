@@ -29,6 +29,7 @@
 #include "ModelComponent.h"
 #include "BrainComponent.h"
 #include "ColliderComponent.h"
+#include "CameraComponent.h"
 #include "BoxPrimitiveComponent.h"
 #include "MathsUtils.h"
 #include "SpherePrimitiveComponent.h"
@@ -52,7 +53,7 @@ Scene* Scene::GetInstance() {
 
 Scene::Scene() : Application() {
 	//Init camera
-	m_camera = nullptr;
+	m_pCamera = nullptr;
 }
 
 bool Scene::Initalise(){
@@ -63,6 +64,7 @@ bool Scene::Initalise(){
 		//initalise properly
 		return false;
 	}
+	
 	Gizmos::create();
 	
 	//Init Callback functions for mouse move/scroll
@@ -78,7 +80,11 @@ bool Scene::Initalise(){
 	m_pNanoSuitModel = new Model("models/nanosuit/nanosuit.obj");
 
 	//Init Camera
-	m_camera = new Camera(glm::vec3(0.0f, 1.2f, 4.0f));
+	Entity* pCameraEntity = new Entity();
+	TransformComponent* pCameraTransform = new TransformComponent(pCameraEntity);
+	pCameraEntity->AddComponent(pCameraTransform);
+	m_pCamera = new CameraComponent(pCameraEntity, m_window, glm::vec3(0.0f, 1.2f, 4.0f));
+	pCameraEntity->AddComponent(m_pCamera);
 
 	//Seed RNG
 	srand(time(nullptr));
@@ -87,9 +93,12 @@ bool Scene::Initalise(){
 	//occour in
 	m_pSceneCollisionWorld = new rp3d::CollisionWorld;
 
-
 	//Create our world bounds
 	GenerateBoundsVolume(10.f);
+
+	//todo move
+	//Creating Obsticles
+	
 	
 	//Create entities
 	for (int i = 0; i < BOID_COUINT; i++) {
@@ -129,10 +138,6 @@ bool Scene::Update() {
 
 	//Clear the Gizmos from last frame
 	Gizmos::clear();
-	
-	// input
-	// -----
-	m_camera->processInput(m_window, m_fDeltaTime);
 
 	//Update the Debug UI
 	DebugUI::GetInstance()->Update();
@@ -164,8 +169,8 @@ void Scene::Render() {
 	m_ourShader->use();
 
 	// view/projection transformations
-	const glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	const glm::mat4 view = m_camera->GetViewMatrix();
+	const glm::mat4 projection = glm::perspective(glm::radians(m_pCamera->GetCameraZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	const glm::mat4 view = m_pCamera->GetViewMatrix();
 	m_ourShader->setMat4("projection", projection);
 	m_ourShader->setMat4("view", view);
 
@@ -197,9 +202,7 @@ void Scene::DeInitlise() {
 	//Deinitalise Application
 	Application::Deinitalise();
 
-	if (m_camera != nullptr) {
-		delete m_camera;
-	}
+
 	if (m_pNanoSuitModel != nullptr) {
 		delete m_pNanoSuitModel;
 	}
@@ -287,6 +290,7 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 	
 }
 
+
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
 void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -309,8 +313,8 @@ void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	pScene->m_fLastX = xpos;
 	pScene->m_fLastY = ypos;
 
-	if (pScene->m_camera) {
-		pScene->m_camera->ProcessMouseMovement(xoffset, yoffset);
+	if (pScene->m_pCamera) {
+		pScene->m_pCamera->ProcessMouseMovement(xoffset, yoffset);
 	}
 }
 
@@ -319,9 +323,9 @@ void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	Scene* pScene = Scene::GetInstance();
-	if (!pScene && !pScene->m_camera) {
+	if (!pScene && !pScene->m_pCamera) {
 		return;
 	}
 
-	pScene->m_camera->ProcessMouseScroll(yoffset);
+	pScene->m_pCamera->ProcessMouseScroll(yoffset);
 }

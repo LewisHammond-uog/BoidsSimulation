@@ -7,8 +7,10 @@
 //React Physics Includes
 #include <ReactPhysics3D/reactphysics3d.h>
 
+
 //Foward Declares
 class Camera;
+class CameraComponent;
 class Shader;
 class Model;
 
@@ -32,12 +34,15 @@ private:
 
 	//Function to generate our bounds volume
 	void GenerateBoundsVolume(float a_fBoundsSize) const;
+
+	//Function to create an obsticle
+	void CreateObstacle(glm::vec3 a_v3Position);
 	
 	//OpenGL Callback functions
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-	Camera* m_camera;
+	CameraComponent* m_pCamera;
 	Shader* m_ourShader;
 	Model* m_pNanoSuitModel;
 

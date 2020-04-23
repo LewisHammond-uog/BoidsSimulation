@@ -95,6 +95,7 @@
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\BoxPrimitiveComponent.cpp" />
     <ClCompile Include="source\BrainComponent.cpp" />
+    <ClCompile Include="source\CameraComponent.cpp" />
     <ClCompile Include="source\ColliderComponent.cpp" />
     <ClCompile Include="source\Component.cpp" />
     <ClCompile Include="source\DebugUI.cpp" />
@@ -108,7 +109,6 @@
     <ClCompile Include="source\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\deps\include\learnopengl\camera.h" />
     <ClInclude Include="..\deps\include\learnopengl\mesh.h" />
     <ClInclude Include="..\deps\include\learnopengl\model.h" />
     <ClInclude Include="..\deps\include\learnopengl\shader.h" />
@@ -116,6 +116,7 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\BoxPrimitiveComponent.h" />
     <ClInclude Include="include\BrainComponent.h" />
+    <ClInclude Include="include\CameraComponent.h" />
     <ClInclude Include="include\ColliderComponent.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\DebugUI.h" />

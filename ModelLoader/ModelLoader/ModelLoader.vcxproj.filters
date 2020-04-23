@@ -99,11 +99,11 @@
     <ClCompile Include="source\PrimitiveComponent.cpp">
       <Filter>Source Files\Components\Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="source\CameraComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\deps\include\learnopengl\camera.h">
-      <Filter>Header Files\Deps</Filter>
-    </ClInclude>
     <ClInclude Include="..\deps\include\learnopengl\mesh.h">
       <Filter>Header Files\Deps</Filter>
     </ClInclude>
@@ -160,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="include\MathsUtils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CameraComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
