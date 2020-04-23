@@ -33,6 +33,7 @@
 #include "BoxPrimitiveComponent.h"
 #include "MathsUtils.h"
 #include "SpherePrimitiveComponent.h"
+#include "ObstacleSpawnerComponent.h"
 
 
 const unsigned int BOID_COUINT = 25;
@@ -85,6 +86,9 @@ bool Scene::Initalise(){
 	pCameraEntity->AddComponent(pCameraTransform);
 	m_pCamera = new CameraComponent(pCameraEntity, m_window, glm::vec3(0.0f, 1.2f, 4.0f));
 	pCameraEntity->AddComponent(m_pCamera);
+	ObstacleSpawnerComponent* pObstSpawner = new ObstacleSpawnerComponent(pCameraEntity);
+	pCameraEntity->AddComponent(pObstSpawner);
+	
 
 	//Seed RNG
 	srand(time(nullptr));

@@ -34,9 +34,6 @@ private:
 
 	//Function to generate our bounds volume
 	void GenerateBoundsVolume(float a_fBoundsSize) const;
-
-	//Function to create an obsticle
-	void CreateObstacle(glm::vec3 a_v3Position);
 	
 	//OpenGL Callback functions
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
