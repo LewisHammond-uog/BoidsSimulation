@@ -31,8 +31,16 @@ void DebugUI::Update() {
 	ImGui::SetNextWindowPos(m_v2WindowPos, ImGuiCond_Always);
 	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
 
+
+
+	
 	//Begin the drawing of the Window
 	ImGui::Begin("Flocking Values");
+	//Controls Text
+	ImGui::Text("Controls");
+	ImGui::Text("WASD to Move the Camera");
+	ImGui::Text("Left Click to Rotate the Camera");
+	ImGui::Text("Hold and Release Right Click to Place an Obstacle");
 
 	//Sliders for changing force weights - UI puts these values in to the appropriate varables as
 	//we pass by ref
