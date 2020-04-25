@@ -30,6 +30,8 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 
+#include "TransformComponent.h"
+
 // ReactPhysiscs3D namespace
 namespace reactphysics3d {
 
@@ -63,6 +65,9 @@ class Transform {
         /// Constructor
         Transform(const Vector3& position, const Quaternion& orientation);
 
+		//TransformComponent Constructor
+        Transform(TransformComponent* pTransformComponent);
+	
         /// Destructor
         ~Transform() = default;
 
@@ -135,6 +140,33 @@ inline Transform::Transform(const Vector3& position, const Matrix3x3& orientatio
 inline Transform::Transform(const Vector3& position, const Quaternion& orientation)
           : mPosition(position), mOrientation(orientation) {
 
+}
+
+//TransformComponent Constructor
+inline Transform::Transform(TransformComponent* a_pTransform)
+{
+    //Early out, returning a default 
+	//transform if we were not given a valid transform
+    if (a_pTransform == nullptr) {
+        mPosition = Vector3::zero();
+        mOrientation = Quaternion::identity();
+    }
+
+    //Convert Position Component
+    const glm::vec3 v3TransformPos = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
+    const Vector3 v3PosVector = Vector3(v3TransformPos.x, v3TransformPos.y, v3TransformPos.z);
+
+    //Convert Rotation Component
+    const glm::vec3 v3Right = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR);
+    const glm::vec3 v3Up = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
+    const glm::vec3 v3Forward = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+    const Matrix3x3 m3RotVector = Matrix3x3(v3Right.x, v3Right.y, v3Right.z,
+        v3Up.x, v3Up.y, v3Up.z,
+        v3Forward.x, v3Forward.y, v3Forward.z);
+
+    //set values
+    mPosition = v3PosVector;
+    mOrientation = m3RotVector;
 }
 
 // Copy-constructor

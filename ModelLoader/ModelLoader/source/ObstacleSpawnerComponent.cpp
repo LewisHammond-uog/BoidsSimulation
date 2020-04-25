@@ -76,21 +76,21 @@ void ObstacleSpawnerComponent::SpawnObstacle(glm::vec3 a_v3Position)
 	Entity* pObstacleEntity = new Entity();
 	pObstacleEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_OBSTACLE);
 	
-	//Create components - we need a transform, primative and collider
+	//Create and apply transforms
 	TransformComponent* pObstacleTransform = new TransformComponent(pObstacleEntity);
-	SpherePrimitiveComponent* pObstacleSphere = new SpherePrimitiveComponent(pObstacleEntity);
-	ColliderComponent* pObstacleCollider = new ColliderComponent(pObstacleEntity, Scene::GetInstance()->GetCollisionWorld());
-
-	//Set dimentions of collider and sphere so that they match
-	pObstacleSphere->SetDimensions(m_fObstacleRadius);
-	pObstacleCollider->AddSphereCollider(m_fObstacleRadius, glm::vec3(0));
-	//Set position so it is correct
 	pObstacleTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, a_v3Position);
-
-	//Add all of our components to the entity
 	pObstacleEntity->AddComponent(pObstacleTransform);
-	pObstacleEntity->AddComponent(pObstacleCollider);
+
+	//Add Sphere - so we have a visual repreentation
+	SpherePrimitiveComponent* pObstacleSphere = new SpherePrimitiveComponent(pObstacleEntity);
+	pObstacleSphere->SetDimensions(m_fObstacleRadius);
 	pObstacleEntity->AddComponent(pObstacleSphere);
+
+	//Add collider - so we entities avoid this
+	ColliderComponent* pObstacleCollider = new ColliderComponent(pObstacleEntity, Scene::GetInstance()->GetCollisionWorld());
+	pObstacleCollider->AddSphereCollider(m_fObstacleRadius, glm::vec3(0));
+	pObstacleEntity->AddComponent(pObstacleCollider);
+
 }
 
 

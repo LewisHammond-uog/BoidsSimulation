@@ -43,9 +43,6 @@ public:
 	RaycastCallbackInfo RayCast(rp3d::Ray* a_Ray);
 
 private:
-
-	//Convert from our transform to the rp3d transform
-	static rp3d::Transform GetPhysicsTransform(TransformComponent* a_pTransform);
 	
 	//Checks if a collision check between 2 colliders is valid - performs null checks on
 	//colliding components

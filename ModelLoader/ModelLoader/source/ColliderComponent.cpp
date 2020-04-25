@@ -24,10 +24,19 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 	* collide with other objects
 	*/
 
-	//Create collision body at object transform
+
+	
+	//Create collision body at object transform, or default transform if we don't have one
 	if (m_pCollisionWorld != nullptr) {
-		TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
-		m_pCollisionBody = m_pCollisionWorld->createCollisionBody(GetPhysicsTransform(pLocalTransform));
+		if (m_pOwnerEntity != nullptr) {
+			TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+			if (pLocalTransform) {
+				m_pCollisionBody = m_pCollisionWorld->createCollisionBody(pLocalTransform);
+			}else
+			{
+				m_pCollisionBody = m_pCollisionWorld->createCollisionBody(rp3d::Transform::identity());
+			}
+		}
 	}
 }
 
@@ -59,7 +68,9 @@ void ColliderComponent::Update(float a_fDeltaTime)
 	{
 		return;
 	}
-	m_pCollisionBody->setTransform(GetPhysicsTransform(pLocalTransform));
+	if (m_pCollisionBody) {
+		m_pCollisionBody->setTransform(pLocalTransform);
+	}
 }
 
 /// <summary>
@@ -117,6 +128,11 @@ void ColliderComponent::Draw(Shader* a_pShader)
 /// <param name="a_v3Offset">Local Offset from the center of the object to put the collider</param>
 void ColliderComponent::AddBoxCollider(const glm::vec3 a_v3BoxSize, const glm::vec3 a_v3Offset)
 {
+	if(!m_pCollisionBody || !m_pCollisionWorld )
+	{
+		return;
+	}
+	
 	//Create a rp3d vector to store the extends (which are half the box size)
 	//then create the box shape itself
 	const rp3d::Vector3 v3BoxExtends(a_v3BoxSize);
@@ -138,6 +154,11 @@ void ColliderComponent::AddBoxCollider(const glm::vec3 a_v3BoxSize, const glm::v
 /// <param name="a_v3Offset">Local Offset from the center of the object to put the collider</param>
 void ColliderComponent::AddSphereCollider(const float a_fSphereSize, const glm::vec3 a_v3Offset)
 {
+	if (!m_pCollisionBody || !m_pCollisionWorld)
+	{
+		return;
+	}
+	
 	//Create the sphere shape
 	rp3d::SphereShape* pSphereShape = new rp3d::SphereShape(a_fSphereSize);
 
@@ -297,34 +318,6 @@ CollisionInfo* ColliderComponent::GetCollisionInfo(ColliderComponent* a_pOtherCo
 }
 
 /// <summary>
-/// Coverts a TransformComponent to a rp3d Transform
-/// </summary>
-/// <param name="a_pTransform">Transform Component to convert</param>
-/// <returns>rp3d Transform</returns>
-rp3d::Transform ColliderComponent::GetPhysicsTransform(TransformComponent* a_pTransform)
-{
-	//Early out, returning a default 
-	//transform if we were not given a valid transform
-	if (a_pTransform == nullptr) {
-		return rp3d::Transform::identity();
-	}
-
-	//Convert Position Component
-	const glm::vec3 v3TransformPos = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
-	const rp3d::Vector3 v3PosVector = rp3d::Vector3(v3TransformPos.x, v3TransformPos.y, v3TransformPos.z);
-
-	//Convert Rotation Component
-	const glm::vec3 v3Right = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR);
-	const glm::vec3 v3Up = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
-	const glm::vec3 v3Forward = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
-	const rp3d::Matrix3x3 m3RotVector = rp3d::Matrix3x3(v3Right.x,	v3Right.y,	v3Right.z,
-														v3Up.x,		v3Up.y,		v3Up.z,
-														v3Forward.x, v3Forward.y,	v3Forward.z);
-
-	return rp3d::Transform(v3PosVector, m3RotVector);
-}
-
-/// <summary>
 /// Checks if a collision check will be valid by checking that
 /// both the collision world an other collider exists
 /// </summary>
@@ -334,6 +327,12 @@ bool ColliderComponent::IsCollisionCheckValid(ColliderComponent* a_pOtherCollide
 {
 	//Check that the collision world exists
 	if (m_pCollisionWorld == nullptr) {
+		return false;
+	}
+
+	//Check our collision body exists
+	if(m_pCollisionBody == nullptr)
+	{
 		return false;
 	}
 
@@ -365,6 +364,12 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
 
+	//Null check the collision body
+	if(a_collisionBody == nullptr)
+	{
+		return nullptr;
+	}
+	
 	//TODO - Make Nicer
 	//Loop through all of the entites that we have
 	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
@@ -378,6 +383,10 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 		//Get the collider component
 		ColliderComponent* pTargetCollider = pTarget->GetComponent<ColliderComponent*>();
 		if (pTargetCollider == nullptr) {
+			continue;
+		}
+		if(pTargetCollider->m_pCollisionBody)
+		{
 			continue;
 		}
 

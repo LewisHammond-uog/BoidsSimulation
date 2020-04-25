@@ -281,13 +281,11 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 		//Create a transfrom so our wall has position and give it our wall psoition
 		TransformComponent* pWallTransform = new TransformComponent(pWallEntity);
 		pWallTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, currentWallPosition);
+		pWallEntity->AddComponent(pWallTransform);
 
 		//Create a our collider to our entities can collider with this
 		ColliderComponent* pWallCollider = new ColliderComponent(pWallEntity, m_pSceneCollisionWorld);
 		pWallCollider->AddBoxCollider(currentWallSize, glm::vec3(0, 0, 0));
-
-		//Add components to our wall entity
-		pWallEntity->AddComponent(pWallTransform);
 		pWallEntity->AddComponent(pWallCollider);
 		
 	}
