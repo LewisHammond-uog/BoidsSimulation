@@ -95,7 +95,7 @@ bool Scene::Initalise(){
 
 	//Create a collision world - this is the physics simulation that all of our physics will
 	//occour in
-	m_pSceneCollisionWorld = new rp3d::CollisionWorld;
+	m_pSceneCollisionWorld = new rp3d::CollisionWorld();
 
 	//Create our world bounds
 	GenerateBoundsVolume(10.f);

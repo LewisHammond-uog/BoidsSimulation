@@ -90,9 +90,6 @@
     <ClCompile Include="source\BoxPrimitiveComponent.cpp">
       <Filter>Source Files\Components\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="source\ColliderComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\SpherePrimitiveComponent.cpp">
       <Filter>Source Files\Components\Primitives</Filter>
     </ClCompile>
@@ -104,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="source\ObstacleSpawnerComponent.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ColliderComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

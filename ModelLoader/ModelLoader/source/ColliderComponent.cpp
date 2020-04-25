@@ -25,8 +25,10 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 	*/
 
 	//Create collision body at object transform
-	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
-	m_pCollisionBody = m_pCollisionWorld->createCollisionBody(GetPhysicsTransform(pLocalTransform));
+	if (m_pCollisionWorld != nullptr) {
+		TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+		m_pCollisionBody = m_pCollisionWorld->createCollisionBody(GetPhysicsTransform(pLocalTransform));
+	}
 }
 
 ColliderComponent::~ColliderComponent()

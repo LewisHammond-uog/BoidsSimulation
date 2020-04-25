@@ -10,7 +10,7 @@ DebugUI* DebugUI::s_pUIInstance = nullptr;
 //Default Values
 const float mc_fDefaultForce = 0.0f;
 
-///Get singleton instance of scene
+///Get singleton instance of UI
 DebugUI* DebugUI::GetInstance() {
 
 	//Create an instance if we don't have one
@@ -31,9 +31,6 @@ void DebugUI::Update() {
 	ImGui::SetNextWindowPos(m_v2WindowPos, ImGuiCond_Always);
 	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
 
-
-
-	
 	//Begin the drawing of the Window
 	ImGui::Begin("Flocking Values");
 	//Controls Text
