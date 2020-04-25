@@ -385,7 +385,7 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 		if (pTargetCollider == nullptr) {
 			continue;
 		}
-		if(pTargetCollider->m_pCollisionBody)
+		if(pTargetCollider->m_pCollisionBody == nullptr)
 		{
 			continue;
 		}
