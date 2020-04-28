@@ -72,7 +72,6 @@ void BrainComponent::Update(float a_fDeltaTime)
 	vV3WeightedForces.push(v3AvoidanceForce);
 	vV3WeightedForces.push(v3CohesionForce);
 
-	
 	/*~~~~WANDER~~~~*/
 	//Get and weight wander force
 	glm::vec3 v3WanderForce = CalculateWanderForce() * m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_WANDER);
@@ -98,6 +97,8 @@ void BrainComponent::Update(float a_fDeltaTime)
 	v3FinalForce = glm::clamp(v3FinalForce, mc_v3MinForce, mc_v3MaxForce);
 	
 	m_v3CurrentVelocity += v3FinalForce;
+	//Clamp Velocity
+	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity,mc_v3MinVelocity, mc_v3MaxVelocity);
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
 	 
