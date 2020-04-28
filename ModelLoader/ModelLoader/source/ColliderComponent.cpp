@@ -63,7 +63,7 @@ ColliderComponent::~ColliderComponent()
 void ColliderComponent::Update(float a_fDeltaTime)
 {
 	//Get new position and transform of the physics body
-	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+	TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();	
 	if (pLocalTransform == nullptr)
 	{
 		return;

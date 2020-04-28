@@ -65,6 +65,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	
 	//Apply Force
 	m_v3CurrentVelocity += v3WanderForce + v3ContainmentForce + v3AvoidanceForce;
+	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, glm::vec3(-5000.f, -5000.f, -5000.f), glm::vec3(5000.f, 5000.f, 5000.f));
 	//Apply Velocity to Position
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
