@@ -48,8 +48,20 @@ CameraComponent::CameraComponent(Entity* a_pOwner, GLFWwindow* a_pWindow, glm::v
 /// <param name="a_fDeltaTime"></param>
 void CameraComponent::Update(float a_fDeltaTime)
 {
-	//Process the input that we have received
-	ProcessInput(a_fDeltaTime);
+	//Null check render window
+	if(!m_pWindow)
+	{
+		return;
+	}
+	
+	//Get if we should be moving the camera, if we are process movement
+	//and set GLFW mouse mode
+	if(glfwGetMouseButton(m_pWindow, mc_iCamUseBtn) == GLFW_PRESS)
+	{
+		//Process the input that we have received
+		ProcessInput(a_fDeltaTime);
+	}
+
 }
 
 /// <summary>
@@ -103,6 +115,15 @@ void CameraComponent::ProcessMouseScroll(float a_fYOffset)
 		m_fZoom = 1.0f;
 	if (m_fZoom >= 45.0f)
 		m_fZoom = 45.0f;
+}
+
+/// <summary>
+/// Gets the mouse button we use for activating the camera
+/// </summary>
+/// <returns>GLFW_MOUSE_BUTTON</returns>
+int CameraComponent::GetActivateCamBtn() const
+{
+	return mc_iCamUseBtn;
 }
 
 /// <summary>

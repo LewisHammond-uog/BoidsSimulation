@@ -24,8 +24,6 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 	* collide with other objects
 	*/
 
-
-	
 	//Create collision body at object transform, or default transform if we don't have one
 	if (m_pCollisionWorld != nullptr) {
 		if (m_pOwnerEntity != nullptr) {
@@ -100,7 +98,7 @@ void ColliderComponent::Draw(Shader* a_pShader)
 				rp3d::BoxShape* pBox = dynamic_cast<reactphysics3d::BoxShape*>(m_apCollisionShapes[i]);
 				glm::vec3 v3boxCenter = glm::vec3(pBox->getCentroid().x, pBox->getCentroid().y, pBox->getCentroid().z);
 				glm::vec3 v3boxDimentions = glm::vec3(pBox->getExtent().x, pBox->getExtent().y, pBox->getExtent().z);
-				Gizmos::addBox(v3CurrentPosition + v3boxCenter, v3boxDimentions, true);
+				Gizmos::addBox(v3CurrentPosition + v3boxCenter, v3boxDimentions, true, mc_v4ColliderDrawCol);
 				break;
 			}
 
@@ -108,7 +106,7 @@ void ColliderComponent::Draw(Shader* a_pShader)
 				//TODO Cleanup
 				rp3d::SphereShape* pSphere = dynamic_cast<reactphysics3d::SphereShape*>(m_apCollisionShapes[i]);
 				const float fSphereRadius = pSphere->getRadius();
-				Gizmos::addSphere(v3CurrentPosition, 10, 10, fSphereRadius, glm::vec4(1.f));
+				Gizmos::addSphere(v3CurrentPosition, mc_iColliderDrawRes, mc_iColliderDrawRes, fSphereRadius, mc_v4ColliderDrawCol);
 				break;
 			}
 			default:

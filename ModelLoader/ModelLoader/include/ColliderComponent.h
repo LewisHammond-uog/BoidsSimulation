@@ -59,6 +59,10 @@ private:
 	std::vector<rp3d::CollisionShape*> m_apCollisionShapes; //List of physical shapes used
 	std::vector<rp3d::ProxyShape*> m_apProxyShapes; //List of proxy shapes. Proxy shape is the collision shape with mass and transform info
 
+	//Constants for debug collider drawing
+	const glm::vec4 mc_v4ColliderDrawCol = glm::vec4(0, 0, 0, 1);
+	const unsigned int mc_iColliderDrawRes = 10u;
+	
 };
 
 

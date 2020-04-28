@@ -31,6 +31,9 @@ public:
 	float GetUIFlockingWeight(ForceWeight a_eBehaviourType) const;
 	bool GetShowColliders() const;
 
+	//Get if this UI has the mouse in focus
+	bool HasMouseFocus();
+	
 private:
 	//Private Constructors/Destructors
 	//that prevent duplicaton of the singleton

@@ -8,11 +8,12 @@
 #include <glm/fwd.hpp>
 #include <glm/vec3.hpp>
 
+//GLFW includes
+#include <GLFW/glfw3.h>
+
 //Forward Declare
 struct GLFWwindow;
 class TransformComponent;
-
-
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum class CameraMove {
@@ -39,7 +40,9 @@ public:
 	//Process Functions
 	void ProcessMouseMovement(float a_fXOffset, float a_fYOffset, bool a_constrainPitch = true);
 	void ProcessMouseScroll(float a_fYOffset);
-	
+
+	//Get Controls function
+	int GetActivateCamBtn() const;
 private:
 
 
@@ -54,6 +57,9 @@ private:
 
 	//Window that this camera if for
 	GLFWwindow* m_pWindow;
+
+	//Mouse button for allowing camera movement
+	int mc_iCamUseBtn = GLFW_MOUSE_BUTTON_1;
 	
 	//Camera Attributes
 	glm::vec3 m_v3WorldUp;

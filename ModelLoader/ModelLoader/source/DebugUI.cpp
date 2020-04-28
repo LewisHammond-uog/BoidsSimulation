@@ -31,33 +31,35 @@ void DebugUI::Update() {
 	ImGui::SetNextWindowPos(m_v2WindowPos, ImGuiCond_Always);
 	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
 
-
-	
 	//Begin the drawing of the Window
-	ImGui::Begin("UI");
+	ImGui::Begin("Boids UI");
 	
-	ImGui::Text("Application Average: %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	
-	//Controls Text
-	ImGui::Text("Controls");
-	ImGui::Text("WASD to Move the Camera");
-	ImGui::Text("Left Click to Rotate the Camera");
-	ImGui::Text("Hold and Release Right Click to Place an Obstacle");
+	//FPS info tab
+	if (ImGui::CollapsingHeader("Debug/FPS info")) {
+		ImGui::Text("Application Average: %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		//Tickbox to draw colliders
+		ImGui::Checkbox("Draw Collider Bounds", &m_bShowColliders);
+	}
+
+	if (ImGui::CollapsingHeader("Controls")) {
+		//Controls Text
+		ImGui::Text("Controls");
+		ImGui::Text("WASD to Move the Camera");
+		ImGui::Text("Left Click to Rotate the Camera");
+		ImGui::Text("Hold and Release Right Click to Place an Obstacle");
+	}
 
 	//Sliders for changing force weights - UI puts these values in to the appropriate varables as
 	//we pass by ref
-	ImGui::Spacing();
-	ImGui::Text("Simulation Values");
-	ImGui::SliderFloat("Containment Force Weight", &m_fInputContainmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-	ImGui::SliderFloat("Collision Avoidance Force Weight", &m_fInputCollisionAvoidForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-	ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-	ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-	ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-	ImGui::SliderFloat("Wander Force Weight", &m_fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-
-	//Tickbox of whether to draw colliders
-	ImGui::Text("Debug Drawing");
-	ImGui::Checkbox("Draw Collider Bounds", &m_bShowColliders);
+	if (ImGui::CollapsingHeader("Force Values")) {
+		ImGui::Text("Simulation Values");
+		ImGui::SliderFloat("Containment Force Weight", &m_fInputContainmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Collision Avoidance Force Weight", &m_fInputCollisionAvoidForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Wander Force Weight", &m_fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+	}
 
 	//End the drawing of the window
 	ImGui::End();
@@ -112,10 +114,22 @@ bool DebugUI::GetShowColliders() const
 	return m_bShowColliders;
 }
 
+/// <summary>
+/// Gets if the UI has the mouse hovered, clicked or
+/// otherwise interacting with
+/// </summary>
+/// <returns>If mouse is focused on the UI</returns>
+bool DebugUI::HasMouseFocus()
+{
+	return ImGui::GetIO().WantCaptureMouse;
+}
+
 DebugUI::DebugUI() :
+	m_fInputContainmentForce(mc_fDefaultForce),
+	m_fInputCollisionAvoidForce(mc_fDefaultForce),
 	m_fInputSeperationForce(mc_fDefaultForce),
-	m_fInputCohesionForce(mc_fDefaultForce),
 	m_fInputAlignmentForce(mc_fDefaultForce),
+	m_fInputCohesionForce(mc_fDefaultForce),
 	m_fInputWanderForce(mc_fDefaultForce),
 	m_bShowColliders(false)
 {

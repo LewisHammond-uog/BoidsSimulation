@@ -70,6 +70,8 @@ bool Scene::Initalise(){
 	//Init Callback functions for mouse move/scroll
 	glfwSetCursorPosCallback(m_window, mouse_callback);
 	glfwSetScrollCallback(m_window, scroll_callback);
+	glfwSetMouseButtonCallback(m_window, toggle_mouse_input_mode);
+	
 	//Disable V-Sync
 	glfwSwapInterval(0);
 
@@ -91,7 +93,6 @@ bool Scene::Initalise(){
 	ObstacleSpawnerComponent* pObstSpawner = new ObstacleSpawnerComponent(pCameraEntity);
 	pCameraEntity->AddComponent(pObstSpawner);
 	
-
 	//Seed RNG
 	srand(time(nullptr));
 
@@ -295,6 +296,8 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 // -------------------------------------------------------
 void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
+	
+
 	Scene* pScene = Scene::GetInstance();
 	if (!pScene) {
 		return;
@@ -313,8 +316,11 @@ void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	pScene->m_fLastX = xpos;
 	pScene->m_fLastY = ypos;
 
-	if (pScene->m_pCamera) {
-		pScene->m_pCamera->ProcessMouseMovement(xoffset, yoffset);
+		//Check that mouse is in the right mode to move the camera
+	if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
+		if (pScene->m_pCamera) {
+			pScene->m_pCamera->ProcessMouseMovement(xoffset, yoffset);
+		}
 	}
 }
 
@@ -328,4 +334,28 @@ void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	}
 
 	pScene->m_pCamera->ProcessMouseScroll(yoffset);
+}
+
+// glfw: whenever a mouse button is pressed, this callback is called
+// ----------------------------------------------------------------------
+void Scene::toggle_mouse_input_mode(GLFWwindow* window, int button, int action, int mods)
+{
+
+	Scene* pScene = Scene::GetInstance();
+	if (!pScene && !pScene->m_pCamera) {
+		return;
+	}
+
+	//Check that the mouse is not focused on the UI
+	if (!DebugUI::GetInstance()->HasMouseFocus()) {
+		//Check if we are pressing the game button if so then hide the cursor
+		if (button == pScene->m_pCamera->GetActivateCamBtn() && action == GLFW_PRESS)
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		else
+		{
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+	}
 }

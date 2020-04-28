@@ -1,5 +1,4 @@
-﻿  DebugUI.cpp
-  Scene.cpp
+﻿  Scene.cpp
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\engine\DynamicsWorld.h(387,31): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\engine\DynamicsWorld.h(395,26): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\HalfEdgeStructure.h(135,32): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
@@ -7,17 +6,17 @@ E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\shapes\HeightFieldShape.h(264,19): warning C4244: 'return': conversion from 'reactphysics3d::decimal' to 'int', possible loss of data
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\TriangleMesh.h(95,34): warning C4267: 'return': conversion from 'size_t' to 'reactphysics3d::uint', possible loss of data
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\learnopengl\mesh.h(88,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(93,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(103,20): warning C4018: '<': signed/unsigned mismatch
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(304,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(305,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(309,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(309,22): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(310,41): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(310,22): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(312,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(313,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(329,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(97,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(107,20): warning C4018: '<': signed/unsigned mismatch
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(308,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(309,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(313,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(313,22): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(314,41): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(314,22): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(316,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(317,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\source\Scene.cpp(336,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\containers\Set.h(502,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\containers\Set.h(449): message : while compiling class template member function 'void reactphysics3d::Set<reactphysics3d::bodyindexpair>::add(const V &)'
           with
@@ -30,5 +29,4 @@ E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\
               V=reactphysics3d::bodyindexpair
           ]
 E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\deps\include\ReactPhysics3D\collision\CollisionDetection.h(89): message : see reference to class template instantiation 'reactphysics3d::Set<reactphysics3d::bodyindexpair>' being compiled
-  Generating Code...
   ModelLoader.vcxproj -> E:\Uni\Github\ct5037-boids-simulation-LewisHammond-uog\ModelLoader\ModelLoader\\Build\Debug_x64\ModelLoader.exe

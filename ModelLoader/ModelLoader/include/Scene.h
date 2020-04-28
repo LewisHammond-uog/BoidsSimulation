@@ -38,6 +38,7 @@ private:
 	//OpenGL Callback functions
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+	static void toggle_mouse_input_mode(GLFWwindow* window, int button, int action, int mods);
 
 	CameraComponent* m_pCamera;
 	Shader* m_ourShader;
