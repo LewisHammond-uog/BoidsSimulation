@@ -70,6 +70,9 @@ bool Scene::Initalise(){
 	//Init Callback functions for mouse move/scroll
 	glfwSetCursorPosCallback(m_window, mouse_callback);
 	glfwSetScrollCallback(m_window, scroll_callback);
+	//Disable V-Sync
+	glfwSwapInterval(0);
+
 
 	// build and compile shaders
 	// -------------------------
@@ -98,10 +101,6 @@ bool Scene::Initalise(){
 
 	//Create our world bounds
 	GenerateBoundsVolume(10.f);
-
-	//todo move
-	//Creating Obsticles
-	
 	
 	//Create entities
 	for (int i = 0; i < mc_iBoidCount; i++) {
@@ -130,7 +129,7 @@ bool Scene::Initalise(){
 		pCollider->AddSphereCollider(0.25f, glm::vec3(0.0f));
 		pEntity->AddComponent(pCollider);
 	}
-
+	
 	return true;
 }
 

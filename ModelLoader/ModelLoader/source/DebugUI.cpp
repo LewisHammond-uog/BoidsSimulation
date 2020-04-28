@@ -31,8 +31,13 @@ void DebugUI::Update() {
 	ImGui::SetNextWindowPos(m_v2WindowPos, ImGuiCond_Always);
 	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
 
+
+	
 	//Begin the drawing of the Window
-	ImGui::Begin("Flocking Values");
+	ImGui::Begin("UI");
+	
+	ImGui::Text("Application Average: %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	
 	//Controls Text
 	ImGui::Text("Controls");
 	ImGui::Text("WASD to Move the Camera");
@@ -41,7 +46,10 @@ void DebugUI::Update() {
 
 	//Sliders for changing force weights - UI puts these values in to the appropriate varables as
 	//we pass by ref
+	ImGui::Spacing();
 	ImGui::Text("Simulation Values");
+	ImGui::SliderFloat("Containment Force Weight", &m_fInputContainmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+	ImGui::SliderFloat("Collision Avoidance Force Weight", &m_fInputCollisionAvoidForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 	ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 	ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 	ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
@@ -69,6 +77,12 @@ float DebugUI::GetUIFlockingWeight(const ForceWeight a_eBehaviourType) const
 	//and return the appropriate value
 	switch (a_eBehaviourType)
 	{
+	case ForceWeight::FORCE_WEIGHT_CONTAINMENT:
+		return m_fInputContainmentForce;
+		break;
+	case ForceWeight::FORCE_WEIGHT_COLLISION_AVOID:
+		return m_fInputCollisionAvoidForce;
+		break;
 	case ForceWeight::FORCE_WEIGHT_SEPERATION:
 		return m_fInputSeperationForce;
 		break;

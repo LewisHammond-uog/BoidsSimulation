@@ -50,6 +50,8 @@ private:
 
 	//Variables for different game elements that are controlled
 	//by the UI
+	float m_fInputContainmentForce;
+	float m_fInputCollisionAvoidForce;
 	float m_fInputSeperationForce;
 	float m_fInputAlignmentForce;
 	float m_fInputCohesionForce;
