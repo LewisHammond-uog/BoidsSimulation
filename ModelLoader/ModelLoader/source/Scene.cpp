@@ -36,8 +36,7 @@
 #include "ObstacleSpawnerComponent.h"
 
 
-const unsigned int BOID_COUINT = 25;
-
+//Static Declareations
 Scene* Scene::s_pSceneInstance = nullptr;
 
 ///Get singleton instance of scene
@@ -105,7 +104,7 @@ bool Scene::Initalise(){
 	
 	
 	//Create entities
-	for (int i = 0; i < BOID_COUINT; i++) {
+	for (int i = 0; i < mc_iBoidCount; i++) {
 		Entity* pEntity = new Entity();
 		pEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_BOID);
 

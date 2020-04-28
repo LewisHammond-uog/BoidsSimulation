@@ -11,16 +11,7 @@
 #include "DebugUI.h"
 #include "Gizmos.h"
 
-//TODO Clean UP/Remove
-//Constants
-const float fMAX_SPEED = 0.2f;
-const float fMAX_FORCE = 0.2f;
-const float fNEIGHBOURHOOD_RADIUS = 5.0f;
-
-const float fCIRCLE_FORWARD_MUTIPLIER = 1.f; //How far forward to draw the sphere
-const float fJITTER = 0.5f; //How much to move from the point on the spehre
-const float fWANDER_RADIUS = 4.0f; //How large the sphere is
-
+//Static Declerations
 glm::vec3 BrainComponent::s_aCollisionDirections[BrainComponent::sc_iCollisionAvoidanceRayCount];
 bool BrainComponent::s_bCollisionDirectionsInit = false;
 
@@ -100,7 +91,7 @@ glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& v3Target, const gl
 	}
 
 	//Calc New Velocity
-	const glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
+	const glm::vec3 v3NewVelocity = v3TargetDir * mc_fMaxSpeed;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
@@ -119,7 +110,7 @@ glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& v3Target, const gl
 	}
 
 	//Calc New Velocity
-	const glm::vec3 v3NewVelocity = v3TargetDir * fMAX_SPEED;
+	const glm::vec3 v3NewVelocity = v3TargetDir * mc_fMaxSpeed;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
@@ -147,27 +138,27 @@ glm::vec3 BrainComponent::CalculateWanderForce()
 	const glm::vec3 v3CurrentForward = pParentTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	
 	//Project a point in front of us for the center of our sphere
-	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * fCIRCLE_FORWARD_MUTIPLIER);
+	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * mc_fSphereForwardMutiplier);
 
 	//If the magnitude of the vector is 0 then initalize our
 	//first wander point
 	if (glm::length(m_v3WanderPoint) == 0.0f) 
 	{
 		//Find a random point omn a sphere
-		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(fWANDER_RADIUS);
+		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(mc_fWanderRadius);
 
 		//Add this point on a sphere to the sphere we are casting out infront of us
 		m_v3WanderPoint = v3SphereOrigin + v3RandomPointOnSphere;
 	}
 
 	//Calculate direction to move to
-	const glm::vec3 v3DirectionToTarget = glm::normalize(m_v3WanderPoint - v3SphereOrigin) * fWANDER_RADIUS;
+	const glm::vec3 v3DirectionToTarget = glm::normalize(m_v3WanderPoint - v3SphereOrigin) * mc_fWanderRadius;
 
 	//Find out final target point
 	m_v3WanderPoint = v3SphereOrigin + v3DirectionToTarget;
 
 	//Add Jitter
-	m_v3WanderPoint += glm::sphericalRand(fJITTER);
+	m_v3WanderPoint += glm::sphericalRand(mc_fWanderJitter);
 
 	return CalculateSeekForce(m_v3WanderPoint, v3CurrentPos);
 }
@@ -234,12 +225,12 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 		}
 
 		//Get the values we want from the components we just go
-		glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
-		glm::vec3 v3TargetVelocity = pTargetBrain->GetCurrentVelocity();
+		const glm::vec3 v3TargetPos = pTargetTransform->GetCurrentPosition();
+		const glm::vec3 v3TargetVelocity = pTargetBrain->GetCurrentVelocity();
 
 		//Get the distance to our target entity and make sure it is within our search radius
-		float fDistanceToTarget = glm::length(v3TargetPos - v3OwnerPos);
-		if(fDistanceToTarget < fNEIGHBOURHOOD_RADIUS)
+		const float fDistanceToTarget = glm::length(v3TargetPos - v3OwnerPos);
+		if(fDistanceToTarget < mc_fNeighbourhoodRadius)
 		{
 			/*Calculate the forces in the manner that they should*/
 			a_v3SeparationForce += v3OwnerPos - v3TargetPos; //Replusion force
@@ -376,7 +367,7 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisi
 		glm::vec3 avoidDirection = GetCollisionAvoidDirection(a_pRaycaster, a_v3CastPos);
 		
 		//Calc New Velocity
-		const glm::vec3 v3NewVelocity = avoidDirection * fMAX_SPEED * (1 - distToCollision);
+		const glm::vec3 v3NewVelocity = avoidDirection * mc_fMaxSpeed * (1 - distToCollision);
 		//Force is target velocity - current velocity
 		v3AvoidForce = (v3NewVelocity - m_v3CurrentVelocity);
 	}

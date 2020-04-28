@@ -40,7 +40,11 @@ private:
 	float m_fSpawnDistance;
 	float m_fObstacleRadius;
 
-
+	#pragma region Spawner Defaults
+	const static float sc_fDefaultSpawnDistance;
+	const static float sc_fDefaultObstacleRadius;
+	const static unsigned int sc_fObstacleResolution;
+	#pragma endregion 
 };
 
 #endif //!__OBSTACLE_SPAWNER_COMPONENT_H__

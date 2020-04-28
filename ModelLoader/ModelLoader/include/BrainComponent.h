@@ -12,6 +12,7 @@ class Entity;
 class Shader;
 class DebugUI;
 
+//todo reorginise
 class BrainComponent : public Component
 {
 public:
@@ -46,11 +47,28 @@ private:
 	static glm::vec3 s_aCollisionDirections[];
 	static bool s_bCollisionDirectionsInit;
 	
+	//Current Velocity of the boid
+	glm::vec3 m_v3CurrentVelocity;
+	//Projected point we are wandering to
+	glm::vec3 m_v3WanderPoint;
+
 	//Debug UI Instance used to apply weights
 	DebugUI* m_pDebugUI;
 
-	glm::vec3 m_v3CurrentVelocity; 
-	glm::vec3 m_v3WanderPoint;
+	#pragma region Boid Defaults
+	//Brain Defaults - Max force and our neighbour hood
+	//todo combine max force/speed
+	const float mc_fMaxSpeed = 0.2f;
+	const float mc_fMaxForce = 0.2f;
+	const float mc_fNeighbourhoodRadius = 5.0f;//todo prehaps default?
+
+	//Wannder Defaults
+	const float mc_fSphereForwardMutiplier = 1.f; //How far forward to draw the sphere
+	const float mc_fWanderJitter = 0.5f; //How much to move from the point on the spehre
+	const float mc_fWanderRadius = 4.0f; //How large the sphere is
+
+
+	#pragma endregion 
 
 };
 

@@ -12,17 +12,17 @@
 //Typedefs
 typedef Component PARENT;
 
-//Defaults
-constexpr float mc_fDefaultSpawnDistance = 3.0f;
-constexpr float mc_fDefaultObstacleRadius = 0.25f;
-constexpr unsigned int mc_fObstacleResolution = 20u;
+//Declare Statics - Spawner Defaults
+const float ObstacleSpawnerComponent::sc_fDefaultSpawnDistance = 3.0f;
+const float ObstacleSpawnerComponent::sc_fDefaultObstacleRadius = 0.25f;
+const unsigned int ObstacleSpawnerComponent::sc_fObstacleResolution = 10u;
 
 ObstacleSpawnerComponent::ObstacleSpawnerComponent(Entity* a_pOwner):
 	PARENT(a_pOwner),
 	m_bSpawnBtnThisFrame(false),
 	m_bSpawnBtnLastFrame(false),
-	m_fObstacleRadius(mc_fDefaultObstacleRadius),
-	m_fSpawnDistance(mc_fDefaultSpawnDistance)
+	m_fObstacleRadius(sc_fDefaultObstacleRadius),
+	m_fSpawnDistance(sc_fDefaultSpawnDistance)
 {
 }
 
@@ -62,7 +62,7 @@ void ObstacleSpawnerComponent::Draw(Shader* a_pShader)
 	//going to spawn it
 	if(m_bSpawnBtnLastFrame)
 	{
-		Gizmos::addSphere(GetObstacleSpawnPos(), mc_fObstacleResolution, mc_fObstacleResolution, m_fObstacleRadius, m_v4ObstacleColour);
+		Gizmos::addSphere(GetObstacleSpawnPos(), sc_fObstacleResolution, sc_fObstacleResolution, m_fObstacleRadius, m_v4ObstacleColour);
 	}
 }
 

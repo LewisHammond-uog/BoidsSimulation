@@ -9,7 +9,15 @@
 //Typedefs
 typedef Component PARENT;
 
-
+//Declare Camera Statics - default values
+const glm::vec3 CameraComponent::sc_v3DefaultPosition = glm::vec3(0.f);
+const glm::vec3 CameraComponent::sc_v3DefaultUp = glm::vec3(0.0f, 1.0f, 0.0f);
+const glm::vec3 CameraComponent::sc_v3DefaultForward = glm::vec3(0.0f, 0.0f, -1.0f);
+const float CameraComponent::sc_fDefaultYaw = -90.f;
+const float CameraComponent::sc_fDefaultPitch = 0.0f;
+const float CameraComponent::sc_fDefaultSpeed = 2.5f;
+const float CameraComponent::sc_fDefaultSensitivity = 0.1f;
+const float CameraComponent::sc_fDefaultZoom = 45.f;
 
 CameraComponent::CameraComponent(Entity* a_pOwner, GLFWwindow* a_pWindow, glm::vec3 a_v3Pos, glm::vec3 a_v3Up, float a_fYaw, float a_fPitch) :
 	PARENT(a_pOwner),

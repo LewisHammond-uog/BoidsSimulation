@@ -12,15 +12,7 @@
 struct GLFWwindow;
 class TransformComponent;
 
-//Default Camera values
-constexpr glm::vec3 sc_v3DefaultPosition = glm::vec3(0.f);
-constexpr glm::vec3 sc_v3DefaultUp = glm::vec3(0.0f, 1.0f, 0.0f);
-constexpr glm::vec3 sc_v3DefaultForward = glm::vec3(0.0f, 0.0f, -1.0f);
-constexpr float sc_fDefaultYaw = -90.f;
-constexpr float sc_fDefaultPitch = 0.0f;
-constexpr float sc_fDefaultSpeed = 2.5f;
-constexpr float sc_fDefaultSensitivity = 0.1f;
-constexpr float sc_fDefaultZoom = 45.f;
+
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum class CameraMove {
@@ -72,7 +64,17 @@ private:
 	float m_fMouseSensitivity;
 	float m_fZoom;
 
-
+	#pragma region Camera Defaults
+	//Default Camera values
+	const static glm::vec3 sc_v3DefaultPosition;
+	const static glm::vec3 sc_v3DefaultUp;
+	const static glm::vec3 sc_v3DefaultForward;
+	const static float sc_fDefaultYaw;
+	const static float sc_fDefaultPitch;
+	const static float sc_fDefaultSpeed;
+	const static float sc_fDefaultSensitivity;
+	const static float sc_fDefaultZoom;
+	#pragma endregion
 };
 
 #endif // CAMERA_COMPONENT_H
