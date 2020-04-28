@@ -69,7 +69,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	CalculateFlockingForces(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 	ApplyFlockingWeights(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 	vV3WeightedForces.push(v3SeparationForce);
-	vV3WeightedForces.push(v3AvoidanceForce);
+	vV3WeightedForces.push(v3AlignmentForce);
 	vV3WeightedForces.push(v3CohesionForce);
 
 	/*~~~~WANDER~~~~*/
