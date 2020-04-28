@@ -387,7 +387,8 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisi
 		{
 			Entity* hitEntity = m_vRayCastHit->m_pHitEntity;
 			if (hitEntity) {
-				if (hitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_OBSTACLE)
+				ENTITY_TYPE hitType = hitEntity->GetEntityType();
+				if (hitType == ENTITY_TYPE::ENTITY_TYPE_BOID || hitType == ENTITY_TYPE::ENTITY_TYPE_OBSTACLE)
 				{
 					bIsHeadingForCollision = true;
 					distToCollision = m_vRayCastHit->m_fHitFraction;
@@ -424,8 +425,11 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisi
 glm::vec3 BrainComponent::GetCollisionAvoidDirection(ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos) const
 {
 
-	//Todo - return our current forward?
-	glm::vec3 v3AvoidDirection(0.f);
+	//Set to our current -forward so in the result of a fail we
+	//just turn back
+	glm::vec3 forward = m_pOwnerEntity->GetComponent<TransformComponent*>()->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+	glm::vec3 back = glm::vec3(-forward.x, -forward.y, -forward.z);
+	glm::vec3 v3AvoidDirection(back);
 
 	//Null check raycaster
 	if(a_pRaycaster == nullptr)
