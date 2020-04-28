@@ -59,7 +59,8 @@ private:
 	//Brain Defaults - Max force and our neighbour hood
 	//todo combine max force/speed
 	const float mc_fMaxSpeed = 0.2f;
-	const float mc_fMaxForce = 0.2f;
+	const glm::vec3 mc_v3MaxForce = glm::vec3(0.2f,0.2f,0.2f);
+	const glm::vec3 mc_v3MinForce = glm::vec3(-0.2f,-0.2f,-0.2f);
 	const float mc_fNeighbourhoodRadius = 5.0f;//todo prehaps default?
 
 	//Wannder Defaults

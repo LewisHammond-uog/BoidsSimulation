@@ -3,13 +3,14 @@
 //C++ Includes
 #define _USE_MATH_DEFINES //Use Math Defines so we can use pi
 #include <math.h>
+#include <queue>
 
 //Project Incldues
 #include "ColliderComponent.h"
-#include "Entity.h"
-#include "TransformComponent.h"
 #include "DebugUI.h"
+#include "Entity.h"
 #include "Gizmos.h"
+#include "TransformComponent.h"
 
 //Static Declerations
 glm::vec3 BrainComponent::s_aCollisionDirections[BrainComponent::sc_iCollisionAvoidanceRayCount];
@@ -36,6 +37,10 @@ void BrainComponent::Update(float a_fDeltaTime)
 		return;
 	}
 
+	//Vector for storing all of the forces that we calculate, as we get forces calculated,
+	//we add them to the vector in the order that we want to process them (i.e should they be applied?)
+	std::queue<glm::vec3> vV3WeightedForces;
+
 	//Get vectors for calculation
 	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();
@@ -48,25 +53,51 @@ void BrainComponent::Update(float a_fDeltaTime)
 	ColliderComponent* pCollider = m_pOwnerEntity->GetComponent<ColliderComponent*>();
 	if(pCollider)
 	{
+		//Add forces for containment and collision avoidance - these are very high priority
 		RaycastCallbackInfo rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + v3Forward);
-		v3ContainmentForce = CalculateContainmentForce(&rayHit);
-		v3AvoidanceForce = CalculateAvoidanceForce(&rayHit, pCollider, v3CurrentPos);
+		v3ContainmentForce = CalculateContainmentForce(&rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_CONTAINMENT);
+		vV3WeightedForces.push(v3ContainmentForce);
+		v3AvoidanceForce = CalculateAvoidanceForce(&rayHit, pCollider, v3CurrentPos) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_COLLISION_AVOID);
+		vV3WeightedForces.push(v3AvoidanceForce);
 	}
 
 	/*~~~~FLOCKING~~~~*/
 	//Get all of our flocking values - we call the function by ref so the values are populated
-	glm::vec3 v3SeparationForce, v3AlignmentForce, v3CohesionForce = glm::vec3(0.f);
+	glm::vec3 v3SeparationForce = glm::vec3(0.f);
+	glm::vec3 v3AlignmentForce = glm::vec3(0.f);
+	glm::vec3 v3CohesionForce = glm::vec3(0.f);
 	CalculateFlockingForces(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 	ApplyFlockingWeights(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
+	vV3WeightedForces.push(v3SeparationForce);
+	vV3WeightedForces.push(v3AvoidanceForce);
+	vV3WeightedForces.push(v3CohesionForce);
 
+	
 	/*~~~~WANDER~~~~*/
 	//Get and weight wander force
-	glm::vec3 v3WanderForce = CalculateWanderForce() * m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_WANDER);
+	glm::vec3 v3WanderForce = CalculateWanderForce() * m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_WANDER);
+	vV3WeightedForces.push(v3WanderForce);
+
+	//Do weighted sum calcuations. Apply forces with their weighting and then check if
+	//they are over the maximum force
+	glm::vec3 v3FinalForce(0.f);
+	const int iForceCount = vV3WeightedForces.size();
+	for(int i = 0; i < iForceCount; ++i)
+	{
+		if(glm::length(v3FinalForce) < glm::length(mc_v3MaxForce))
+		{
+			v3FinalForce += vV3WeightedForces.front();
+			vV3WeightedForces.pop();
+		}else
+		{
+			//if we over the max force then break the loop
+			break;
+		}
+	}
+	//Clamp values
+	v3FinalForce = glm::clamp(v3FinalForce, mc_v3MinForce, mc_v3MaxForce);
 	
-	//Apply Force
-	m_v3CurrentVelocity += v3WanderForce + v3ContainmentForce + v3AvoidanceForce;
-	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, glm::vec3(-5000.f, -5000.f, -5000.f), glm::vec3(5000.f, 5000.f, 5000.f));
-	//Apply Velocity to Position
+	m_v3CurrentVelocity += v3FinalForce;
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
 	 
@@ -249,11 +280,16 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 	{
 		a_v3SeparationForce /= iNeighbourCount;
 		a_v3AlignmentForce /= iNeighbourCount;
-		a_v3CohesionForce /= iNeighbourCount;
+
 
 		a_v3SeparationForce = glm::length(a_v3SeparationForce) != 0 ? glm::normalize(a_v3SeparationForce) : a_v3SeparationForce;
 		a_v3AlignmentForce = glm::length(a_v3AlignmentForce) != 0 ? glm::normalize(a_v3AlignmentForce) : a_v3AlignmentForce;
-		a_v3CohesionForce = glm::length(a_v3CohesionForce) != 0 ? glm::normalize(a_v3CohesionForce) : a_v3CohesionForce;
+		
+		if(glm::length(a_v3CohesionForce))
+		{
+			a_v3CohesionForce /= iNeighbourCount;
+			a_v3CohesionForce = glm::normalize(a_v3CohesionForce - v3OwnerPos);
+		}
 	}
 	
 	//todo currentvel - this force to get better calculation?
@@ -277,9 +313,9 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 	}
 		
 	//Apply the UI weights to the forces
-	a_v3SeparationForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_SEPERATION);
-	a_v3AlignmentForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_ALIGNMENT);
-	a_v3CohesionForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::BEHAVIOUR_COHESION);
+	a_v3SeparationForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_SEPERATION);
+	a_v3AlignmentForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_ALIGNMENT);
+	a_v3CohesionForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_COHESION);
 }
 
 /// <summary>

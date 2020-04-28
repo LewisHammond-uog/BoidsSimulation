@@ -5,11 +5,15 @@
 #include <imgui/imgui.h>
 
 //Enum for types of flocking values
-typedef enum FlockingBehaviourType {
-	BEHAVIOUR_SEPERATION,
-	BEHAVIOUR_ALIGNMENT,
-	BEHAVIOUR_COHESION,
-	BEHAVIOUR_WANDER
+typedef enum class ForceWeight {
+	FORCE_WEIGHT_CONTAINMENT,
+	FORCE_WEIGHT_COLLISION_AVOID,
+	FORCE_WEIGHT_SEPERATION,
+	FORCE_WEIGHT_ALIGNMENT,
+	FORCE_WEIGHT_COHESION,
+	FORCE_WEIGHT_WANDER,
+
+	FORCE_WEIGHT_COUNT //Number of force weights
 }FlockingBehaviourType;
 
 class DebugUI {
@@ -24,7 +28,7 @@ public:
 
 	//Function to get value about flocking
 	//that the user has input in to the UI
-	float GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType) const;
+	float GetUIFlockingWeight(ForceWeight a_eBehaviourType) const;
 	bool GetShowColliders() const;
 
 private:

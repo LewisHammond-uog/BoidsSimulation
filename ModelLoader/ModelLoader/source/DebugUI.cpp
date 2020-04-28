@@ -61,7 +61,7 @@ void DebugUI::Update() {
 /// </summary>
 /// <param name="a_eBehaviourType">Behvaiour type of get value for</param>
 /// <returns>Weight of Behvaiour</returns>
-float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType) const
+float DebugUI::GetUIFlockingWeight(const ForceWeight a_eBehaviourType) const
 {
 	//TODO MAKE THIS RETURN A HASH MAP so that we only request it once
 
@@ -69,16 +69,16 @@ float DebugUI::GetUIFlockingWeight(FlockingBehaviourType a_eBehaviourType) const
 	//and return the appropriate value
 	switch (a_eBehaviourType)
 	{
-	case BEHAVIOUR_SEPERATION:
+	case ForceWeight::FORCE_WEIGHT_SEPERATION:
 		return m_fInputSeperationForce;
 		break;
-	case BEHAVIOUR_ALIGNMENT:
+	case ForceWeight::FORCE_WEIGHT_ALIGNMENT:
 		return m_fInputAlignmentForce;
 		break;
-	case BEHAVIOUR_COHESION:
+	case ForceWeight::FORCE_WEIGHT_COHESION:
 		return m_fInputCohesionForce;
 		break;
-	case BEHAVIOUR_WANDER:
+	case ForceWeight::FORCE_WEIGHT_WANDER:
 		return m_fInputWanderForce;
 		break;
 	default:
