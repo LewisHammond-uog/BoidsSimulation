@@ -54,11 +54,12 @@ void BrainComponent::Update(float a_fDeltaTime)
 	if(pCollider)
 	{
 		//Add forces for containment and collision avoidance - these are very high priority
-		RaycastCallbackInfo rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + v3Forward);
-		v3ContainmentForce = CalculateContainmentForce(&rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_CONTAINMENT);
+		RaycastCallbackInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + v3Forward);
+		v3ContainmentForce = CalculateContainmentForce(rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_CONTAINMENT);
 		vV3WeightedForces.push(v3ContainmentForce);
-		v3AvoidanceForce = CalculateAvoidanceForce(&rayHit, pCollider, v3CurrentPos) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_COLLISION_AVOID);
+		v3AvoidanceForce = CalculateAvoidanceForce(rayHit, pCollider, v3CurrentPos) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_COLLISION_AVOID);
 		vV3WeightedForces.push(v3AvoidanceForce);
+		delete rayHit;
 	}
 
 	/*~~~~FLOCKING~~~~*/
@@ -356,7 +357,6 @@ glm::vec3 BrainComponent::CalculateContainmentForce(RaycastCallbackInfo* a_rayRe
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
 	}
 
-	//todo currentvel - this force to get better calculation?
 	return v3ContainmentForce;
 }
 
@@ -441,8 +441,8 @@ glm::vec3 BrainComponent::GetCollisionAvoidDirection(ColliderComponent* a_pRayca
 	{
 		glm::vec3 v3SafeDir = m_v3PrevSafeDir;
 		glm::vec3 v3SafePoint = a_v3CastPos + (v3SafeDir * mc_fLookAheadDist);
-		RaycastCallbackInfo raySafeHit = a_pRaycaster->RayCast(a_v3CastPos, v3SafePoint);
-		if(raySafeHit.m_vRayCastHits.empty())
+		RaycastCallbackInfo* raySafeHit = a_pRaycaster->RayCast(a_v3CastPos, v3SafePoint);
+		if(raySafeHit->m_vRayCastHits.empty())
 		{
 			return v3SafeDir;
 		}
@@ -455,10 +455,10 @@ glm::vec3 BrainComponent::GetCollisionAvoidDirection(ColliderComponent* a_pRayca
 		//return it as our direction
 		glm::vec3 v3Dir = s_aCollisionDirections[i];
 		glm::vec3 v3Point = a_v3CastPos + (v3Dir * mc_fLookAheadDist);
-		RaycastCallbackInfo rayHit = a_pRaycaster->RayCast(a_v3CastPos, v3Point);
+		RaycastCallbackInfo* rayHit = a_pRaycaster->RayCast(a_v3CastPos, v3Point);
 
 		//If we have not hit then return this direction
-		if(rayHit.m_vRayCastHits.empty())
+		if(rayHit->m_vRayCastHits.empty())
 		{
 			m_v3PrevSafeDir = v3Dir;
 			return v3Dir;

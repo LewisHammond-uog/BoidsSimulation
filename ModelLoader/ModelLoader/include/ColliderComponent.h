@@ -39,8 +39,8 @@ public:
 	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
 
 	//Functions to do raycasting
-	RaycastCallbackInfo RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
-	RaycastCallbackInfo RayCast(rp3d::Ray* a_Ray);
+	RaycastCallbackInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
+	RaycastCallbackInfo* RayCast(rp3d::Ray* a_Ray);
 
 private:
 	
@@ -104,7 +104,6 @@ public:
 		hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
 		hit->m_v3HitNormal = glm::vec3(info.worldNormal.x, info.worldNormal.y, info.worldNormal.z);
 		hit->m_fHitFraction = info.hitFraction;
-		
 
 		//Add to hits list
 		m_vRayCastHits.push_back(hit);

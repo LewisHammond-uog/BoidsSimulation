@@ -407,7 +407,7 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 /// <param name="a_v3StartPoint">World Start Point</param>
 /// <param name="a_v3EndPoint">World End Point</param>
 /// <returns>Infomation about all of the objects that the raycast has hit</returns>
-RaycastCallbackInfo ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
+RaycastCallbackInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
 {
 	//Create a ray from the given start and end point
 	const rp3d::Vector3 v3StartPoint(a_v3StartPoint.x, a_v3StartPoint.y, a_v3StartPoint.z);
@@ -418,12 +418,12 @@ RaycastCallbackInfo ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::ve
 	return RayCast(&raycastRay);
 }
 
-RaycastCallbackInfo ColliderComponent::RayCast(rp3d::Ray* a_Ray)
+RaycastCallbackInfo* ColliderComponent::RayCast(rp3d::Ray* a_Ray)
 {
-	RaycastCallbackInfo callback;
+	RaycastCallbackInfo* callback = new RaycastCallbackInfo();
 
 	//Perform Raycast and return the resulting info
-	m_pCollisionWorld->raycast(*a_Ray, &callback);
+	m_pCollisionWorld->raycast(*a_Ray, callback);
 	return callback;
 }
 
@@ -447,5 +447,4 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 		m_aCollisionEntities.push_back(collisionEntity1);
 		m_aCollisionEntities.push_back(collisionEntity2);
 	}
-	
 }
