@@ -36,8 +36,8 @@ private:
 
 	//Collision Avoidance
 	glm::vec3 CalculateContainmentForce(RaycastCallbackInfo* a_rayResults) const;
-	glm::vec3 CalculateAvoidanceForce(RaycastCallbackInfo* a_collisionDetectRay, ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos) const;
-	glm::vec3 GetCollisionAvoidDirection(ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos) const;
+	glm::vec3 CalculateAvoidanceForce(RaycastCallbackInfo* a_collisionDetectRay, ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos);
+	glm::vec3 GetCollisionAvoidDirection(ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos);
 	//Collision Avoidance Settings
 	static const int sc_iCollisionAvoidanceRayCount = 200; //Number of directions to look in when avoiding collisions
 	const float mc_fLookAheadDist = 1.0f;
@@ -46,6 +46,8 @@ private:
 	void ComputeCollisionDirections();
 	static glm::vec3 s_aCollisionDirections[];
 	static bool s_bCollisionDirectionsInit;
+
+	glm::vec3 m_v3PrevSafeDir = glm::vec3(0);
 	
 	//Current Velocity of the boid
 	glm::vec3 m_v3CurrentVelocity;

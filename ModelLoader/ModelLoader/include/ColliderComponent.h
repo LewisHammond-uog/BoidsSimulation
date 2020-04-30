@@ -113,6 +113,14 @@ public:
 		return reactphysics3d::decimal(1.f);
 	}
 
+	~RaycastCallbackInfo()
+	{
+		for(int i = 0; i < m_vRayCastHits.size(); ++i)
+		{
+			delete m_vRayCastHits[i];
+		}
+	}
+
 	//List of hits from this raycast
 	std::vector<RayCastHit*> m_vRayCastHits;
 };

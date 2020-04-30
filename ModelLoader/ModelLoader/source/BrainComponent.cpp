@@ -352,7 +352,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(RaycastCallbackInfo* a_rayRe
 		//Get the normal and return our force in that direction so we turn away from the object,
 		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
-		v3ContainmentForce = containerHit->m_v3HitNormal * (1.f - containerHit->m_fHitFraction); 
+		v3ContainmentForce = containerHit->m_v3HitNormal * (containerHit->m_fHitFraction); 
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
 	}
 
@@ -367,7 +367,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(RaycastCallbackInfo* a_rayRe
 /// <param name="a_pRaycaster">Collider Component used to generate new raycasts if we detect a collision</param>
 /// <param name="a_v3CastPos">Position to cast from (normally the boids position) if we need to find an avoid direction</param>
 /// <returns>Force to avoid any collision</returns>
-glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisionDetectRay, ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos) const
+glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisionDetectRay, ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos) 
 {
 	glm::vec3 v3AvoidForce(0.f);
 	//The distance (normalised from our raycast min to max distance)
@@ -383,15 +383,15 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisi
 	bool bIsHeadingForCollision = false;
 	if(!a_collisionDetectRay->m_vRayCastHits.empty())
 	{
-		for (RayCastHit* m_vRayCastHit : a_collisionDetectRay->m_vRayCastHits)
+		for (RayCastHit* vRayCastHit : a_collisionDetectRay->m_vRayCastHits)
 		{
-			Entity* hitEntity = m_vRayCastHit->m_pHitEntity;
+			Entity* hitEntity = vRayCastHit->m_pHitEntity;
 			if (hitEntity) {
 				ENTITY_TYPE hitType = hitEntity->GetEntityType();
 				if (hitType == ENTITY_TYPE::ENTITY_TYPE_BOID || hitType == ENTITY_TYPE::ENTITY_TYPE_OBSTACLE)
 				{
 					bIsHeadingForCollision = true;
-					distToCollision = m_vRayCastHit->m_fHitFraction;
+					distToCollision = vRayCastHit->m_fHitFraction;
 					break;
 				}
 			}
@@ -403,10 +403,10 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisi
 	if(bIsHeadingForCollision)
 	{
 		//Get avoiding direction
-		glm::vec3 avoidDirection = GetCollisionAvoidDirection(a_pRaycaster, a_v3CastPos);
+		const glm::vec3 v3AvoidDirection = GetCollisionAvoidDirection(a_pRaycaster, a_v3CastPos);
 		
 		//Calc New Velocity
-		const glm::vec3 v3NewVelocity = avoidDirection * mc_fMaxSpeed * (1 - distToCollision);
+		const glm::vec3 v3NewVelocity = v3AvoidDirection * mc_fMaxSpeed * (distToCollision);
 		//Force is target velocity - current velocity
 		v3AvoidForce = (v3NewVelocity - m_v3CurrentVelocity);
 	}
@@ -422,9 +422,9 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_collisi
 /// <param name="a_pRaycaster">Collider Component to Raycast uisng</param>
 /// <param name="a_v3CastPos">Position to raycast from (usally the boids position)</param>
 /// <returns>Direction where there is not a collision</returns>
-glm::vec3 BrainComponent::GetCollisionAvoidDirection(ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos) const
+glm::vec3 BrainComponent::GetCollisionAvoidDirection(ColliderComponent* a_pRaycaster, glm::vec3 a_v3CastPos)
 {
-
+	//todo - nice
 	//Set to our current -forward so in the result of a fail we
 	//just turn back
 	glm::vec3 forward = m_pOwnerEntity->GetComponent<TransformComponent*>()->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
@@ -436,7 +436,18 @@ glm::vec3 BrainComponent::GetCollisionAvoidDirection(ColliderComponent* a_pRayca
 	{
 		return v3AvoidDirection;
 	}
-	
+
+	if(m_v3PrevSafeDir != glm::vec3(0))
+	{
+		glm::vec3 v3SafeDir = m_v3PrevSafeDir;
+		glm::vec3 v3SafePoint = a_v3CastPos + (v3SafeDir * mc_fLookAheadDist);
+		RaycastCallbackInfo raySafeHit = a_pRaycaster->RayCast(a_v3CastPos, v3SafePoint);
+		if(raySafeHit.m_vRayCastHits.empty())
+		{
+			return v3SafeDir;
+		}
+	}
+
 	for(int i = 0; i < sc_iCollisionAvoidanceRayCount; ++i)
 	{
 		//Cast a ray in the given direction by generatin a point
@@ -449,6 +460,7 @@ glm::vec3 BrainComponent::GetCollisionAvoidDirection(ColliderComponent* a_pRayca
 		//If we have not hit then return this direction
 		if(rayHit.m_vRayCastHits.empty())
 		{
+			m_v3PrevSafeDir = v3Dir;
 			return v3Dir;
 		}
 	}
