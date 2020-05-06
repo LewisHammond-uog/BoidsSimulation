@@ -27,12 +27,12 @@ public:
 private:
 	
 	//Steering Behaviours
-	glm::vec3 CalculateSeekForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const;
-	glm::vec3 CalculateFleeForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const;
+	glm::vec3 CalculateSeekForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const;
+	glm::vec3 CalculateFleeForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const;
 	glm::vec3 CalculateWanderForce();
 
 	//Steering Helper Functions
-	glm::vec3 GetTargetDirection();
+	inline glm::vec3 GetPointDirection(const glm::vec3& a_v3Start, const glm::vec3& a_v3End) const;
 
 	//Flocking Behaviours
 	glm::vec3 CalculateFlockingForces(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;

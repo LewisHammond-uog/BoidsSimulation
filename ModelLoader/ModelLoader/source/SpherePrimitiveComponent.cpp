@@ -27,11 +27,6 @@ void SpherePrimitiveComponent::SetDimensions(const float a_fNewRadius)
 	m_fSphereRadius = a_fNewRadius;
 }
 
-void SpherePrimitiveComponent::Update(float a_fDeltaTime)
-{
-	//todo - implement this
-}
-
 void SpherePrimitiveComponent::Draw(Shader* a_pShader)
 {
 	//Get the transform component - so that we can create the box at our position

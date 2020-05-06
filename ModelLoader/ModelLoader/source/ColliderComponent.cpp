@@ -81,6 +81,7 @@ void ColliderComponent::Update(float a_fDeltaTime)
 void ColliderComponent::Draw(Shader* a_pShader)
 {
 	if (DebugUI::GetInstance()->GetShowColliders()) {
+		
 		//Get the current position of the object - all colliders positions are relative
 		//to this
 		TransformComponent* pLocalTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
@@ -96,7 +97,7 @@ void ColliderComponent::Draw(Shader* a_pShader)
 			switch (m_apCollisionShapes[i]->getName())
 			{
 			case reactphysics3d::CollisionShapeName::BOX: {
-				//TODO Cleanup
+				//Draw a box at the collider point
 				rp3d::BoxShape* pBox = dynamic_cast<reactphysics3d::BoxShape*>(m_apCollisionShapes[i]);
 				glm::vec3 v3boxCenter = glm::vec3(pBox->getCentroid().x, pBox->getCentroid().y, pBox->getCentroid().z);
 				glm::vec3 v3boxDimentions = glm::vec3(pBox->getExtent().x, pBox->getExtent().y, pBox->getExtent().z);
@@ -105,7 +106,7 @@ void ColliderComponent::Draw(Shader* a_pShader)
 			}
 
 			case reactphysics3d::CollisionShapeName::SPHERE: {
-				//TODO Cleanup
+				//Draw a sphere at the collider point
 				rp3d::SphereShape* pSphere = dynamic_cast<reactphysics3d::SphereShape*>(m_apCollisionShapes[i]);
 				const float fSphereRadius = pSphere->getRadius();
 				Gizmos::addSphere(v3CurrentPosition, mc_iColliderDrawRes, mc_iColliderDrawRes, fSphereRadius, mc_v4ColliderDrawCol);
@@ -183,7 +184,6 @@ bool ColliderComponent::IsColliding(const bool a_bUseAABB)
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
 
-	//TODO - Make Nicer
 	//Loop through all of the entites that we have
 	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
 	{
@@ -260,7 +260,6 @@ std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo()
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
 
-	//TODO - Make Nicer
 	//Loop through all of the entites that we have
 	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
 	{
@@ -284,8 +283,9 @@ std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo()
 
 		//If we find a collision then add it to our list
 		CollisionInfo* currentCollision = GetCollisionInfo(pTargetCollider);
-		//TODO Make this check that collision is valid
-		vObjectCollisions.push_back(currentCollision);
+		if (currentCollision != nullptr) {
+			vObjectCollisions.push_back(currentCollision);
+		}
 	}
 
 	//Return the list of collisions, this may be empty if no
@@ -370,7 +370,6 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 		return nullptr;
 	}
 	
-	//TODO - Make Nicer
 	//Loop through all of the entites that we have
 	for (xIter = xEntityMap.begin(); xIter != xEntityMap.end(); ++xIter)
 	{

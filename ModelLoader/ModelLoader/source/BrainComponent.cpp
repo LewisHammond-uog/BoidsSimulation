@@ -110,19 +110,16 @@ void BrainComponent::Update(float a_fDeltaTime)
 	pTransform->Orthogonalize();
 }
 
-
-
-//TODO Restructure so that we don't repeat ourselves - CalculateFleeForce
-glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const
+/// <summary>
+/// Calculate the force to seek towards a target position
+/// </summary>
+/// <param name="a_v3Target">Target Position</param>
+/// <param name="a_v3CurrentPos">Current Position</param>
+/// <returns>Force to seek</returns>
+glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const
 {
 	//Calculate Target Direction
-	glm::vec3 v3TargetDir = v3Target - v3CurrentPos;
-
-	//only normalise if not a zero vector
-	if (glm::length(v3TargetDir) > 0.0f) 
-	{
-		v3TargetDir = glm::normalize(v3TargetDir);
-	}
+	const glm::vec3 v3TargetDir = GetPointDirection(a_v3Target, a_v3CurrentPos);
 
 	//Calc New Velocity
 	const glm::vec3 v3NewVelocity = v3TargetDir * mc_fMaxSpeed;
@@ -131,17 +128,16 @@ glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& v3Target, const gl
 	return (v3NewVelocity - m_v3CurrentVelocity);
 }
 
-//TODO Restructure so that we don't repeat ourselves - CalculateSeekForce
-glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const
+/// <summary>
+/// Calculate the force to flee from a target position
+/// </summary>
+/// <param name="a_v3Target">Target Position</param>
+/// <param name="a_v3CurrentPos">Current Position</param>
+/// <returns>Force to flee</returns>
+glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const
 {
 	//Calculate Target Direction (away from the )
-	glm::vec3 v3TargetDir = v3CurrentPos - v3Target;
-
-	//only normalise if not a zero vector
-	if (glm::length(v3TargetDir) > 0.0f)
-	{
-		v3TargetDir = glm::normalize(v3TargetDir);
-	}
+	const glm::vec3 v3TargetDir = GetPointDirection(a_v3CurrentPos, a_v3Target);
 
 	//Calc New Velocity
 	const glm::vec3 v3NewVelocity = v3TargetDir * mc_fMaxSpeed;
@@ -186,7 +182,7 @@ glm::vec3 BrainComponent::CalculateWanderForce()
 	}
 
 	//Calculate direction to move to
-	const glm::vec3 v3DirectionToTarget = glm::normalize(m_v3WanderPoint - v3SphereOrigin) * mc_fWanderRadius;
+	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * mc_fWanderRadius;
 
 	//Find out final target point
 	m_v3WanderPoint = v3SphereOrigin + v3DirectionToTarget;
@@ -197,7 +193,19 @@ glm::vec3 BrainComponent::CalculateWanderForce()
 	return CalculateSeekForce(m_v3WanderPoint, v3CurrentPos);
 }
 
-
+/// <summary>
+/// Gets the direction between 2 points
+/// </summary>
+/// <param name="a_v3Start">Start Point</param>
+/// <param name="a_v3End">End Point</param>
+/// <returns>Direction from Start to End Point </returns>
+glm::vec3 BrainComponent::GetPointDirection(const glm::vec3& a_v3Start, const glm::vec3& a_v3End) const
+{
+	//Get vector between 2 points and normalise
+	glm::vec3 targetDir = a_v3Start - a_v3End;
+	targetDir = glm::length(targetDir) > 0 ? glm::normalize(targetDir) : targetDir;
+	return targetDir;
+}
 
 /// <summary>
 /// Calculates all of the flocking forces
@@ -275,7 +283,6 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 		}
 	}
 
-	//todo seperate function?
 	//Our forces should be an average all of the influences we have so we need to
 	//divide the current value by the number of influences we had
 	if(iNeighbourCount > 0)
@@ -293,8 +300,7 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 			a_v3CohesionForce = glm::normalize(a_v3CohesionForce - v3OwnerPos);
 		}
 	}
-	
-	//todo currentvel - this force to get better calculation?
+
 	//Return the final total force
 	return a_v3SeparationForce + a_v3AlignmentForce + a_v3CohesionForce;
 }

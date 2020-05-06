@@ -17,7 +17,7 @@ public:
 	
 	//Update/Draw Functions - have no implementation as primatives
 	//cannot be created 
-	void Update(float a_fDeltaTime) override;
+	void Update(float a_fDeltaTime) override {};
 	void Draw(Shader* a_pShader) override;
 
 private:

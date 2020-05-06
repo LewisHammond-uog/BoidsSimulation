@@ -12,10 +12,6 @@
 //Typedefs
 typedef Component PARENT;
 
-//todo remove
-#include "BrainComponent.h"
-#include "BoxPrimitiveComponent.h"
-
 ModelComponent::ModelComponent(Entity* a_pOwner): 
 	PARENT(a_pOwner),
 	m_pModelData(nullptr),
