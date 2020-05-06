@@ -82,7 +82,7 @@ bool Scene::Initalise(){
 
 	// load models
 	// -----------
-	m_pNanoSuitModel = new Model("models/fish/TropicalFish01.obj");
+	m_pNanoSuitModel = new Model("models/nanosuit/nanosuit.obj");
 
 	//Init Camera
 	Entity* pCameraEntity = new Entity();
