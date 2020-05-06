@@ -56,6 +56,8 @@ Scene::Scene() : Application() {
 	m_pCamera = nullptr;
 }
 
+
+
 bool Scene::Initalise(){
 
 	//Call Application Init Function
@@ -82,7 +84,7 @@ bool Scene::Initalise(){
 
 	// load models
 	// -----------
-	m_pNanoSuitModel = new Model("models/nanosuit/nanosuit.obj");
+	LoadAllModels();
 
 	//Init Camera
 	Entity* pCameraEntity = new Entity();
@@ -117,7 +119,7 @@ bool Scene::Initalise(){
 
 		//Model Component
 		ModelComponent* pModel = new ModelComponent(pEntity);
-		pModel->SetModel(m_pNanoSuitModel);
+		pModel->ChooseRandomModel(m_vpLoadedModels);
 		pModel->SetScale(0.02f);
 		pEntity->AddComponent(pModel);
 
@@ -164,7 +166,7 @@ void Scene::Render() {
 	//Call Render on Application
 	Application::Render();
 	
-	if (!m_ourShader || !m_pNanoSuitModel) {
+	if (!m_ourShader) {
 		return;
 	}
 
@@ -235,6 +237,33 @@ void Scene::DeInitlise() {
 
 	//Destory Gizmos
 	Gizmos::destroy();
+
+}
+
+/// <summary>
+/// Load all of the models used by the program
+/// </summary>
+void Scene::LoadAllModels()
+{
+	/* Model Files are stored in the format
+	 * Fish01, Fish02 etc. so we just loop through
+	 * with the same prefix to load all of the models
+	 */
+	const std::string modelFilePrefix = "models/fish/Fish0";
+	const std::string modelFileSuffix = ".obj";
+
+	//Loop until we have loaded all models
+	for(int i = 1; i <= m_iModelCount; ++i)
+	{
+		//Generate file name and load model
+		const std::string modelFileName = modelFilePrefix + std::to_string(i) + modelFileSuffix;
+		Model* newModel = new Model(modelFileName);
+
+		if (newModel != nullptr) {
+			//Add to our loaded models
+			m_vpLoadedModels.push_back(newModel);
+		}
+	}
 
 }
 

@@ -2,6 +2,8 @@
 #define __MODEL_COMPONENT_H__
 
 //Project Includes
+#include <vector>
+
 #include "Component.h"
 
 //Forward Declare
@@ -17,6 +19,7 @@ public:
 	void Draw(Shader* a_pShader) override;
 
 	void SetModel(Model* a_pNewModel) { m_pModelData = a_pNewModel; };
+	void ChooseRandomModel(std::vector<Model*>& a_vpModels);
 	void SetScale(const float a_fNewScale) { m_fModelScale = a_fNewScale; };
 
 private:

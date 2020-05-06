@@ -9,6 +9,8 @@
 #include <learnopengl/model.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "MathsUtils.h"
+
 //Typedefs
 typedef Component PARENT;
 
@@ -42,4 +44,20 @@ void ModelComponent::Draw(Shader* a_pShader)
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_fModelScale, m_fModelScale, m_fModelScale));
 	a_pShader->setMat4("model", modelMatrix);
 	m_pModelData->Draw(*a_pShader);
+}
+
+/// <summary>
+/// Chooses a random model for a given list
+/// </summary>
+void ModelComponent::ChooseRandomModel(std::vector<Model*>& a_vpModels)
+{
+	//Select a Random Model from our list
+	int chosenIndex = MathsUtils::RandomRange<int>(0, a_vpModels.size());
+	//Lets Choose A Model
+	Model* selectedModel = a_vpModels[chosenIndex];
+
+	if(selectedModel != nullptr)
+	{
+		SetModel(selectedModel);
+	}
 }

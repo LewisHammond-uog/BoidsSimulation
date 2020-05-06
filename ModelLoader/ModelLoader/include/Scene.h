@@ -5,6 +5,7 @@
 #include "Application.h"
 
 //React Physics Includes
+#include <vector>
 #include <ReactPhysics3D/reactphysics3d.h>
 
 
@@ -17,6 +18,9 @@ class Model;
 class Scene : private Application
 {
 public:
+	Scene(const Scene&) = delete; //Overload Copy Constructor - no implementation
+	Scene& operator=(const Scene&) = delete; //Overload Equals Operator - no implementation
+	
 	static Scene* GetInstance();
 
 	bool Initalise();
@@ -29,9 +33,11 @@ public:
 
 private:
 	Scene();
-	Scene(const Scene&); //Overload Copy Constructor - no implementation
-	Scene& operator=(const Scene&); //Overload Equals Operator - no implementation
 
+
+	//Load all of the fish models
+	void LoadAllModels();
+	
 	//Function to generate our bounds volume
 	void GenerateBoundsVolume(float a_fBoundsSize) const;
 	
@@ -43,6 +49,10 @@ private:
 	CameraComponent* m_pCamera;
 	Shader* m_ourShader;
 	Model* m_pNanoSuitModel;
+
+	//All loaded models and number to load
+	const int m_iModelCount = 15;
+	std::vector<Model*> m_vpLoadedModels;
 
 	//Collision World
 	rp3d::CollisionWorld* m_pSceneCollisionWorld;
