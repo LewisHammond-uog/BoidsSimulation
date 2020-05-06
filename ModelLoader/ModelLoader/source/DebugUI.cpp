@@ -37,6 +37,9 @@ void DebugUI::Update() {
 	//FPS info tab
 	if (ImGui::CollapsingHeader("Debug/FPS info")) {
 		ImGui::Text("Application Average: %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		ImGui::Spacing();
+		
 		//Tickbox to draw colliders
 		ImGui::Checkbox("Draw Collider Bounds", &m_bShowColliders);
 	}
@@ -51,10 +54,24 @@ void DebugUI::Update() {
 
 	//Sliders for changing force weights - UI puts these values in to the appropriate varables as
 	//we pass by ref
-	if (ImGui::CollapsingHeader("Force Values")) {
+	if (ImGui::CollapsingHeader("Global Boid Values")) {
 		ImGui::Text("Simulation Values");
+
+		//todo setup with var
+		//Nehbourhood Radius
+		ImGui::SliderFloat("Neighbourhood Radius", &m_fInputContainmentForce, 1.0f, 20.f);
+
+		ImGui::Spacing();
+		
+		//Collision Avoidance Forces
+		ImGui::Text("Collision Avoidance");
 		ImGui::SliderFloat("Containment Force Weight", &m_fInputContainmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Collision Avoidance Force Weight", &m_fInputCollisionAvoidForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		
+		ImGui::Spacing();
+
+		//Flocking Forces
+		ImGui::Text("Flocking Forces");
 		ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
