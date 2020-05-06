@@ -61,11 +61,6 @@ private:
 	const glm::vec3 mc_v3MinVelocity = glm::vec3(-2.f, -2.f, -2.f);
 	
 	float m_fNeighbourRadius = 5.0f;
-
-	//Wander Defaults
-	const float mc_fSphereForwardMutiplier = 1.f; //How far forward to draw the sphere
-	const float mc_fWanderJitter = 0.5f; //How much to move from the point on the spehre
-	const float mc_fWanderRadius = 4.0f; //How large the sphere is
 	
 	#pragma endregion 
 

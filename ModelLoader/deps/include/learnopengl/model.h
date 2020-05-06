@@ -65,7 +65,7 @@ private:
         // process ASSIMP's root node recursively
         processNode(scene->mRootNode, scene);
 
-        std::cout << "LOADED: " << path << std::endl;
+        std::cout << "ASSIMP::LOADED: " << path << std::endl;
     }
 
     // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).

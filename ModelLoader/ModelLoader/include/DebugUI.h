@@ -31,6 +31,10 @@ public:
 	float GetUIFlockingWeight(ForceWeight a_eBehaviourType) const;
 
 	float GetUINeighbourRadius();
+
+	float GetUIWanderForward();
+	float GetUIWanderJitter();
+	float GetUIWanderRadius();
 	
 	bool GetShowColliders() const;
 
@@ -57,13 +61,17 @@ private:
 	//Variables for different game elements that are controlled
 	//by the UI
 	//FORCES
-	float m_fInputContainmentForce;
-	float m_fInputCollisionAvoidForce;
-	float m_fInputSeperationForce;
-	float m_fInputAlignmentForce;
-	float m_fInputCohesionForce;
-	float m_fInputWanderForce;
-	//NEIGHBOUR RADUIS
+	float m_fInputContainmentForce = 0.f;
+	float m_fInputCollisionAvoidForce = 0.f;
+	float m_fInputSeperationForce = 0.f;
+	float m_fInputAlignmentForce = 0.f;
+	float m_fInputCohesionForce = 0.f;
+	float m_fInputWanderForce = 0.f;
+	//WANDER SETTINGS
+	float m_fInputWanderForward = 2.f;
+	float m_fInputWanderJitter = 0.05f;
+	float m_fInputWanderRadius = 0.33f;
+	//NEIGHBOUR RADIUSS
 	float m_fInputNeighbourRadius;
 	//DEBUG
 	bool m_bShowColliders;

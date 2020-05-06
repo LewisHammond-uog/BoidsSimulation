@@ -52,7 +52,7 @@ void ModelComponent::Draw(Shader* a_pShader)
 void ModelComponent::ChooseRandomModel(std::vector<Model*>& a_vpModels)
 {
 	//Select a Random Model from our list
-	int chosenIndex = MathsUtils::RandomRange<int>(0, a_vpModels.size());
+	const int chosenIndex = MathsUtils::RandomRange<int>(0, a_vpModels.size());
 	//Lets Choose A Model
 	Model* selectedModel = a_vpModels[chosenIndex];
 

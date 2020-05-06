@@ -168,27 +168,27 @@ glm::vec3 BrainComponent::CalculateWanderForce()
 	const glm::vec3 v3CurrentForward = pParentTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	
 	//Project a point in front of us for the center of our sphere
-	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * mc_fSphereForwardMutiplier);
+	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * m_pDebugUI->GetUIWanderForward());
 
 	//If the magnitude of the vector is 0 then initalize our
 	//first wander point
 	if (glm::length(m_v3WanderPoint) == 0.0f) 
 	{
 		//Find a random point omn a sphere
-		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(mc_fWanderRadius);
+		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(m_pDebugUI->GetUIWanderRadius());
 
 		//Add this point on a sphere to the sphere we are casting out infront of us
 		m_v3WanderPoint = v3SphereOrigin + v3RandomPointOnSphere;
 	}
 
 	//Calculate direction to move to
-	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * mc_fWanderRadius;
+	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * m_pDebugUI->GetUIWanderRadius();
 
 	//Find out final target point
 	m_v3WanderPoint = v3SphereOrigin + v3DirectionToTarget;
 
 	//Add Jitter
-	m_v3WanderPoint += glm::sphericalRand(mc_fWanderJitter);
+	m_v3WanderPoint += glm::sphericalRand(m_pDebugUI->GetUIWanderJitter());
 
 	return CalculateSeekForce(m_v3WanderPoint, v3CurrentPos);
 }

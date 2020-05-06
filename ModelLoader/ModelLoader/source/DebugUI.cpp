@@ -55,9 +55,8 @@ void DebugUI::Update() {
 	//Sliders for changing force weights - UI puts these values in to the appropriate varables as
 	//we pass by ref
 	if (ImGui::CollapsingHeader("Global Boid Values")) {
-		ImGui::Text("Simulation Values");
+		ImGui::Text("Detection Values");
 
-		//todo setup with var
 		//Nehbourhood Radius
 		ImGui::SliderFloat("Neighbourhood Radius", &m_fInputNeighbourRadius, 1.0f, 20.f);
 
@@ -76,6 +75,15 @@ void DebugUI::Update() {
 		ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Wander Force Weight", &m_fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+
+		if(ImGui::CollapsingHeader("Wander Settings"))
+		{
+			ImGui::Text("Settings for the sphere that is projected in front of the sphere.");
+			
+			ImGui::SliderFloat("Sphere Forward Projection", &m_fInputWanderForward, 0.f, 5.f);
+			ImGui::SliderFloat("Sphere Jitter", &m_fInputWanderJitter, 0.01f, 5.f);
+			ImGui::SliderFloat("Sphere Radius", &m_fInputWanderRadius, 0.01f, 5.f);
+		}
 	}
 
 	//End the drawing of the window
@@ -130,6 +138,34 @@ float DebugUI::GetUIFlockingWeight(const ForceWeight a_eBehaviourType) const
 float DebugUI::GetUINeighbourRadius()
 {
 	return m_fInputNeighbourRadius;
+}
+
+/// <summary>
+/// Get the amount forward the user wants the wander sphere
+/// to be projected
+/// </summary>
+/// <returns></returns>
+float DebugUI::GetUIWanderForward()
+{
+	return m_fInputWanderForward;
+}
+
+/// <summary>
+/// Get the radius that the user wantes the wander jitter to be
+/// </summary>
+/// <returns></returns>
+float DebugUI::GetUIWanderJitter()
+{
+	return m_fInputWanderJitter;
+}
+
+/// <summary>
+/// Get the radius that the user wants the wander sphere to have
+/// </summary>
+/// <returns></returns>
+float DebugUI::GetUIWanderRadius()
+{
+	return m_fInputWanderRadius;
 }
 
 /// <summary>
