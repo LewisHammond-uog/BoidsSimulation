@@ -59,7 +59,7 @@ void DebugUI::Update() {
 
 		//todo setup with var
 		//Nehbourhood Radius
-		ImGui::SliderFloat("Neighbourhood Radius", &m_fInputContainmentForce, 1.0f, 20.f);
+		ImGui::SliderFloat("Neighbourhood Radius", &m_fInputNeighbourRadius, 1.0f, 20.f);
 
 		ImGui::Spacing();
 		
@@ -123,6 +123,16 @@ float DebugUI::GetUIFlockingWeight(const ForceWeight a_eBehaviourType) const
 }
 
 /// <summary>
+/// Get the radius of the neighbourhood that the user
+/// has input to the UI
+/// </summary>
+/// <returns></returns>
+float DebugUI::GetUINeighbourRadius()
+{
+	return m_fInputNeighbourRadius;
+}
+
+/// <summary>
 /// Get if should draw colliders on our entities
 /// </summary>
 /// <returns></returns>
@@ -148,6 +158,7 @@ DebugUI::DebugUI() :
 	m_fInputAlignmentForce(mc_fDefaultForce),
 	m_fInputCohesionForce(mc_fDefaultForce),
 	m_fInputWanderForce(mc_fDefaultForce),
+	m_fInputNeighbourRadius(mc_fDefaultForce),
 	m_bShowColliders(false)
 {
 }

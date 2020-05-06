@@ -29,6 +29,9 @@ public:
 	//Function to get value about flocking
 	//that the user has input in to the UI
 	float GetUIFlockingWeight(ForceWeight a_eBehaviourType) const;
+
+	float GetUINeighbourRadius();
+	
 	bool GetShowColliders() const;
 
 	//Get if this UI has the mouse in focus
@@ -53,12 +56,16 @@ private:
 
 	//Variables for different game elements that are controlled
 	//by the UI
+	//FORCES
 	float m_fInputContainmentForce;
 	float m_fInputCollisionAvoidForce;
 	float m_fInputSeperationForce;
 	float m_fInputAlignmentForce;
 	float m_fInputCohesionForce;
 	float m_fInputWanderForce;
+	//NEIGHBOUR RADUIS
+	float m_fInputNeighbourRadius;
+	//DEBUG
 	bool m_bShowColliders;
 
 };

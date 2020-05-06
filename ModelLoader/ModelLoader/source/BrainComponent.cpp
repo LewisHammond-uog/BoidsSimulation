@@ -21,7 +21,18 @@ BrainComponent::BrainComponent(Entity* a_pOwner)
 }
 
 void BrainComponent::Update(float a_fDeltaTime)
-{	
+{
+
+	//Break if we don't have a UI instance, as we can't
+	//control anything
+	if(!m_pDebugUI)
+	{
+		return;
+	}
+
+	//Update Radius
+	m_fNeighbourRadius = m_pDebugUI->GetUINeighbourRadius();
+	
 	//Get transform component
 	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
 	if (!pTransform) {
@@ -87,9 +98,9 @@ void BrainComponent::Update(float a_fDeltaTime)
 	}
 	//Clamp values
 	v3FinalForce = glm::clamp(v3FinalForce, mc_v3MinForce, mc_v3MaxForce);
-	
+
+	//Add Velcoity to boid position
 	m_v3CurrentVelocity += v3FinalForce;
-	//Clamp Velocity
 	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity,mc_v3MinVelocity, mc_v3MaxVelocity);
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
@@ -263,7 +274,7 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 
 		//Get the distance to our target entity and make sure it is within our search radius
 		const float fDistanceToTarget = glm::length(v3TargetPos - v3OwnerPos);
-		if(fDistanceToTarget < mc_fNeighbourhoodRadius)
+		if(fDistanceToTarget < m_fNeighbourRadius)
 		{
 			/*Calculate the forces in the manner that they should*/
 			a_v3SeparationForce += v3OwnerPos - v3TargetPos; //Replusion force
