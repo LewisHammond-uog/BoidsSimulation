@@ -15,10 +15,9 @@ public:
 	//Function to set size
 	void SetDimensions(glm::vec3 a_v3NewDimensions);
 	
-	//Update/Draw Functions - have no implementation as primatives
-	//cannot be created 
-	virtual void Update(float a_fDeltaTime);
-	virtual void Draw(Shader* a_pShader);
+	//Update/Draw Functions
+	void Update(float a_fDeltaTime) override = 0;
+	void Draw(Shader* a_pShader) override;
 
 private:
 	glm::vec3 m_v3BoxDimensions;

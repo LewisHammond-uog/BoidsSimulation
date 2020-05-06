@@ -153,7 +153,7 @@ inline Transform::Transform(TransformComponent* a_pTransform)
     }
 
     //Convert Position Component
-    const glm::vec3 v3TransformPos = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
+    const glm::vec3 v3TransformPos = a_pTransform->GetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR);
     const Vector3 v3PosVector = Vector3(v3TransformPos.x, v3TransformPos.y, v3TransformPos.z);
 
     //Convert Rotation Component

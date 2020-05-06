@@ -78,7 +78,7 @@ void ObstacleSpawnerComponent::SpawnObstacle(glm::vec3 a_v3Position)
 	
 	//Create and apply transforms
 	TransformComponent* pObstacleTransform = new TransformComponent(pObstacleEntity);
-	pObstacleTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, a_v3Position);
+	pObstacleTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, a_v3Position);
 	pObstacleEntity->AddComponent(pObstacleTransform);
 
 	//Add Sphere - so we have a visual repreentation

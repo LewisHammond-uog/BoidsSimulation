@@ -110,7 +110,7 @@ bool Scene::Initalise(){
 
 		//Transform Component
 		TransformComponent* pTransform = new TransformComponent(pEntity);
-		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, glm::vec3(	MathsUtils::RandomRange(-5.0f, 5.0f), 
+		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, glm::vec3(	MathsUtils::RandomRange(-5.0f, 5.0f), 
 																				MathsUtils::RandomRange(-5.0f, 5.0f),
 																				MathsUtils::RandomRange(-5.0f, 5.0f)));
 		pEntity->AddComponent(pTransform);
@@ -279,7 +279,7 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 
 		//Create a transfrom so our wall has position and give it our wall psoition
 		TransformComponent* pWallTransform = new TransformComponent(pWallEntity);
-		pWallTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, currentWallPosition);
+		pWallTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, currentWallPosition);
 		pWallEntity->AddComponent(pWallTransform);
 
 		//Create a our collider to our entities can collider with this

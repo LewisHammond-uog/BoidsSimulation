@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Components\Primitives">
       <UniqueIdentifier>{e5a531a6-e04f-468f-bde3-8b4a7386bd56}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Components\Collision">
+      <UniqueIdentifier>{4a846545-2bbf-415b-8849-7a19fbdb694c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -99,10 +102,10 @@
     <ClCompile Include="source\CameraComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="source\ObstacleSpawnerComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\ColliderComponent.cpp">
+      <Filter>Source Files\Components\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ObstacleSpawnerComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>

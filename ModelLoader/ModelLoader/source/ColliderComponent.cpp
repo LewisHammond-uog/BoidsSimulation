@@ -40,6 +40,7 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 
 ColliderComponent::~ColliderComponent()
 {
+	//todo fix
 	//Destroy the collision body
 	delete m_pCollisionBody;
 
@@ -48,6 +49,7 @@ ColliderComponent::~ColliderComponent()
 	{
 		delete m_apCollisionShapes[i];
 	}
+
 	for (unsigned int i = 0; i < m_apCollisionShapes.size(); ++i)
 	{
 		delete m_apProxyShapes[i];

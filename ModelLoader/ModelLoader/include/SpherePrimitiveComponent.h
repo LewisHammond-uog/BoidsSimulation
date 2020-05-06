@@ -17,8 +17,8 @@ public:
 	
 	//Update/Draw Functions - have no implementation as primatives
 	//cannot be created 
-	virtual void Update(float a_fDeltaTime);
-	virtual void Draw(Shader* a_pShader);
+	void Update(float a_fDeltaTime) override;
+	void Draw(Shader* a_pShader) override;
 
 private:
 	float m_fSphereRadius;

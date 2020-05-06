@@ -7,28 +7,26 @@
 //Lib Includes
 #include <glm/ext.hpp>
 
-//todo this needs a big cleanup
-
-enum MATRIX_ROW 
+enum class MATRIX_ROW 
 {
 	RIGHT_VECTOR,
 	UP_VECTOR,
 	FORWARD_VECTOR,
-	POSTION_VECTOR
+	POSITION_VECTOR
 };
 
 class TransformComponent : public Component
 {
 public:
 	TransformComponent(Entity* a_pOwner);
-	~TransformComponent();
+	~TransformComponent() = default;
 
-	virtual void Update(float a_fDeltaTime) {};
-	virtual void Draw(Shader* a_pShader) {};
+	void Update(float a_fDeltaTime) override {};
+	void Draw(Shader* a_pShader) override {};
 
 	void Orthogonalize();
 
-	//Get and set Matrix Row
+	//Get and set Matrix Rows
 	const glm::mat4& GetEntityMatrix() const;
 	void SetEntityMatrixRow(MATRIX_ROW a_eRow, glm::vec3 a_v3Vec);
 	glm::vec3 GetEntityMatrixRow(MATRIX_ROW a_eRow);

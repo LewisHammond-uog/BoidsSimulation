@@ -11,10 +11,10 @@ class ModelComponent : public Component
 {
 public:
 	ModelComponent(Entity* a_pOwner);
-	~ModelComponent();
+	~ModelComponent() = default;
 
-	virtual void Update(float a_fDeltaTime) {};
-	virtual void Draw(Shader* a_pShader);
+	void Update(float a_fDeltaTime) override {};
+	void Draw(Shader* a_pShader) override;
 
 	void SetModel(Model* a_pNewModel) { m_pModelData = a_pNewModel; };
 	void SetScale(const float a_fNewScale) { m_fModelScale = a_fNewScale; };

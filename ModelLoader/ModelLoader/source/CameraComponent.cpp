@@ -35,7 +35,7 @@ CameraComponent::CameraComponent(Entity* a_pOwner, GLFWwindow* a_pWindow, glm::v
 		m_pCameraTransform = a_pOwner->GetComponent<TransformComponent*>();
 		if(m_pCameraTransform)
 		{
-			m_pCameraTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, a_v3Pos);
+			m_pCameraTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, a_v3Pos);
 			m_pCameraTransform->SetEntityMatrixRow(MATRIX_ROW::UP_VECTOR, a_v3Up);
 			m_pCameraTransform->SetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR, sc_v3DefaultForward);
 		}
@@ -174,7 +174,7 @@ void CameraComponent::ProcessKeyboard(CameraMove direction, float deltaTime) con
 		v3CameraPos += v3Right * fVelocity;
 
 	//Apply new position
-	m_pCameraTransform->SetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR, v3CameraPos);
+	m_pCameraTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, v3CameraPos);
 }
 
 /// <summary>

@@ -17,9 +17,10 @@ class BrainComponent : public Component
 {
 public:
 	BrainComponent(Entity* a_pOwner);
+	~BrainComponent() = default;
 
-	virtual void Update(float a_fDeltaTime);
-	virtual void Draw(Shader* a_pShader) {};
+	void Update(float a_fDeltaTime) override;
+	void Draw(Shader* a_pShader) override {};
 
 	glm::vec3 GetCurrentVelocity() const { return m_v3CurrentVelocity; }
 
@@ -29,6 +30,9 @@ private:
 	glm::vec3 CalculateSeekForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const;
 	glm::vec3 CalculateFleeForce(const glm::vec3& v3Target, const glm::vec3& v3CurrentPos) const;
 	glm::vec3 CalculateWanderForce();
+
+	//Steering Helper Functions
+	glm::vec3 GetTargetDirection();
 
 	//Flocking Behaviours
 	glm::vec3 CalculateFlockingForces(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;

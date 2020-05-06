@@ -29,10 +29,12 @@ public:
 
 	//Constructor
 	CameraComponent(Entity* a_pOwner, GLFWwindow* a_pWindow, glm::vec3 a_v3Pos = sc_v3DefaultPosition, glm::vec3 a_v3Up = sc_v3DefaultUp, float a_fYaw = sc_fDefaultYaw, float a_fPitch = sc_fDefaultPitch);
+	~CameraComponent() = default;
 
+	
 	//Reqiured Update/Draw Functions
 	virtual void Update(float a_fDeltaTime) override;
-	virtual void Draw(Shader* a_pShader){};
+	void Draw(Shader* a_pShader) override {};
 
 	glm::mat4 GetViewMatrix() const;
 	float GetCameraZoom() const;

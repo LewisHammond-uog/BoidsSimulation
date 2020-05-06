@@ -70,7 +70,7 @@ private:
 //todo make these names better
 class CollisionInfo : public rp3d::CollisionCallback {
 public:
-	virtual void notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo);
+	void notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo) override;
 private:
 	std::vector<Entity*> m_aCollisionEntities;
 };
@@ -96,7 +96,8 @@ class RaycastCallbackInfo : public rp3d::RaycastCallback
 public:
 
 	//Function called when the ray cast hits a collider in the world
-	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info) {
+	rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info) override
+	{
 
 		//Create a raycast hit and fill it with our info
 		RayCastHit* hit = new RayCastHit();

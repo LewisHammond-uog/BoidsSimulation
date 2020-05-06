@@ -29,12 +29,6 @@ void BoxPrimitiveComponent::SetDimensions(const glm::vec3 a_v3NewDimensions)
 	m_v3BoxDimensions = a_v3NewDimensions;
 }
 
-void BoxPrimitiveComponent::Update(float a_fDeltaTime)
-{
-	//TODO - Implement this? 
-	//No Implementation
-}
-
 /// <summary>
 /// Draw the box primitive component
 /// </summary>

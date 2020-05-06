@@ -104,8 +104,8 @@ void BrainComponent::Update(float a_fDeltaTime)
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
 	 
 	//Update our matrix
-	pTransform->SetEntityMatrixRow(FORWARD_VECTOR, v3Forward);
-	pTransform->SetEntityMatrixRow(POSTION_VECTOR, v3CurrentPos);
+	pTransform->SetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR, v3Forward);
+	pTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, v3CurrentPos);
 	//When we update our transform make sure we Orthogonalize the matrix
 	pTransform->Orthogonalize();
 }
@@ -305,7 +305,6 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 /// <param name="a_v3SeparationForce">ByRef Separation Force to modify</param>
 /// <param name="a_v3AlignmentForce">ByRef Alignment Force to modify</param>
 /// <param name="a_v3CohesionForce">ByRef Cohesion Force to modify</param>
-/// <param name="a_pDebugUI">Debug UI instance to use to get weights</param>
 /// <returns></returns>
 void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const
 {

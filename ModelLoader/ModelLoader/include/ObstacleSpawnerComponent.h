@@ -15,7 +15,7 @@ class ObstacleSpawnerComponent : public Component
 {
 public:
 	ObstacleSpawnerComponent(Entity* a_pOwner);
-	~ObstacleSpawnerComponent() ;
+	~ObstacleSpawnerComponent() = default;
 
 	//Update/Draw Functions
 	virtual void Update(float a_fDeltaTime) override;

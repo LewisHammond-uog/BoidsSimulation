@@ -11,15 +11,13 @@ class Component
 {
 public:
 	Component(Entity* a_pOwner);
-	~Component();
+	virtual ~Component();
 
-	//todo - Shared Function for Update/Draw?
 	virtual void Update(float a_fDeltaTime) = 0; //Pure Virtual Function
 	virtual void Draw(Shader* a_pShader) = 0; //Pure Virtual Function
 
 	Entity* GetOwnerEntity() const;
 	void RemoveOwnerEntity();
-
 
 protected:
 	Entity* m_pOwnerEntity;

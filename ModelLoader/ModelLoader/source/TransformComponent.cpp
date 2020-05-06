@@ -17,8 +17,8 @@ TransformComponent::TransformComponent(Entity* a_pOwner) :
 /// <param name="a_v3Vec">Vector 3 to fill row with</param>
 void TransformComponent::SetEntityMatrixRow(MATRIX_ROW a_eRow, const glm::vec3 a_v3Vec)
 {
-	const float finalVec4Value = a_eRow == POSTION_VECTOR ? 1.f : 0.0f;
-	m_m4EntityMatrix[a_eRow] = glm::vec4(a_v3Vec, finalVec4Value);
+	const float finalVec4Value = a_eRow == MATRIX_ROW::POSITION_VECTOR ? 1.f : 0.0f;
+	m_m4EntityMatrix[(int)a_eRow] = glm::vec4(a_v3Vec, finalVec4Value);
 }
 
 /// <summary>
@@ -28,7 +28,7 @@ void TransformComponent::SetEntityMatrixRow(MATRIX_ROW a_eRow, const glm::vec3 a
 /// <returns>Matrix Row as Vector 3</returns>
 glm::vec3 TransformComponent::GetEntityMatrixRow(MATRIX_ROW a_eRow)
 {
-	return m_m4EntityMatrix[a_eRow];
+	return m_m4EntityMatrix[(int)a_eRow];
 }
 
 ///<summary>
@@ -37,7 +37,7 @@ glm::vec3 TransformComponent::GetEntityMatrixRow(MATRIX_ROW a_eRow)
 ///<returns>Current Transform Position</returns>
 glm::vec3 TransformComponent::GetCurrentPosition()
 {
-	return GetEntityMatrixRow(MATRIX_ROW::POSTION_VECTOR);
+	return GetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR);
 }
 
 /// <summary>
