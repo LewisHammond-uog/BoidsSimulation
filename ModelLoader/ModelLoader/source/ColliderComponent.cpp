@@ -40,20 +40,15 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 
 ColliderComponent::~ColliderComponent()
 {
-	//todo fix
-	//Destroy the collision body
-	delete m_pCollisionBody;
+	m_pCollisionWorld->destroyCollisionBody(m_pCollisionBody);
 
-	//Delete all of the collision and proxy shapes
-	for (unsigned int i =0; i < m_apCollisionShapes.size(); ++i)
-	{
-		delete m_apCollisionShapes[i];
-	}
-
-	for (unsigned int i = 0; i < m_apCollisionShapes.size(); ++i)
-	{
-		delete m_apProxyShapes[i];
-	}
+	//Proxy and Collision Shapes are removed by React Physics, we do not need to delete them here
+	/* It is not necessary to manually remove all the collision shapes from a body at the end of your application.
+	 * They will automatically be removed when you destroy the body.
+	 * Note that after removing a collision shape, the corresponding proxy shape pointer will not be valid anymore
+	 * https://www.reactphysics3d.com/usermanual.html#x1-4500010.7
+	 */
+	
 }
 
 /// <summary>

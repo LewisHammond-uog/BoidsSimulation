@@ -46,8 +46,6 @@ public:
 	//Get Controls function
 	int GetActivateCamBtn() const;
 private:
-
-
 	void UpdateCameraVectors() const;
 
 	//Input Processing
@@ -62,11 +60,12 @@ private:
 
 	//Mouse button for allowing camera movement
 	int mc_iCamUseBtn = GLFW_MOUSE_BUTTON_1;
-	
+
 	//Camera Attributes
 	glm::vec3 m_v3WorldUp;
 	float m_fYaw;
 	float m_fPitch;
+	
 	//Camera settings
 	float m_fMovementSpeed;
 	float m_fMouseSensitivity;

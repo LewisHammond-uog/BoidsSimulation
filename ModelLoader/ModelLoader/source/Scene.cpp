@@ -296,8 +296,6 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 // -------------------------------------------------------
 void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	
-
 	Scene* pScene = Scene::GetInstance();
 	if (!pScene) {
 		return;
