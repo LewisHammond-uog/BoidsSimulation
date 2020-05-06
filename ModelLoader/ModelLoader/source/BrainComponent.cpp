@@ -55,7 +55,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	if(pCollider)
 	{
 		//Add forces for containment and collision avoidance - these are very high priority
-		RaycastCallbackInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + v3Forward);
+		RaycastCallbackInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + (v3Forward * m_fNeighbourRadius));
 		v3ContainmentForce = CalculateContainmentForce(rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_CONTAINMENT);
 		vV3WeightedForces.push(v3ContainmentForce);
 		v3AvoidanceForce = CalculateAvoidanceForce(rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_COLLISION_AVOID);

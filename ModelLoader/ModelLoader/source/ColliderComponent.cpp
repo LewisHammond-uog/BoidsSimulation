@@ -16,8 +16,6 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 	PARENT(a_pOwner),
 	m_pCollisionWorld(a_pCollisionWorld)
 {
-
-
 	/*
 	* Create the collision body, used by rp3d at the transform of
 	* the entity, then attach a collision shape so that we can
@@ -48,7 +46,6 @@ ColliderComponent::~ColliderComponent()
 	 * Note that after removing a collision shape, the corresponding proxy shape pointer will not be valid anymore
 	 * https://www.reactphysics3d.com/usermanual.html#x1-4500010.7
 	 */
-	
 }
 
 /// <summary>

@@ -57,8 +57,8 @@ private:
 	const float mc_fMaxSpeed = 0.2f;
 	const glm::vec3 mc_v3MaxForce = glm::vec3(0.2f,0.2f,0.2f);
 	const glm::vec3 mc_v3MinForce = glm::vec3(-0.2f,-0.2f,-0.2f);
-	const glm::vec3 mc_v3MaxVelocity = glm::vec3(5.f, 5.f, 5.f);
-	const glm::vec3 mc_v3MinVelocity = glm::vec3(-5.f, -5.f, -5.f);
+	const glm::vec3 mc_v3MaxVelocity = glm::vec3(2.f, 2.f, 2.f);
+	const glm::vec3 mc_v3MinVelocity = glm::vec3(-2.f, -2.f, -2.f);
 	
 	float m_fNeighbourRadius = 5.0f;
 
