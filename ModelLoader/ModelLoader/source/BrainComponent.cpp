@@ -85,27 +85,35 @@ void BrainComponent::Update(float a_fDeltaTime)
 	const int iForceCount = vV3WeightedForces.size();
 	for(int i = 0; i < iForceCount; ++i)
 	{
-		if(glm::length(v3FinalForce) < glm::length(mc_v3MaxForce))
-		{
-			v3FinalForce += vV3WeightedForces.front();
-			vV3WeightedForces.pop();
-		}else
+		//If we are over our max force then break
+		if(glm::length(v3FinalForce) > glm::length(mc_v3MaxForce))
 		{
 			//if we over the max force then break the loop
 			break;
 		}
+
+		//Add forces to our final force
+		v3FinalForce += vV3WeightedForces.front();
+		vV3WeightedForces.pop();
 	}
+	
 	//Clamp values
 	v3FinalForce = glm::clamp(v3FinalForce, mc_v3MinForce, mc_v3MaxForce);
 
-	//Add Velcoity to boid position
-	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity + v3FinalForce,mc_v3MinVelocity, mc_v3MaxVelocity);
+	//Calculate Speed and direction, apply limits on speed 
+	m_v3CurrentVelocity += v3FinalForce;
+	float fSpeed = glm::length(m_v3CurrentVelocity);
+	fSpeed = glm::clamp(fSpeed, 2.f, 5.f); //Limit our Speed
+	glm::vec3 v3Dir = m_v3CurrentVelocity / fSpeed; //Get our direction, if direction is 0 make it our forward
+	m_v3CurrentVelocity = fSpeed * v3Dir; //Re add speed with direction to get new velocity
+	
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
 	 
 	//Update our matrix
 	pTransform->SetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR, v3Forward);
 	pTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, v3CurrentPos);
+	
 	//When we update our transform make sure we Orthogonalize the matrix
 	pTransform->Orthogonalize();
 }
@@ -176,17 +184,14 @@ glm::vec3 BrainComponent::CalculateWanderForce()
 	{
 		//Find a random point omn a sphere
 		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(m_pDebugUI->GetUIWanderRadius());
-
 		//Add this point on a sphere to the sphere we are casting out infront of us
 		m_v3WanderPoint = v3SphereOrigin + v3RandomPointOnSphere;
 	}
 
 	//Calculate direction to move to
 	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * m_pDebugUI->GetUIWanderRadius();
-
 	//Find out final target point
 	m_v3WanderPoint = v3SphereOrigin + v3DirectionToTarget;
-
 	//Add Jitter
 	m_v3WanderPoint += glm::sphericalRand(m_pDebugUI->GetUIWanderJitter());
 

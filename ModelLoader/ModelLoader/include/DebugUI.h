@@ -61,7 +61,7 @@ private:
 	//Variables for different game elements that are controlled
 	//by the UI
 	//FORCES
-	float m_fInputContainmentForce = 0.f;
+	float m_fInputContainmentForce = 5.f;
 	float m_fInputCollisionAvoidForce = 0.f;
 	float m_fInputSeperationForce = 0.f;
 	float m_fInputAlignmentForce = 0.f;
@@ -72,7 +72,7 @@ private:
 	float m_fInputWanderJitter = 0.05f;
 	float m_fInputWanderRadius = 0.33f;
 	//NEIGHBOUR RADIUSS
-	float m_fInputNeighbourRadius;
+	float m_fInputNeighbourRadius = 5.0f;
 	//DEBUG
 	bool m_bShowColliders;
 

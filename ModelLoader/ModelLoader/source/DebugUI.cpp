@@ -187,15 +187,7 @@ bool DebugUI::HasMouseFocus()
 	return ImGui::GetIO().WantCaptureMouse;
 }
 
-DebugUI::DebugUI() :
-	m_fInputContainmentForce(mc_fDefaultForce),
-	m_fInputCollisionAvoidForce(mc_fDefaultForce),
-	m_fInputSeperationForce(mc_fDefaultForce),
-	m_fInputAlignmentForce(mc_fDefaultForce),
-	m_fInputCohesionForce(mc_fDefaultForce),
-	m_fInputWanderForce(mc_fDefaultForce),
-	m_fInputNeighbourRadius(mc_fDefaultForce),
-	m_bShowColliders(false)
+DebugUI::DebugUI() : m_bShowColliders(false)
 {
 }
 
