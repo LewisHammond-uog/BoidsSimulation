@@ -4,13 +4,13 @@
 #include "Component.h"
 
 #include <glm/glm.hpp>
-
+//Forward Declare
 class ColliderComponent;
 class RayCastHitsInfo;
-//Forward Declare
 class Entity;
 class Shader;
 class DebugUI;
+struct UIInputValues;
 
 
 class BrainComponent : public Component
@@ -29,7 +29,7 @@ private:
 	//Steering Behaviours
 	glm::vec3 CalculateSeekForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const;
 	glm::vec3 CalculateFleeForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const;
-	glm::vec3 CalculateWanderForce();
+	glm::vec3 CalculateWanderForce(UIInputValues* a_pUIValues);
 
 	//Flocking Behaviours
 	glm::vec3 CalculateFlockingForces(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;

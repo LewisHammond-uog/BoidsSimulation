@@ -102,7 +102,6 @@ void Application::Deinitalise()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui::DestroyContext();
 
-
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();

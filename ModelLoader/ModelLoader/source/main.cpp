@@ -14,7 +14,7 @@ int main()
 
 	if (pScene) {
 
-		bool bIsInitalised = pScene->Initalise();
+		bool bIsInitalised = pScene->Initalise(true);
 
 		if (bIsInitalised) {
 
@@ -25,7 +25,7 @@ int main()
 				pScene->Render();
 			}
 
-			pScene->DeInitlise();
+			pScene->DeInitlise(true);
 		}
 	}
 

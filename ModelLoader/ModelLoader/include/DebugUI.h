@@ -16,6 +16,32 @@ typedef enum class ForceWeight {
 	FORCE_WEIGHT_COUNT //Number of force weights
 }FlockingBehaviourType;
 
+/// <summary>
+/// Struct for storing all of the values that the user has input
+/// in to the UI
+/// </summary>
+struct UIInputValues
+{
+public:
+	//FORCES
+	float fInputContainmentForce = 5.f;
+	float fInputCollisionAvoidForce = 0.f;
+	float fInputSeperationForce = 0.f;
+	float fInputAlignmentForce = 0.f;
+	float fInputCohesionForce = 0.f;
+	float fInputWanderForce = 0.f;
+	//WANDER SETTINGS
+	float fInputWanderForward = 2.f;
+	float fInputWanderJitter = 0.05f;
+	float fInputWanderRadius = 0.33f;
+	//NEIGHBOUR RADIUSS
+	float fInputNeighbourRadius = 5.0f;
+	//WORLD SETTINGS
+	int iInputWorldBounds = 10;
+	//DEBUG
+	bool bShowColliders;
+};
+
 class DebugUI {
 
 public:
@@ -26,17 +52,8 @@ public:
 
 	void Update();
 
-	//Function to get value about flocking
-	//that the user has input in to the UI
-	float GetUIFlockingWeight(ForceWeight a_eBehaviourType) const;
-
-	float GetUINeighbourRadius();
-
-	float GetUIWanderForward();
-	float GetUIWanderJitter();
-	float GetUIWanderRadius();
-	
-	bool GetShowColliders() const;
+	//Get all of the UI Values
+	UIInputValues* GetUIInputValues();
 
 	//Get if this UI has the mouse in focus
 	bool HasMouseFocus();
@@ -58,23 +75,8 @@ private:
 	const float mc_fMinForceWeight = 0.0f;
 	const float mc_fMaxForceWeight = 5.0f;
 
-	//Variables for different game elements that are controlled
-	//by the UI
-	//FORCES
-	float m_fInputContainmentForce = 5.f;
-	float m_fInputCollisionAvoidForce = 0.f;
-	float m_fInputSeperationForce = 0.f;
-	float m_fInputAlignmentForce = 0.f;
-	float m_fInputCohesionForce = 0.f;
-	float m_fInputWanderForce = 0.f;
-	//WANDER SETTINGS
-	float m_fInputWanderForward = 2.f;
-	float m_fInputWanderJitter = 0.05f;
-	float m_fInputWanderRadius = 0.33f;
-	//NEIGHBOUR RADIUSS
-	float m_fInputNeighbourRadius = 5.0f;
-	//DEBUG
-	bool m_bShowColliders;
+	//All of the UI Values
+	UIInputValues m_uiValues;
 
 };
 

@@ -23,10 +23,10 @@ public:
 	
 	static Scene* GetInstance();
 
-	bool Initalise();
+	bool Initalise(bool a_bInitApplication);
 	bool Update();
 	void Render();
-	void DeInitlise();
+	void DeInitlise(bool a_bCloseApplication);
 
 	//Get the collision world - used for collider components
 	rp3d::CollisionWorld* GetCollisionWorld() const;

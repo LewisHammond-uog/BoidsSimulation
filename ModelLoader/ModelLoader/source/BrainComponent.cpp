@@ -29,8 +29,11 @@ void BrainComponent::Update(float a_fDeltaTime)
 		return;
 	}
 
+	//Get the UI values
+	UIInputValues* pForceValues = m_pDebugUI->GetUIInputValues();
+	
 	//Update Radius
-	m_fNeighbourRadius = m_pDebugUI->GetUINeighbourRadius();
+	m_fNeighbourRadius = pForceValues->fInputNeighbourRadius;
 	
 	//Get transform component
 	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
@@ -56,9 +59,9 @@ void BrainComponent::Update(float a_fDeltaTime)
 	{
 		//Add forces for containment and collision avoidance - these are very high priority
 		RayCastHitsInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + (v3Forward * m_fNeighbourRadius));
-		v3ContainmentForce = CalculateContainmentForce(rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_CONTAINMENT);
+		v3ContainmentForce = CalculateContainmentForce(rayHit) * pForceValues->fInputContainmentForce;
 		vV3WeightedForces.push(v3ContainmentForce);
-		v3AvoidanceForce = CalculateAvoidanceForce(rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_COLLISION_AVOID);
+		v3AvoidanceForce = CalculateAvoidanceForce(rayHit) * pForceValues->fInputCollisionAvoidForce;
 		vV3WeightedForces.push(v3AvoidanceForce);
 		delete rayHit;
 	}
@@ -76,7 +79,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 
 	/*~~~~WANDER~~~~*/
 	//Get and weight wander force
-	glm::vec3 v3WanderForce = CalculateWanderForce() * m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_WANDER);
+	glm::vec3 v3WanderForce = CalculateWanderForce(pForceValues) * pForceValues->fInputWanderForce;
 	vV3WeightedForces.push(v3WanderForce);
 
 	//Do weighted sum calcuations. Apply forces with their weighting and then check if
@@ -158,7 +161,7 @@ glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& a_v3Target, const 
 /// Calculate the wander force by casting a sphere and choosing a point on it
 /// </summary>
 /// <returns>Force to apply for wander</returns>
-glm::vec3 BrainComponent::CalculateWanderForce()
+glm::vec3 BrainComponent::CalculateWanderForce(UIInputValues* a_pUIValues)
 {
 	//Check that parent is not null
 	if(m_pOwnerEntity == nullptr)
@@ -176,24 +179,24 @@ glm::vec3 BrainComponent::CalculateWanderForce()
 	const glm::vec3 v3CurrentForward = pParentTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	
 	//Project a point in front of us for the center of our sphere
-	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * m_pDebugUI->GetUIWanderForward());
+	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * a_pUIValues->fInputWanderForward);
 
 	//If the magnitude of the vector is 0 then initalize our
 	//first wander point
 	if (glm::length(m_v3WanderPoint) == 0.0f) 
 	{
 		//Find a random point omn a sphere
-		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(m_pDebugUI->GetUIWanderRadius());
+		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(a_pUIValues->fInputWanderRadius);
 		//Add this point on a sphere to the sphere we are casting out infront of us
 		m_v3WanderPoint = v3SphereOrigin + v3RandomPointOnSphere;
 	}
 
 	//Calculate direction to move to
-	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * m_pDebugUI->GetUIWanderRadius();
+	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * a_pUIValues->fInputWanderRadius;
 	//Find out final target point
 	m_v3WanderPoint = v3SphereOrigin + v3DirectionToTarget;
 	//Add Jitter
-	m_v3WanderPoint += glm::sphericalRand(m_pDebugUI->GetUIWanderJitter());
+	m_v3WanderPoint += glm::sphericalRand(a_pUIValues->fInputWanderJitter);
 
 	return CalculateSeekForce(m_v3WanderPoint, v3CurrentPos);
 }
@@ -323,11 +326,14 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 	{
 		return;
 	}
+
+	//Get the UI values
+	UIInputValues* pForceValues = m_pDebugUI->GetUIInputValues();
 		
 	//Apply the UI weights to the forces
-	a_v3SeparationForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_SEPERATION);
-	a_v3AlignmentForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_ALIGNMENT);
-	a_v3CohesionForce *= m_pDebugUI->GetUIFlockingWeight(FlockingBehaviourType::FORCE_WEIGHT_COHESION);
+	a_v3SeparationForce *= pForceValues->fInputSeperationForce;
+	a_v3AlignmentForce *= pForceValues->fInputAlignmentForce;
+	a_v3CohesionForce *= pForceValues->fInputCohesionForce;
 }
 
 /// <summary>

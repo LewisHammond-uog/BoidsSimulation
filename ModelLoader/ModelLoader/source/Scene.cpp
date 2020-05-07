@@ -58,13 +58,15 @@ Scene::Scene() : Application() {
 
 
 
-bool Scene::Initalise(){
+bool Scene::Initalise(bool a_bInitApplication){
 
 	//Call Application Init Function
-	if (!Application::Initalise()) {
-		//return false if application did not
-		//initalise properly
-		return false;
+	if (a_bInitApplication) {
+		if (!Application::Initalise()) {
+			//return false if application did not
+			//initalise properly
+			return false;
+		}
 	}
 	
 	Gizmos::create();
@@ -78,9 +80,11 @@ bool Scene::Initalise(){
 	// -------------------------
 	m_ourShader = new Shader("shaders/model_loading.vs", "shaders/model_loading.fs");
 
-	// load models
+	// load models, if they aren't already
 	// -----------
-	LoadAllModels();
+	if (m_vpLoadedModels.size() < m_iModelCount) {
+		LoadAllModels();
+	}
 
 	//Init Camera
 	Entity* pCameraEntity = new Entity();
@@ -99,7 +103,7 @@ bool Scene::Initalise(){
 	m_pSceneCollisionWorld = new rp3d::CollisionWorld();
 
 	//Create our world bounds
-	GenerateBoundsVolume(10.f);
+	GenerateBoundsVolume(DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds);
 	
 	//Create entities
 	for (int i = 0; i < mc_iBoidCount; i++) {
@@ -198,22 +202,22 @@ void Scene::Render() {
 }
 
 
-void Scene::DeInitlise() {
+void Scene::DeInitlise(bool a_bCloseApplication) {
 
-	//Deinitalise Application
-	Application::Deinitalise();
-
-	//Delete all of our models
-	for(int i = 0; i < m_vpLoadedModels.size(); ++i)
-	{
-		delete m_vpLoadedModels[i];
-	}
-	m_vpLoadedModels.clear();
 	
-	if (m_ourShader != nullptr) {
-		delete m_ourShader;
+	//Delete all of our models, only is we are destroying
+	//the application, other wise we are likley to reuse them
+	if (a_bCloseApplication) {
+		for (int i = 0; i < m_vpLoadedModels.size(); ++i)
+		{
+			delete m_vpLoadedModels[i];
+		}
+		m_vpLoadedModels.clear();
 	}
-
+		
+	//Delete Shader
+	delete m_ourShader;
+	
 	//Delete all of the entities that exist in the scene
 	std::map<const unsigned int, Entity*>::const_iterator xIter;
 	//Make a duplicate of the entity map so that we don't cause problems
@@ -270,7 +274,7 @@ void Scene::LoadAllModels()
 /// Get the collision world that the scene is using
 /// </summary>
 /// <returns></returns>
-rp3d::CollisionWorld* Scene::GetCollisionWorld() const
+rp3d::CollisionWorld* Scene::GetCollisionWorld() const  
 {
 	return m_pSceneCollisionWorld;
 }
@@ -293,7 +297,8 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 										glm::vec3(0.f,a_fBoundsSize,0.0f), glm::vec3(0.f,-a_fBoundsSize,0.f),
 										glm::vec3(a_fBoundsSize,0.0f,0.0f), glm::vec3(-a_fBoundsSize,0.0f,0.f), };
 
-	
+
+	//Construct the the cube our of all of the walls
 	for(int i = 0; i < iWallCount; ++i)
 	{
 		//Get the size of the current wall

@@ -51,13 +51,15 @@ void ModelComponent::Draw(Shader* a_pShader)
 /// </summary>
 void ModelComponent::ChooseRandomModel(std::vector<Model*>& a_vpModels)
 {
-	//Select a Random Model from our list
-	const int chosenIndex = MathsUtils::RandomRange<int>(0, a_vpModels.size());
-	//Lets Choose A Model
-	Model* selectedModel = a_vpModels[chosenIndex];
+	if (!a_vpModels.empty()) {
+		//Select a Random Model from our list
+		const int chosenIndex = MathsUtils::RandomRange<int>(0, a_vpModels.size());
+		//Lets Choose A Model
+		Model* selectedModel = a_vpModels[chosenIndex];
 
-	if(selectedModel != nullptr)
-	{
-		SetModel(selectedModel);
+		if (selectedModel != nullptr)
+		{
+			SetModel(selectedModel);
+		}
 	}
 }

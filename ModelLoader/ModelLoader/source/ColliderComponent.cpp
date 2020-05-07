@@ -45,6 +45,14 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 /// </summary>
 ColliderComponent::~ColliderComponent()
 {
+
+	//Delete all shapes
+	for(int i = 0; i < m_apCollisionShapes.size(); ++i)
+	{
+		delete m_apCollisionShapes[i];
+	}
+	m_apCollisionShapes.clear();
+	
 	m_pCollisionWorld->destroyCollisionBody(m_pCollisionBody);
 
 	//Proxy and Collision Shapes are removed by React Physics, we do not need to delete them here
@@ -79,7 +87,7 @@ void ColliderComponent::Update(float a_fDeltaTime)
 /// <param name="a_pShader"></param>
 void ColliderComponent::Draw(Shader* a_pShader)
 {
-	if (DebugUI::GetInstance()->GetShowColliders()) {
+	if (DebugUI::GetInstance()->GetUIInputValues()->bShowColliders) {
 		
 		//Get the current position of the object - all colliders positions are relative
 		//to this

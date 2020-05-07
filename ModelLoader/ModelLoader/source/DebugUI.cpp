@@ -4,6 +4,11 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
+//Project Includes
+#include <iostream>
+
+#include "Scene.h"
+
 //Init Singleton var
 DebugUI* DebugUI::s_pUIInstance = nullptr;
 
@@ -35,13 +40,24 @@ void DebugUI::Update() {
 	ImGui::Begin("Boids UI");
 	
 	//FPS info tab
-	if (ImGui::CollapsingHeader("Debug/FPS info")) {
+	if (ImGui::CollapsingHeader("Game Info")) {
 		ImGui::Text("Application Average: %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 		ImGui::Spacing();
 		
 		//Tickbox to draw colliders
-		ImGui::Checkbox("Draw Collider Bounds", &m_bShowColliders);
+		ImGui::Checkbox("Draw Collider Bounds", &m_uiValues.bShowColliders);
+
+		ImGui::Spacing();
+
+		//Button to Restart the scene
+		if (ImGui::Button("Restart Scene"))
+		{
+			ImGui::Text("Restarting...");
+			Scene::GetInstance()->DeInitlise(false);
+			Scene::GetInstance()->Initalise(false);
+			std::cout << "\n SCENE RESTARTED \n" << std::endl;
+		}
 	}
 
 	if (ImGui::CollapsingHeader("Controls")) {
@@ -58,32 +74,38 @@ void DebugUI::Update() {
 		ImGui::Text("Detection Values");
 
 		//Nehbourhood Radius
-		ImGui::SliderFloat("Neighbourhood Radius", &m_fInputNeighbourRadius, 1.0f, 20.f);
+		ImGui::SliderFloat("Neighbourhood Radius", &m_uiValues.fInputNeighbourRadius, 1.0f, 20.f);
 
 		ImGui::Spacing();
 		
 		//Collision Avoidance Forces
 		ImGui::Text("Collision Avoidance");
-		ImGui::SliderFloat("Containment Force Weight", &m_fInputContainmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Collision Avoidance Force Weight", &m_fInputCollisionAvoidForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Containment Force Weight", &m_uiValues.fInputContainmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Collision Avoidance Force Weight", &m_uiValues.fInputCollisionAvoidForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		
 		ImGui::Spacing();
 
 		//Flocking Forces
 		ImGui::Text("Flocking Forces");
-		ImGui::SliderFloat("Seperation Force Weight", &m_fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Alignment Force Weight", &m_fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Cohension Force Weight", &m_fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Wander Force Weight", &m_fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Seperation Force Weight", &m_uiValues.fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Alignment Force Weight", &m_uiValues.fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Cohension Force Weight", &m_uiValues.fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Wander Force Weight", &m_uiValues.fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 
 		if(ImGui::CollapsingHeader("Wander Settings"))
 		{
 			ImGui::Text("Settings for the sphere that is projected in front of the sphere.");
 			
-			ImGui::SliderFloat("Sphere Forward Projection", &m_fInputWanderForward, 0.f, 5.f);
-			ImGui::SliderFloat("Sphere Jitter", &m_fInputWanderJitter, 0.01f, 5.f);
-			ImGui::SliderFloat("Sphere Radius", &m_fInputWanderRadius, 0.01f, 5.f);
+			ImGui::SliderFloat("Sphere Forward Projection", &m_uiValues.fInputWanderForward, 0.f, 5.f);
+			ImGui::SliderFloat("Sphere Jitter", &m_uiValues.fInputWanderJitter, 0.01f, 5.f);
+			ImGui::SliderFloat("Sphere Radius", &m_uiValues.fInputWanderRadius, 0.01f, 5.f);
 		}
+	}
+
+	if(ImGui::CollapsingHeader("World Settings"))
+	{
+		ImGui::Text("Adjust the world bounds size (Requires Scene Restart)");
+		ImGui::SliderInt("World Bounds Size", &m_uiValues.iInputWorldBounds, 10.f, 50.f);
 	}
 
 	//End the drawing of the window
@@ -91,91 +113,14 @@ void DebugUI::Update() {
 }
 
 /// <summary>
-/// Get the value that the user has input for the given
-/// type of flocking behaviour
-/// </summary>
-/// <param name="a_eBehaviourType">Behvaiour type of get value for</param>
-/// <returns>Weight of Behvaiour</returns>
-float DebugUI::GetUIFlockingWeight(const ForceWeight a_eBehaviourType) const
-{
-	//TODO MAKE THIS RETURN A HASH MAP so that we only request it once
-
-	//Switch through the different behaviour types
-	//and return the appropriate value
-	switch (a_eBehaviourType)
-	{
-	case ForceWeight::FORCE_WEIGHT_CONTAINMENT:
-		return m_fInputContainmentForce;
-		break;
-	case ForceWeight::FORCE_WEIGHT_COLLISION_AVOID:
-		return m_fInputCollisionAvoidForce;
-		break;
-	case ForceWeight::FORCE_WEIGHT_SEPERATION:
-		return m_fInputSeperationForce;
-		break;
-	case ForceWeight::FORCE_WEIGHT_ALIGNMENT:
-		return m_fInputAlignmentForce;
-		break;
-	case ForceWeight::FORCE_WEIGHT_COHESION:
-		return m_fInputCohesionForce;
-		break;
-	case ForceWeight::FORCE_WEIGHT_WANDER:
-		return m_fInputWanderForce;
-		break;
-	default:
-		//Default (i.e invalid value), return 0 so that
-		//we don't apply that behaviour
-		return 0.f;
-		break;
-	}
-}
-
-/// <summary>
-/// Get the radius of the neighbourhood that the user
-/// has input to the UI
+/// Gets all of the values the user has input to the UI
 /// </summary>
 /// <returns></returns>
-float DebugUI::GetUINeighbourRadius()
+UIInputValues* DebugUI::GetUIInputValues()
 {
-	return m_fInputNeighbourRadius;
+	return &m_uiValues;
 }
 
-/// <summary>
-/// Get the amount forward the user wants the wander sphere
-/// to be projected
-/// </summary>
-/// <returns></returns>
-float DebugUI::GetUIWanderForward()
-{
-	return m_fInputWanderForward;
-}
-
-/// <summary>
-/// Get the radius that the user wantes the wander jitter to be
-/// </summary>
-/// <returns></returns>
-float DebugUI::GetUIWanderJitter()
-{
-	return m_fInputWanderJitter;
-}
-
-/// <summary>
-/// Get the radius that the user wants the wander sphere to have
-/// </summary>
-/// <returns></returns>
-float DebugUI::GetUIWanderRadius()
-{
-	return m_fInputWanderRadius;
-}
-
-/// <summary>
-/// Get if should draw colliders on our entities
-/// </summary>
-/// <returns></returns>
-bool DebugUI::GetShowColliders() const
-{
-	return m_bShowColliders;
-}
 
 /// <summary>
 /// Gets if the UI has the mouse hovered, clicked or
@@ -187,7 +132,7 @@ bool DebugUI::HasMouseFocus()
 	return ImGui::GetIO().WantCaptureMouse;
 }
 
-DebugUI::DebugUI() : m_bShowColliders(false)
+DebugUI::DebugUI()
 {
 }
 
