@@ -1,23 +1,24 @@
 #ifndef __COLLIDER_COMPONENT_H__
 #define __COLLIDER_COMPONENT_H__
 
-//c++ includes
+//C++ includes
 #include <vector>
 
-//Project Includes
-#include <iostream>
+//rp3d Includes
+#include <ReactPhysics3D/reactphysics3d.h>
 
+//Project Includes
 #include "Component.h"
 #include "TransformComponent.h"
-#include <ReactPhysics3D/reactphysics3d.h>
+
 
 //Forward Declare
 class CollisionInfo;
-class RaycastCallbackInfo;
+class RayCastHitsInfo;
 
 class ColliderComponent : public Component {
 	friend class CollisionInfo;
-	friend class RaycastCallbackInfo;
+	friend class RayCastHitsInfo;
 public:
 	ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_pCollisionWorld);
 	~ColliderComponent();
@@ -31,16 +32,16 @@ public:
 	void AddSphereCollider(float a_fSphereSize, glm::vec3 a_v3Offset);
 
 	//Functions to check for a collision
-	bool IsColliding(bool a_bUseAABB);
+	bool IsColliding(bool a_bUseAABB) const;
 	bool IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB) const;
 
 	//Functions to get collision info from a collision
-	std::vector<CollisionInfo*> GetCollisionInfo();
+	std::vector<CollisionInfo*> GetCollisionInfo() const;
 	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
 
 	//Functions to do raycasting
-	RaycastCallbackInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint);
-	RaycastCallbackInfo* RayCast(rp3d::Ray* a_Ray);
+	RayCastHitsInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint) const;
+	RayCastHitsInfo* RayCast(rp3d::Ray* a_ray) const;
 
 private:
 	
@@ -65,20 +66,25 @@ private:
 	
 };
 
-
-//todo move
-//todo make these names better
-class CollisionInfo : public rp3d::CollisionCallback {
+/// <summary>
+/// Class which contains info about a collision between
+/// a number of entities
+/// </summary>
+class CollisionInfo final : public rp3d::CollisionCallback {
 public:
+	//Default Constructor
+	CollisionInfo() = default;
+	//Default Desctructor
+	~CollisionInfo() = default;
+	
 	void notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo) override;
 private:
 	std::vector<Entity*> m_aCollisionEntities;
 };
 
-//todo move
-//todo make these names better
+
 /// <summary>
-/// Class which represents a hit of a raycast
+/// Class which represents a single hit of a raycast
 /// Includes the hit body and the point that the hit occoured at
 /// </summary>
 struct RayCastHit
@@ -89,40 +95,35 @@ struct RayCastHit
 	float m_fHitFraction; //Fraction of the distance that we hit the object in the ray cast (range 0-1)
 };
 
-//todo move
-//todo make these names better
-class RaycastCallbackInfo : public rp3d::RaycastCallback
+
+
+/// <summary>
+/// Class which handles all of the objects that a raycast has hit.
+/// Contains info about the entity, hit point, hit normal and hit fraction
+/// All hits are gathered in the order that they occoured
+/// </summary>
+class RayCastHitsInfo final : public rp3d::RaycastCallback
 {
 public:
 
-	//Function called when the ray cast hits a collider in the world
-	rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info) override
-	{
-
-		//Create a raycast hit and fill it with our info
-		RayCastHit* hit = new RayCastHit();
-		hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(info.body);
-		hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
-		hit->m_v3HitNormal = glm::vec3(info.worldNormal.x, info.worldNormal.y, info.worldNormal.z);
-		hit->m_fHitFraction = info.hitFraction;
-
-		//Add to hits list
-		m_vRayCastHits.push_back(hit);
-
-		// Return a fraction of 1.0 to gather all hits 
-		return reactphysics3d::decimal(1.f);
-	}
-
-	~RaycastCallbackInfo()
+	//Default Constructor
+	RayCastHitsInfo() = default;
+	
+	//Destructor, removes all raycast hits
+	~RayCastHitsInfo()
 	{
 		for(int i = 0; i < m_vRayCastHits.size(); ++i)
 		{
 			delete m_vRayCastHits[i];
 		}
+		m_vRayCastHits.clear();
 	}
 
+	rp3d::decimal notifyRaycastHit(const reactphysics3d::RaycastInfo& raycastInfo) override;
+	
 	//List of hits from this raycast
 	std::vector<RayCastHit*> m_vRayCastHits;
+	
 };
 
 #endif // !__COLLIDER_COMPONENT_H__

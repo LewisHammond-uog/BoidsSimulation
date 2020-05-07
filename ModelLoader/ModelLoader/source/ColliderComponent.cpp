@@ -11,7 +11,11 @@
 //Typedefs
 typedef Component PARENT;
 
-
+/// <summary>
+/// Create a collider component within a given collision world
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
+/// <param name="a_pCollisionWorld">Collision World this collider exists in</param>
 ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_pCollisionWorld) :
 	PARENT(a_pOwner),
 	m_pCollisionWorld(a_pCollisionWorld)
@@ -36,6 +40,9 @@ ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_p
 	}
 }
 
+/// <summary>
+/// Destroy the collider component
+/// </summary>
 ColliderComponent::~ColliderComponent()
 {
 	m_pCollisionWorld->destroyCollisionBody(m_pCollisionBody);
@@ -91,9 +98,9 @@ void ColliderComponent::Draw(Shader* a_pShader)
 			case reactphysics3d::CollisionShapeName::BOX: {
 				//Draw a box at the collider point
 				rp3d::BoxShape* pBox = dynamic_cast<reactphysics3d::BoxShape*>(m_apCollisionShapes[i]);
-				glm::vec3 v3boxCenter = glm::vec3(pBox->getCentroid().x, pBox->getCentroid().y, pBox->getCentroid().z);
-				glm::vec3 v3boxDimentions = glm::vec3(pBox->getExtent().x, pBox->getExtent().y, pBox->getExtent().z);
-				Gizmos::addBox(v3CurrentPosition + v3boxCenter, v3boxDimentions, true, mc_v4ColliderDrawCol);
+				glm::vec3 v3BoxCenter = glm::vec3(pBox->getCentroid().x, pBox->getCentroid().y, pBox->getCentroid().z);
+				glm::vec3 v3BoxDimensions = glm::vec3(pBox->getExtent().x, pBox->getExtent().y, pBox->getExtent().z);
+				Gizmos::addBox(v3CurrentPosition + v3BoxCenter, v3BoxDimensions, true, mc_v4ColliderDrawCol);
 				break;
 			}
 
@@ -110,7 +117,6 @@ void ColliderComponent::Draw(Shader* a_pShader)
 			}
 		}
 	}
-	
 }
 
 
@@ -170,7 +176,7 @@ void ColliderComponent::AddSphereCollider(const float a_fSphereSize, const glm::
 /// <param name="a_bUseAABB">Whether we should use AABB testing for collisions, rather than more
 /// precise methods (i.e mesh)</param>
 /// <returns>If we are colliding with any other object in the scene</returns>
-bool ColliderComponent::IsColliding(const bool a_bUseAABB)
+bool ColliderComponent::IsColliding(const bool a_bUseAABB) const
 {
 	//Create a map to itterate through all of our entities
 	const std::map<const unsigned int, Entity*>& xEntityMap = Entity::GetEntityMap();
@@ -243,7 +249,7 @@ bool ColliderComponent::IsColliding(ColliderComponent* a_pOtherCollider, bool a_
 /// </summary>
 /// <returns>A list of collision info's with every object that collided with this one
 /// this frame</returns>
-std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo()
+std::vector<CollisionInfo*> ColliderComponent::GetCollisionInfo() const
 {
 	//Store the current collision info in a vector
 	std::vector<CollisionInfo*> vObjectCollisions;
@@ -317,14 +323,8 @@ CollisionInfo* ColliderComponent::GetCollisionInfo(ColliderComponent* a_pOtherCo
 /// <returns>If the collision check will be valid</returns>
 bool ColliderComponent::IsCollisionCheckValid(ColliderComponent* a_pOtherCollider) const
 {
-	//Check that the collision world exists
-	if (m_pCollisionWorld == nullptr) {
-		return false;
-	}
-
-	//Check our collision body exists
-	if(m_pCollisionBody == nullptr)
-	{
+	//Check that the collision world and collision body exists
+	if (m_pCollisionWorld == nullptr || m_pCollisionBody == nullptr) {
 		return false;
 	}
 
@@ -400,7 +400,7 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 /// <param name="a_v3StartPoint">World Start Point</param>
 /// <param name="a_v3EndPoint">World End Point</param>
 /// <returns>Infomation about all of the objects that the raycast has hit</returns>
-RaycastCallbackInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint)
+RayCastHitsInfo* ColliderComponent::RayCast(const glm::vec3 a_v3StartPoint, const glm::vec3 a_v3EndPoint) const
 {
 	//Create a ray from the given start and end point
 	const rp3d::Vector3 v3StartPoint(a_v3StartPoint.x, a_v3StartPoint.y, a_v3StartPoint.z);
@@ -411,17 +411,19 @@ RaycastCallbackInfo* ColliderComponent::RayCast(glm::vec3 a_v3StartPoint, glm::v
 	return RayCast(&raycastRay);
 }
 
-RaycastCallbackInfo* ColliderComponent::RayCast(rp3d::Ray* a_Ray)
+RayCastHitsInfo* ColliderComponent::RayCast(rp3d::Ray* a_ray) const
 {
-	RaycastCallbackInfo* callback = new RaycastCallbackInfo();
+	RayCastHitsInfo* callback = new RayCastHitsInfo();
 
 	//Perform Raycast and return the resulting info
-	m_pCollisionWorld->raycast(*a_Ray, callback);
+	m_pCollisionWorld->raycast(*a_ray, callback);
 	return callback;
 }
 
 
-//todo move
+
+#pragma region Collision Callback Info
+
 /// <summary>
 /// Function to implement required virtual function in CollisionCallbackInfo class
 /// Triggered whenever we detect a collision between 2 collision bodies.
@@ -441,3 +443,26 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 		m_aCollisionEntities.push_back(collisionEntity2);
 	}
 }
+
+#pragma endregion 
+
+#pragma region Raycast Callback Info
+//Function called when the ray cast hits a collider in the world
+rp3d::decimal RayCastHitsInfo::notifyRaycastHit(const rp3d::RaycastInfo& info)
+{
+	//Create a raycast hit and fill it with our info
+	RayCastHit* hit = new RayCastHit();
+	hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(info.body);
+	hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
+	hit->m_v3HitNormal = glm::vec3(info.worldNormal.x, info.worldNormal.y, info.worldNormal.z);
+	hit->m_fHitFraction = info.hitFraction;
+
+	//Add to hits list
+	m_vRayCastHits.push_back(hit);
+
+	// Return a decimal of 1.0 to gather all hits 
+	return reactphysics3d::decimal(1.f);
+}
+
+
+#pragma endregion 

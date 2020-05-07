@@ -55,7 +55,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	if(pCollider)
 	{
 		//Add forces for containment and collision avoidance - these are very high priority
-		RaycastCallbackInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + (v3Forward * m_fNeighbourRadius));
+		RayCastHitsInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + (v3Forward * m_fNeighbourRadius));
 		v3ContainmentForce = CalculateContainmentForce(rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_CONTAINMENT);
 		vV3WeightedForces.push(v3ContainmentForce);
 		v3AvoidanceForce = CalculateAvoidanceForce(rayHit) * m_pDebugUI->GetUIFlockingWeight(ForceWeight::FORCE_WEIGHT_COLLISION_AVOID);
@@ -335,7 +335,7 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 /// within the containment volume
 /// </summary>
 /// <returns>(Unweighted) force to turn away from hitting a container</returns>
-glm::vec3 BrainComponent::CalculateContainmentForce(RaycastCallbackInfo* a_rayResults) const
+glm::vec3 BrainComponent::CalculateContainmentForce(RayCastHitsInfo* a_rayResults) const
 {
 	//Store our containment force - init to 0 so we can return this var if we don't hit
 	glm::vec3 v3ContainmentForce(0.0f);
@@ -374,7 +374,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(RaycastCallbackInfo* a_rayRe
 /// Calculate the force needed to avoid any collision with obstacles
 /// </summary>
 /// <returns>Force to avoid any collision</returns>
-glm::vec3 BrainComponent::CalculateAvoidanceForce(RaycastCallbackInfo* a_rayResult) const
+glm::vec3 BrainComponent::CalculateAvoidanceForce(RayCastHitsInfo* a_rayResult) const
 {
 	glm::vec3 v3AvoidForce(0.f);
 	//The distance (normalised from our raycast min to max distance)

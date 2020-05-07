@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Components\Collision">
       <UniqueIdentifier>{4a846545-2bbf-415b-8849-7a19fbdb694c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components\Collision">
+      <UniqueIdentifier>{23f9db43-9333-42b1-91ba-7b353a60c4e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -149,9 +152,6 @@
     <ClInclude Include="include\TransformComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\ColliderComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -172,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="include\ObstacleSpawnerComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ColliderComponent.h">
+      <Filter>Header Files\Components\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
