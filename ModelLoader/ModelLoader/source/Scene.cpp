@@ -73,10 +73,6 @@ bool Scene::Initalise(){
 	glfwSetCursorPosCallback(m_window, mouse_callback);
 	glfwSetScrollCallback(m_window, scroll_callback);
 	glfwSetMouseButtonCallback(m_window, toggle_mouse_input_mode);
-	
-	//Disable V-Sync
-	glfwSwapInterval(0);
-
 
 	// build and compile shaders
 	// -------------------------
@@ -207,10 +203,13 @@ void Scene::DeInitlise() {
 	//Deinitalise Application
 	Application::Deinitalise();
 
-
-	if (m_pNanoSuitModel != nullptr) {
-		delete m_pNanoSuitModel;
+	//Delete all of our models
+	for(int i = 0; i < m_vpLoadedModels.size(); ++i)
+	{
+		delete m_vpLoadedModels[i];
 	}
+	m_vpLoadedModels.clear();
+	
 	if (m_ourShader != nullptr) {
 		delete m_ourShader;
 	}

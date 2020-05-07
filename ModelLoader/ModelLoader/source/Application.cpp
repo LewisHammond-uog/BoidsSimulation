@@ -82,6 +82,10 @@ bool Application::Initalise()
 	ImGui_ImplGlfw_InitForOpenGL(m_window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
+
+	//Disable V-Sync
+	glfwSwapInterval(0);
+
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
