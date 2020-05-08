@@ -12,6 +12,12 @@
 #include "Gizmos.h"
 #include "TransformComponent.h"
 
+
+//Static Declerations
+glm::vec3 BrainComponent::s_aCollisionDirections[BrainComponent::sc_iCollisionAvoidanceRayCount];
+bool BrainComponent::s_bCollisionDirectionsInit = false;
+
+
 BrainComponent::BrainComponent(Entity* a_pOwner)
 	: Component(a_pOwner),
 	m_v3CurrentVelocity(0.0f),
@@ -423,4 +429,31 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RayCastHitsInfo* a_rayResult) 
 	
 
 	return v3AvoidForce;
+}
+
+
+// <summary>
+/// Computes the collision directions for collision avoidance
+/// Casts points on to a sphere uniformly as described:
+/// https://stackoverflow.com/questions/9600801/evenly-distributing-n-points-on-a-sphere/44164075#44164075
+/// </summary>
+void BrainComponent::ComputeCollisionDirections()
+{
+	//Define the golden ratio and thus calculate the angle increment
+							//1 + sqrt(5) / 2
+	constexpr float fGoldenRatio = 1.618033; // The golden ratio is when (a+b)/a = a/b which is solved to 1.618033
+	constexpr float angleIncrement = M_PI * 2 * fGoldenRatio;
+
+	//Loop through all of the directions and calculate their X/Y/Z angles
+	for (int i = 0; i < sc_iCollisionAvoidanceRayCount; ++i)
+	{
+		const float fTheta = i / sc_iCollisionAvoidanceRayCount;
+		const float fInclination = cos(1 - 2 * fTheta);
+		const float fAzimuth = angleIncrement * i;
+
+		const float fX = sin(fInclination) * cos(fAzimuth);
+		const float fY = sin(fInclination) * sin(fAzimuth);
+		const float fZ = cos(fInclination);
+		s_aCollisionDirections[i] = glm::vec3(fX, fY, fZ);
+	}
 }

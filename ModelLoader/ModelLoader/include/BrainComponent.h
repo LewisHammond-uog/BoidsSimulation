@@ -43,6 +43,12 @@ private:
 	inline glm::vec3 GetPointDirection(const glm::vec3& a_v3Start, const glm::vec3& a_v3End) const;
 
 
+	//Function used to precompute directions to look in when doing collision checks
+	void ComputeCollisionDirections();
+	static glm::vec3 s_aCollisionDirections[];
+	static bool s_bCollisionDirectionsInit;
+	static const int sc_iCollisionAvoidanceRayCount = 200;
+
 	//Current Velocity of the boid
 	glm::vec3 m_v3CurrentVelocity;
 	//Projected point we are wandering to
