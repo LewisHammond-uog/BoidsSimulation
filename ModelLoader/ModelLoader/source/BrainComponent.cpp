@@ -107,7 +107,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	v3FinalForce = glm::clamp(v3FinalForce, mc_v3MinForce, mc_v3MaxForce);
 
 	//Calculate Speed and direction, apply limits on speed 
-	m_v3CurrentVelocity += v3FinalForce;
+	m_v3CurrentVelocity = v3FinalForce;
 	float fSpeed = glm::length(m_v3CurrentVelocity);
 	fSpeed = glm::clamp(fSpeed, 2.f, 5.f); //Limit our Speed
 	glm::vec3 v3Dir = m_v3CurrentVelocity / fSpeed; //Get our direction, if direction is 0 make it our forward
@@ -349,7 +349,7 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCaster)
 {
 	//Store our containment force - init to 0 so we can return this var if we don't hit
-	glm::vec3 v3ContainmentForce(0.0f);
+	glm::vec3 v3ContainmentForce(0.0f, 0.0f, 0.0f);
 
 	//Get forward, back and right
 	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
@@ -403,8 +403,9 @@ glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCas
 		//Get the normal and return our force in that direction so we turn away from the object,
 		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
-		v3ContainmentForce = containerHit.m_v3HitNormal/* (1 - containerHit.m_fHitFraction)*/;
+		v3ContainmentForce = containerHit.m_v3HitNormal;
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
+		v3ContainmentForce -= m_v3CurrentVelocity;
 	}
 
 	return v3ContainmentForce;

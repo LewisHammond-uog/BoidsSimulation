@@ -56,7 +56,6 @@ void DebugUI::Update() {
 			ImGui::Text("Restarting...");
 			Scene::GetInstance()->DeInitlise(false);
 			Scene::GetInstance()->Initalise(false);
-			std::cout << "\n SCENE RESTARTED \n" << std::endl;
 		}
 	}
 
