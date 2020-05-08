@@ -112,11 +112,13 @@ public:
 	//Destructor, removes all raycast hits
 	~RayCastHitsInfo()
 	{
-		for(int i = 0; i < m_vRayCastHits.size(); ++i)
-		{
-			delete m_vRayCastHits[i];
+		if (!m_vRayCastHits.empty()) {
+			for (int i = 0; i < m_vRayCastHits.size(); ++i)
+			{
+				delete m_vRayCastHits[i];
+			}
+			m_vRayCastHits.clear();
 		}
-		m_vRayCastHits.clear();
 	}
 
 	rp3d::decimal notifyRaycastHit(const reactphysics3d::RaycastInfo& raycastInfo) override;

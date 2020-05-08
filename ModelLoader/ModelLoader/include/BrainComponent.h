@@ -1,9 +1,18 @@
 #ifndef __BRAIN_COMPONENT_H__
 #define	__BRAIN_COMPONENT_H__
 
+//C++ Includes
+#include <vector>
+
+//GLM Includes
+#include <glm/glm.hpp>
+
+//RP3D Inlcudes
+#include "ReactPhysics3D/reactphysics3d.h"
+
+//Project Includes
 #include "Component.h"
 
-#include <glm/glm.hpp>
 //Forward Declare
 class ColliderComponent;
 class RayCastHitsInfo;
@@ -36,19 +45,15 @@ private:
 	void ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;
 
 	//Collision Avoidance
-	glm::vec3 CalculateContainmentForce(RayCastHitsInfo* a_rayResults) const;
+	glm::vec3 CalculateContainmentForce(ColliderComponent* a_pRayCaster);
 	glm::vec3 CalculateAvoidanceForce(RayCastHitsInfo* a_rayResults) const;
 
 	//Steering Helper Functions
 	inline glm::vec3 GetPointDirection(const glm::vec3& a_v3Start, const glm::vec3& a_v3End) const;
 
-
-	//Function used to precompute directions to look in when doing collision checks
-	void ComputeCollisionDirections();
-	static glm::vec3 s_aCollisionDirections[];
-	static bool s_bCollisionDirectionsInit;
-	static const int sc_iCollisionAvoidanceRayCount = 200;
-
+	//Function for getting the current ray directions
+	std::vector<rp3d::Ray*> GetCollisionRays();
+	
 	//Current Velocity of the boid
 	glm::vec3 m_v3CurrentVelocity;
 	//Projected point we are wandering to

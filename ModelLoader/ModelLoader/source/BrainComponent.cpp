@@ -5,17 +5,13 @@
 #include <math.h>
 #include <queue>
 
+
 //Project Incldues
 #include "ColliderComponent.h"
 #include "DebugUI.h"
 #include "Entity.h"
 #include "Gizmos.h"
 #include "TransformComponent.h"
-
-
-//Static Declerations
-glm::vec3 BrainComponent::s_aCollisionDirections[BrainComponent::sc_iCollisionAvoidanceRayCount];
-bool BrainComponent::s_bCollisionDirectionsInit = false;
 
 
 BrainComponent::BrainComponent(Entity* a_pOwner)
@@ -28,6 +24,7 @@ BrainComponent::BrainComponent(Entity* a_pOwner)
 
 void BrainComponent::Update(float a_fDeltaTime)
 {
+
 	//Break if we don't have a UI instance, as we can't
 	//control anything
 	if(!m_pDebugUI)
@@ -65,7 +62,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	{
 		//Add forces for containment and collision avoidance - these are very high priority
 		RayCastHitsInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + (v3Forward * m_fNeighbourRadius));
-		v3ContainmentForce = CalculateContainmentForce(rayHit) * pForceValues->fInputContainmentForce;
+		v3ContainmentForce = CalculateContainmentForce(pCollider) * pForceValues->fInputContainmentForce;
 		vV3WeightedForces.push(v3ContainmentForce);
 		v3AvoidanceForce = CalculateAvoidanceForce(rayHit) * pForceValues->fInputCollisionAvoidForce;
 		vV3WeightedForces.push(v3AvoidanceForce);
@@ -221,6 +218,8 @@ glm::vec3 BrainComponent::GetPointDirection(const glm::vec3& a_v3Start, const gl
 	return targetDir;
 }
 
+
+
 /// <summary>
 /// Calculates all of the flocking forces
 /// Does not take in to account any weighting of values
@@ -347,35 +346,54 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 /// within the containment volume
 /// </summary>
 /// <returns>(Unweighted) force to turn away from hitting a container</returns>
-glm::vec3 BrainComponent::CalculateContainmentForce(RayCastHitsInfo* a_rayResults) const
+glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCaster)
 {
 	//Store our containment force - init to 0 so we can return this var if we don't hit
 	glm::vec3 v3ContainmentForce(0.0f);
-	
-	//Work out if we hit a containtment object, point to it if we have so
-	//we can get more infomation
-	RayCastHit* containerHit = nullptr;
-	if(!a_rayResults->m_vRayCastHits.empty())
+
+	//Get forward, back and right
+	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+	if(!pTransform)
 	{
-		for (RayCastHit* m_vRayCastHit : a_rayResults->m_vRayCastHits)
+		return glm::vec3(0.f);
+	}
+	
+	//Create Rays and are forward, back, up, down, left and right
+	const std::vector<rp3d::Ray*> vV3CollisionRays = GetCollisionRays();
+	
+	//Loop through all of the collision rays and check if there is a collision
+	//with anything
+	RayCastHit containerHit;
+	bool bHeadingForCollision = false;
+	
+	for (auto collisionRay : vV3CollisionRays)
+	{
+		RayCastHitsInfo* rayHits = a_pRayCaster->RayCast(collisionRay);
+		if(!rayHits->m_vRayCastHits.empty())
 		{
-			Entity* hitEntity = m_vRayCastHit->m_pHitEntity;
-			if (hitEntity) {
-				if (hitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
+			for (auto& pRayCastHit : rayHits->m_vRayCastHits)
+			{
+				if(pRayCastHit->m_pHitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
 				{
-					containerHit = m_vRayCastHit;
+					containerHit = *pRayCastHit;
+					bHeadingForCollision = true;
+					break;
 				}
 			}
 		}
+
+		delete rayHits;
+		delete collisionRay;
 	}
+
 	
 	//If we have hit a container then calculate our force otherwise we will just return 0
-	if (containerHit != nullptr)
+	if (bHeadingForCollision)
 	{
 		//Get the normal and return our force in that direction so we turn away from the object,
 		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
-		v3ContainmentForce = containerHit->m_v3HitNormal * (1 - containerHit->m_fHitFraction); 
+		v3ContainmentForce = containerHit.m_v3HitNormal * (1 - containerHit.m_fHitFraction); 
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
 	}
 
@@ -431,29 +449,59 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RayCastHitsInfo* a_rayResult) 
 	return v3AvoidForce;
 }
 
-
-// <summary>
-/// Computes the collision directions for collision avoidance
-/// Casts points on to a sphere uniformly as described:
-/// https://stackoverflow.com/questions/9600801/evenly-distributing-n-points-on-a-sphere/44164075#44164075
+/// <summary>
+/// Generates a list of rays to use when checking for collisions
 /// </summary>
-void BrainComponent::ComputeCollisionDirections()
+/// <returns></returns>
+std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays()
 {
-	//Define the golden ratio and thus calculate the angle increment
-							//1 + sqrt(5) / 2
-	constexpr float fGoldenRatio = 1.618033; // The golden ratio is when (a+b)/a = a/b which is solved to 1.618033
-	constexpr float angleIncrement = M_PI * 2 * fGoldenRatio;
-
-	//Loop through all of the directions and calculate their X/Y/Z angles
-	for (int i = 0; i < sc_iCollisionAvoidanceRayCount; ++i)
+	//Create Vector
+	std::vector<rp3d::Ray*> vRays;
+	
+	//Null Check and get transform
+	if(!m_pOwnerEntity)
 	{
-		const float fTheta = i / sc_iCollisionAvoidanceRayCount;
-		const float fInclination = cos(1 - 2 * fTheta);
-		const float fAzimuth = angleIncrement * i;
-
-		const float fX = sin(fInclination) * cos(fAzimuth);
-		const float fY = sin(fInclination) * sin(fAzimuth);
-		const float fZ = cos(fInclination);
-		s_aCollisionDirections[i] = glm::vec3(fX, fY, fZ);
+		return vRays;
 	}
+	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+	if(!pTransform)
+	{
+		return vRays;
+	}
+	
+	//Get our current position, so we can make our rays relative
+	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();
+
+	//Number of directions we have (6 all directions around the boid)
+	constexpr int iDirectionCount = 6;
+	
+	//Get all of the directions that we want to cast in
+	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+	glm::vec3 v3Right = pTransform->GetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR);
+	glm::vec3 v3Up = pTransform->GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
+	glm::vec3 vV3PositiveDirections[3] = { v3Forward,v3Right,v3Up };
+
+	//Loop through the directions and mutiply half of them by -1 so we have the inverse's
+	for(int i = 0; i < iDirectionCount; ++i)
+	{
+		//Divide the current direction by 2 so that we grab
+		//the direction twice and on 1 of those times * it by -1 so
+		//we get the inverse
+		int iCurrentDirectionIndex = floor(i / 2);
+		
+		glm::vec3 v3CurrentRayDir = vV3PositiveDirections[iCurrentDirectionIndex];
+		
+		//If the index is odd then divide by 2 so we get the inerse
+		if(i % 2 != 0)
+		{
+			v3CurrentRayDir *= -1;
+		}
+
+		//Create a ray from the direction and our current position
+		glm::vec3 v3EndPos = v3CurrentPos + (v3CurrentRayDir * m_fNeighbourRadius); //End pos is direction * distance, in this case our neighbourbood radius
+		rp3d::Ray* pCreatedRay = new rp3d::Ray(v3CurrentPos, v3EndPos);
+		vRays.push_back(pCreatedRay);
+	}
+
+	return vRays;
 }
