@@ -78,7 +78,7 @@ public:
 	~CollisionInfo() = default;
 	
 	void notifyContact(const CollisionCallbackInfo& a_pCollisionCallbackInfo) override;
-
+private:
 	std::vector<Entity*> m_aCollisionEntities;
 };
 
