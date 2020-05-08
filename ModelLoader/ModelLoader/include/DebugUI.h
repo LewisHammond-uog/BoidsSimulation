@@ -39,7 +39,7 @@ public:
 	//WORLD SETTINGS
 	int iInputWorldBounds = 10;
 	//DEBUG
-	bool bShowColliders;
+	bool bShowColliders = false;
 };
 
 class DebugUI {

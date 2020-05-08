@@ -46,7 +46,7 @@ void DebugUI::Update() {
 		ImGui::Spacing();
 		
 		//Tickbox to draw colliders
-		ImGui::Checkbox("Draw Collider Bounds", &m_uiValues.bShowColliders);
+		ImGui::Checkbox("Draw Collider Bounds (affects performance)", &m_uiValues.bShowColliders);
 
 		ImGui::Spacing();
 
@@ -56,14 +56,13 @@ void DebugUI::Update() {
 			ImGui::Text("Restarting...");
 			Scene::GetInstance()->DeInitlise(false);
 			Scene::GetInstance()->Initalise(false);
-			std::cout << "\n SCENE RESTARTED \n" << std::endl;
 		}
 	}
 
 	if (ImGui::CollapsingHeader("Controls")) {
 		//Controls Text
 		ImGui::Text("Controls");
-		ImGui::Text("WASD to Move the Camera");
+		ImGui::Text("WSAD to Move the Camera");
 		ImGui::Text("Left Click to Rotate the Camera");
 		ImGui::Text("Hold and Release Right Click to Place an Obstacle");
 	}

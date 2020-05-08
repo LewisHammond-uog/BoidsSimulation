@@ -6,11 +6,17 @@
 #include <queue>
 
 //Project Incldues
+#include "MathsUtils.h"
 #include "ColliderComponent.h"
 #include "DebugUI.h"
 #include "Entity.h"
 #include "Gizmos.h"
 #include "TransformComponent.h"
+
+//Statics
+const int BrainComponent::sc_iCollisionAvoidanceRayCount = 100;
+glm::vec3 BrainComponent::s_aCollisionDirections[sc_iCollisionAvoidanceRayCount];
+
 
 BrainComponent::BrainComponent(Entity* a_pOwner)
 	: Component(a_pOwner),
@@ -18,6 +24,7 @@ BrainComponent::BrainComponent(Entity* a_pOwner)
 	m_v3WanderPoint(0.0f),
 	m_pDebugUI(DebugUI::GetInstance())
 {
+	ComputeCollisionDirections();
 }
 
 void BrainComponent::Update(float a_fDeltaTime)
@@ -59,7 +66,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	{
 		//Add forces for containment and collision avoidance - these are very high priority
 		RayCastHitsInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + (v3Forward * m_fNeighbourRadius));
-		v3ContainmentForce = CalculateContainmentForce(rayHit) * pForceValues->fInputContainmentForce;
+		v3ContainmentForce = CalculateContainmentForce(v3CurrentPos, pCollider) * pForceValues->fInputContainmentForce;
 		vV3WeightedForces.push(v3ContainmentForce);
 		v3AvoidanceForce = CalculateAvoidanceForce(rayHit) * pForceValues->fInputCollisionAvoidForce;
 		vV3WeightedForces.push(v3AvoidanceForce);
@@ -74,8 +81,8 @@ void BrainComponent::Update(float a_fDeltaTime)
 	CalculateFlockingForces(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 	ApplyFlockingWeights(v3SeparationForce, v3AlignmentForce, v3CohesionForce);
 	vV3WeightedForces.push(v3SeparationForce);
-	vV3WeightedForces.push(v3AlignmentForce);
 	vV3WeightedForces.push(v3CohesionForce);
+	vV3WeightedForces.push(v3AlignmentForce);
 
 	/*~~~~WANDER~~~~*/
 	//Get and weight wander force
@@ -215,6 +222,7 @@ glm::vec3 BrainComponent::GetPointDirection(const glm::vec3& a_v3Start, const gl
 	return targetDir;
 }
 
+
 /// <summary>
 /// Calculates all of the flocking forces
 /// Does not take in to account any weighting of values
@@ -341,26 +349,48 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 /// within the containment volume
 /// </summary>
 /// <returns>(Unweighted) force to turn away from hitting a container</returns>
-glm::vec3 BrainComponent::CalculateContainmentForce(RayCastHitsInfo* a_rayResults) const
+glm::vec3 BrainComponent::CalculateContainmentForce(glm::vec3 a_v3CastPos, ColliderComponent* a_pRayCaster) const
 {
 	//Store our containment force - init to 0 so we can return this var if we don't hit
 	glm::vec3 v3ContainmentForce(0.0f);
-	
-	//Work out if we hit a containtment object, point to it if we have so
-	//we can get more infomation
 	RayCastHit* containerHit = nullptr;
-	if(!a_rayResults->m_vRayCastHits.empty())
+
+	//todo remove
+	glm::vec3 forward = m_pOwnerEntity->GetComponent<TransformComponent*>()->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+	
+	/*
+	 * Loop through all of the directions and check if any of them hit
+	 * all wall if they do get the wall normal and apply our forces like
+	 * that
+	 */
+	//Loop and check all of the directions that we are raycasting in
+	for(int i = 0; i < sc_iCollisionAvoidanceRayCount; ++i)
 	{
-		for (RayCastHit* m_vRayCastHit : a_rayResults->m_vRayCastHits)
+		//Calculate direction and project it forward
+		glm::vec3 v3Dir = s_aCollisionDirections[i];
+		glm::vec3 v3Point = v3Dir;
+		RayCastHitsInfo* rayHit = a_pRayCaster->RayCast(a_v3CastPos + forward, v3Point + forward);
+
+		Gizmos::addLine(glm::vec3(0,0,0), s_aCollisionDirections[i] * 20000.f, glm::vec4(1, 0, 0, 1));
+		
+		//If we hit a contaitner then set our hit containter
+		//and break out of the loop so we can process the force
+		if(!rayHit->m_vRayCastHits.empty())
 		{
-			Entity* hitEntity = m_vRayCastHit->m_pHitEntity;
-			if (hitEntity) {
-				if (hitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
+			for(int i = 0; i < rayHit->m_vRayCastHits.size(); ++i)
+			{
+				if(rayHit->m_vRayCastHits[i]->m_pHitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
 				{
-					containerHit = m_vRayCastHit;
+					containerHit = rayHit->m_vRayCastHits[i];
+					delete rayHit;
+					break;
 				}
 			}
+			
 		}
+
+		//delete rayHit;
+		
 	}
 	
 	//If we have hit a container then calculate our force otherwise we will just return 0
@@ -369,7 +399,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(RayCastHitsInfo* a_rayResult
 		//Get the normal and return our force in that direction so we turn away from the object,
 		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
-		v3ContainmentForce = containerHit->m_v3HitNormal * (1 - containerHit->m_fHitFraction); 
+		v3ContainmentForce = containerHit->m_v3HitNormal /* (1 - containerHit->m_fHitFraction)*/; 
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
 	}
 
@@ -423,4 +453,27 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RayCastHitsInfo* a_rayResult) 
 	
 
 	return v3AvoidForce;
+}
+
+/// <summary>
+/// Calculates the collision directions that we are using to see if we are
+/// going to have a collision
+/// </summary>
+void BrainComponent::ComputeCollisionDirections()
+{
+
+	//Loop through all of the directions and calculate their X/Y/Z angles
+	for (int i = 0; i < sc_iCollisionAvoidanceRayCount; ++i)
+	{
+		float randy = MathsUtils::RandomRange(0.f, 1.f);
+		
+		float fTheta = 2 * reactphysics3d::PI * randy;
+		float fPhi = acos(2 * randy - 1.0f);
+
+		float fX = cos(fTheta) * sin(fPhi);
+		float fY = sin(fTheta) * sin(fPhi);
+		float fZ = cos(fPhi);
+		
+		s_aCollisionDirections[i] = glm::vec3(fX, fY, fZ);
+	}
 }
