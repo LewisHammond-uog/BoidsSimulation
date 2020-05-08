@@ -361,11 +361,13 @@ glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCas
 	//Create Rays and are forward, back, up, down, left and right
 	const std::vector<rp3d::Ray*> vV3CollisionRays = GetCollisionRays();
 	
-	//Loop through all of the collision rays and check if there is a collision
-	//with anything
+	//Infomation about what we hit
 	RayCastHit containerHit;
+	float closestHitDist = 0.f; //Store the closest collision distance with the wall
 	bool bHeadingForCollision = false;
-	
+
+	//Loop through all of the collision rays and check if there is a collision
+	//with a containter.
 	for (auto collisionRay : vV3CollisionRays)
 	{
 		RayCastHitsInfo* rayHits = a_pRayCaster->RayCast(collisionRay);
@@ -375,13 +377,21 @@ glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCas
 			{
 				if(pRayCastHit->m_pHitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
 				{
-					containerHit = *pRayCastHit;
-					bHeadingForCollision = true;
-					break;
+					//Get the closest collision so we don't end up getting
+					//the normal of the otherside of the containing wall
+					float hitDist = (pRayCastHit->m_fHitFraction);
+					if(hitDist > closestHitDist)
+					{
+						containerHit = *pRayCastHit;
+						bHeadingForCollision = true;
+						closestHitDist = hitDist;
+					}
 				}
 			}
 		}
 
+		//Delete so we don't leak memory because
+		//we are done with these
 		delete rayHits;
 		delete collisionRay;
 	}
@@ -393,7 +403,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCas
 		//Get the normal and return our force in that direction so we turn away from the object,
 		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
-		v3ContainmentForce = containerHit.m_v3HitNormal * (1 - containerHit.m_fHitFraction); 
+		v3ContainmentForce = containerHit.m_v3HitNormal/* (1 - containerHit.m_fHitFraction)*/;
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
 	}
 
@@ -498,7 +508,7 @@ std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays()
 		}
 
 		//Create a ray from the direction and our current position
-		glm::vec3 v3EndPos = v3CurrentPos + (v3CurrentRayDir * m_fNeighbourRadius); //End pos is direction * distance, in this case our neighbourbood radius
+		glm::vec3 v3EndPos = v3CurrentPos + (v3CurrentRayDir * m_fNeighbourRadius); //End pos is direction * distance, in this case our neighbourbood radius plus our velcityy
 		rp3d::Ray* pCreatedRay = new rp3d::Ray(v3CurrentPos, v3EndPos);
 		vRays.push_back(pCreatedRay);
 	}

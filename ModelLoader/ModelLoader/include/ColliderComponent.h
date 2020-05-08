@@ -92,7 +92,7 @@ struct RayCastHit
 	Entity* m_pHitEntity; //Entity that we have hit
 	glm::vec3 m_v3HitPoint; //Point in space that we hit the entity
 	glm::vec3 m_v3HitNormal; //The normal of the point that we hit
-	float m_fHitFraction; //Fraction of the distance that we hit the object in the ray cast (range 0-1)
+	float m_fHitFraction = 1.f; //Fraction of the distance that we hit the object in the ray cast (range 0-1)
 };
 
 

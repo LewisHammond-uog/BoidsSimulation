@@ -285,14 +285,14 @@ rp3d::CollisionWorld* Scene::GetCollisionWorld() const
 /// <param name="a_fBoundsSize">Size of the bounds to generate</param>
 void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 {
-	constexpr float fWallThickness = 0.1f;
+	constexpr float fWallThickness = 0.5f;
 	constexpr int iWallCount = 6;
 
 	//todo - there has to be a better way to do this
 	//Array of the wall sizes and positions that we need
-	glm::vec3 aV3wallSizes[3] = {	glm::vec3(a_fBoundsSize,a_fBoundsSize,fWallThickness),
-									glm::vec3(a_fBoundsSize,fWallThickness,a_fBoundsSize),
-									glm::vec3(fWallThickness,a_fBoundsSize,a_fBoundsSize) };
+	glm::vec3 aV3wallSizes[3] = {	glm::vec3(a_fBoundsSize + fWallThickness,a_fBoundsSize,fWallThickness + fWallThickness),
+									glm::vec3(a_fBoundsSize + fWallThickness,fWallThickness,a_fBoundsSize + fWallThickness),
+									glm::vec3(fWallThickness,	a_fBoundsSize + fWallThickness,a_fBoundsSize + fWallThickness) };
 	glm::vec3 aV3wallPositions[iWallCount] = {	glm::vec3(0.f,0.f,a_fBoundsSize), glm::vec3(0.f,0.f,-a_fBoundsSize),
 										glm::vec3(0.f,a_fBoundsSize,0.0f), glm::vec3(0.f,-a_fBoundsSize,0.f),
 										glm::vec3(a_fBoundsSize,0.0f,0.0f), glm::vec3(-a_fBoundsSize,0.0f,0.f), };
