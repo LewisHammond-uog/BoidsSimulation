@@ -4,6 +4,8 @@
 //Imgui Includes
 #include <imgui/imgui.h>
 
+#include "Singleton.h"
+
 //Enum for types of flocking values
 typedef enum class ForceWeight {
 	FORCE_WEIGHT_CONTAINMENT,
@@ -47,13 +49,9 @@ public:
 
 // ReSharper restore CppInconsistentNaming
 
-class DebugUI {
-
+class DebugUI : public Singleton<DebugUI> {
+	friend class Singleton<DebugUI>;
 public:
-
-	//Funct to get the singeton instance
-	//of the debug UI
-	static DebugUI* GetInstance();
 
 	void Update();
 
@@ -64,13 +62,9 @@ public:
 	static bool HasMouseFocus();
 	
 private:
-	//Private Constructors/Destructors
-	//that prevent duplicaton of the singleton
-	DebugUI() = default;
-	~DebugUI() = default;
 
-	//Instance of the debug UI
-	static DebugUI* s_pUIInstance; //Single instance of this UI
+	DebugUI() : Singleton() {};
+	~DebugUI(){};
 
 	//UI Position
 	const ImVec2 m_v2WindowPos = ImVec2(0, 0);

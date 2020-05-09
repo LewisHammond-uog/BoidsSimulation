@@ -93,6 +93,7 @@
     <ClCompile Include="..\deps\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="source\Application.cpp" />
+    <ClCompile Include="source\BoidSpawner.cpp" />
     <ClCompile Include="source\BoxPrimitiveComponent.cpp" />
     <ClCompile Include="source\BrainComponent.cpp" />
     <ClCompile Include="source\CameraComponent.cpp" />
@@ -125,12 +126,14 @@
     <ClInclude Include="include\DebugUI.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\Gizmos.h" />
+    <ClInclude Include="include\BoidSpawner.h" />
     <ClInclude Include="include\ModelComponent.h" />
     <ClInclude Include="include\ObstacleSpawnerComponent.h" />
     <ClInclude Include="include\PrimitiveComponent.h" />
     <ClInclude Include="include\RaycastComponent.h" />
     <ClInclude Include="include\resource.h" />
     <ClInclude Include="include\Scene.h" />
+    <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\SpherePrimitiveComponent.h" />
     <ClInclude Include="include\TransformComponent.h" />
   </ItemGroup>

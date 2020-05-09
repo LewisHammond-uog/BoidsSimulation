@@ -117,6 +117,9 @@
     <ClCompile Include="source\RaycastComponent.cpp">
       <Filter>Source Files\Components\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="source\BoidSpawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\deps\include\learnopengl\mesh.h">
@@ -181,6 +184,12 @@
     </ClInclude>
     <ClInclude Include="include\RaycastComponent.h">
       <Filter>Header Files\Components\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BoidSpawner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Singleton.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

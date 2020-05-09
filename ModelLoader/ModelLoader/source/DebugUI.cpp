@@ -4,27 +4,14 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-//Project Includes
+//c++ Includes
 #include <iostream>
 
+//Project Includes
 #include "Scene.h"
-
-//Init Singleton var
-DebugUI* DebugUI::s_pUIInstance = nullptr;
 
 //Default Values
 const float mc_fDefaultForce = 0.0f;
-
-///Get singleton instance of UI
-DebugUI* DebugUI::GetInstance() {
-
-	//Create an instance if we don't have one
-	if (s_pUIInstance == nullptr) {
-		s_pUIInstance = new DebugUI();
-	}
-
-	return s_pUIInstance;
-}
 
 /// <summary>
 /// Updates the UI by passing ImGUI elements to draw

@@ -7,6 +7,7 @@
 #include "TransformComponent.h"
 #include "Entity.h"
 #include "DebugUI.h"
+#include "Singleton.h"
 
 //Typedefs
 typedef Component PARENT;

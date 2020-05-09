@@ -53,7 +53,11 @@ Scene::Scene() : Application() {
 }
 
 
-
+/// <summary>
+/// Initialize the scene
+/// </summary>
+/// <param name="a_bInitApplication">Also initalize the application layer?</param>
+/// <returns></returns>
 bool Scene::Initialize(const bool a_bInitApplication){
 
 	//Call Application Init Function
@@ -101,36 +105,9 @@ bool Scene::Initialize(const bool a_bInitApplication){
 	//Create our world bounds
 	GenerateBoundsVolume(DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds);
 	
-	//Create entities
+	//Create boids
 	for (int i = 0; i < mc_iBoidCount; i++) {
-		Entity* pEntity = new Entity();
-		pEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_BOID);
-
-		//Transform Component
-		TransformComponent* pTransform = new TransformComponent(pEntity);
-		pTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, glm::vec3(	MathsUtils::RandomRange(-5.0f, 5.0f), 
-																				MathsUtils::RandomRange(-5.0f, 5.0f),
-																				MathsUtils::RandomRange(-5.0f, 5.0f)));
-		pEntity->AddComponent(pTransform);
-
-		//Model Component
-		ModelComponent* pModel = new ModelComponent(pEntity);
-		pModel->ChooseRandomModel(m_vpLoadedModels);
-		pModel->SetScale(0.02f);
-		pEntity->AddComponent(pModel);
-
-		//Brain Component
-		BrainComponent* pBrain = new BrainComponent(pEntity);
-		pEntity->AddComponent(pBrain);
-
-		//Collider Component
-		ColliderComponent* pCollider = new ColliderComponent(pEntity, m_pSceneCollisionWorld);
-		pCollider->AddSphereCollider(0.25f, glm::vec3(0.0f));
-		pEntity->AddComponent(pCollider);
-
-		//Raycast Component
-		RaycastComponent* pRayCaster = new RaycastComponent(pEntity, m_pSceneCollisionWorld);
-		pEntity->AddComponent(pRayCaster);
+		
 		
 	}
 	

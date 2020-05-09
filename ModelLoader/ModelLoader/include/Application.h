@@ -1,5 +1,6 @@
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
+#include "Singleton.h"
 
 //Forward Declares
 struct GLFWwindow;
