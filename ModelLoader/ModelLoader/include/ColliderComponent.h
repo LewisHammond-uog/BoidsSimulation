@@ -15,6 +15,7 @@
 //Forward Declare
 class CollisionInfo;
 class RayCastHitsInfo;
+struct RayCastHit;
 
 /// <summary>
 /// Component used for detecting collisions between 2 entities in the world
@@ -45,6 +46,7 @@ public:
 	//Functions to do raycasting
 	RayCastHitsInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint) const;
 	RayCastHitsInfo* RayCast(rp3d::Ray* a_ray) const;
+	std::vector<RayCastHitsInfo*> MutiRayCast(std::vector<rp3d::Ray*> a_vRays, bool a_bDeleteRays =false) const;
 
 private:
 	
