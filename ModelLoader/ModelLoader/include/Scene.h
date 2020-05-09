@@ -63,7 +63,7 @@ private:
 	bool m_bFirstMouse; //If this is the first time that we are geting mouse info
 
 	//Number of boids to spawn
-	const unsigned int mc_iBoidCount = 25;
+	const unsigned int mc_iBoidCount = 100;
 	
 	static Scene* s_pSceneInstance; //Single instance of this scene;
 };
