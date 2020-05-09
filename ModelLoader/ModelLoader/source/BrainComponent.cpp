@@ -57,9 +57,17 @@ void BrainComponent::Update(float a_fDeltaTime)
 	//Do a raycast so that we can pass it's info to both functions
 	glm::vec3 v3ContainmentForce = glm::vec3(0.0f);
 	glm::vec3 v3AvoidanceForce = glm::vec3(0.0f);
-	CalculateCollisionForces(v3ContainmentForce, v3AvoidanceForce);
-	vV3WeightedForces.push(v3ContainmentForce);
-	vV3WeightedForces.push(v3AvoidanceForce);
+	ColliderComponent* pCollider = m_pOwnerEntity->GetComponent<ColliderComponent*>();
+	if(pCollider)
+	{
+		//Add forces for containment and collision avoidance - these are very high priority
+		RayCastHitsInfo* rayHit = pCollider->RayCast(v3CurrentPos, v3CurrentPos + (v3Forward * m_fNeighbourRadius));
+		v3ContainmentForce = CalculateContainmentForce(pCollider) * pForceValues->fInputContainmentForce;
+		vV3WeightedForces.push(v3ContainmentForce);
+		v3AvoidanceForce = CalculateAvoidanceForce(rayHit) * pForceValues->fInputCollisionAvoidForce;
+		vV3WeightedForces.push(v3AvoidanceForce);
+		delete rayHit;
+	}
 
 	/*~~~~FLOCKING~~~~*/
 	//Get all of our flocking values - we call the function by ref so the values are populated
@@ -331,98 +339,70 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 }
 
 /// <summary>
-/// Calculates both the containment and collision avoidance forces using a shared
-/// raycast between both
-/// </summary>
-/// <returns>The sum of the containent and collision avoidance forces</returns>
-glm::vec3 BrainComponent::CalculateCollisionForces(glm::vec3& a_v3ContainmentForce, glm::vec3& a_v3CollisionAvoidForce) const
-{
-
-	//Check we have a collider component
-	ColliderComponent* pRayCaster = m_pOwnerEntity->GetComponent<ColliderComponent*>();
-	if(pRayCaster == nullptr)
-	{
-		return glm::vec3(0.f);
-	}
-
-	/*
-	 * Do all of the raycats out and store their results then
-	 * process pass the reults to the contain/avoid function
-	 * so that they can check for indiviual types of collision
-	 * (i.e containters for containment and obstacles for avoidance)
-	 */
-	const std::vector<rp3d::Ray*> vV3CollisionRays = GetCollisionRays();
-	std::vector<RayCastHitsInfo*> vRayResults = pRayCaster->MutiRayCast(vV3CollisionRays, true);
-
-	//Create a list of all of the hits from our results, so we only need to do this once and not
-	//twice (for each containment and collision)
-	std::vector<RayCastHit*> vAllRayHits;
-	for(int resultsIndex = 0; resultsIndex < vRayResults.size(); ++resultsIndex)
-	{
-		RayCastHitsInfo* currentResult = vRayResults[resultsIndex];
-		for(int hitIndex = 0; hitIndex < currentResult->m_vRayCastHits.size(); ++hitIndex)
-		{
-			//Add the hit to the list
-			vAllRayHits.push_back(*&currentResult->m_vRayCastHits[hitIndex]);
-		}
-
-	}
-
-	//Get forces from functions
-	a_v3ContainmentForce = CalculateContainmentForce(vAllRayHits);
-	a_v3CollisionAvoidForce = CalculateAvoidanceForce(vAllRayHits);
-	
-	//Delete all of the ray results, prevent mem leak
-	for (int resultsIndex = 0; resultsIndex < vRayResults.size(); ++resultsIndex)
-	{
-		delete vRayResults[resultsIndex];
-	}
-	
-	return a_v3CollisionAvoidForce + a_v3ContainmentForce;
-}
-
-/// <summary>
 /// Calulates the amount of force needed to keep the boid
 /// within the containment volume
 /// </summary>
 /// <returns>(Unweighted) force to turn away from hitting a container</returns>
-glm::vec3 BrainComponent::CalculateContainmentForce(std::vector<RayCastHit*>& a_vRayCastHits) const
+glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCaster)
 {
 	//Store our containment force - init to 0 so we can return this var if we don't hit
 	glm::vec3 v3ContainmentForce(0.0f, 0.0f, 0.0f);
 
+	//Get forward, back and right
+	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
+	if(!pTransform)
+	{
+		return glm::vec3(0.f);
+	}
+	
+	//Create Rays and are forward, back, up, down, left and right
+	const std::vector<rp3d::Ray*> vV3CollisionRays = GetCollisionRays();
+	
 	//Infomation about what we hit
-	RayCastHit* containerHit = nullptr;
+	RayCastHit containerHit;
 	float closestHitDist = 0.f; //Store the closest collision distance with the wall
 	bool bHeadingForCollision = false;
-	
-	//Check our raycast hits if they have hit a containter then check it is the closest collision
-	for(int i = 0; i < a_vRayCastHits.size(); ++i)
+
+	//Loop through all of the collision rays and check if there is a collision
+	//with a containter.
+	for (auto collisionRay : vV3CollisionRays)
 	{
-		RayCastHit* currentHit = a_vRayCastHits[i];
-		if(currentHit->m_pHitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
+		RayCastHitsInfo* rayHits = a_pRayCaster->RayCast(collisionRay);
+		if(!rayHits->m_vRayCastHits.empty())
 		{
-			//Get the closest collision so we don't end up getting
-			//the normal of the otherside of the containing wall
-			const float hitDist = (currentHit->m_fHitFraction);
-			if (hitDist > closestHitDist)
+			for (auto& pRayCastHit : rayHits->m_vRayCastHits)
 			{
-				containerHit = currentHit;
-				bHeadingForCollision = true;
-				closestHitDist = hitDist;
+				if(pRayCastHit->m_pHitEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_CONTAINER)
+				{
+					//Get the closest collision so we don't end up getting
+					//the normal of the otherside of the containing wall
+					float hitDist = (pRayCastHit->m_fHitFraction);
+					if(hitDist > closestHitDist)
+					{
+						containerHit = *pRayCastHit;
+						bHeadingForCollision = true;
+						closestHitDist = hitDist;
+					}
+				}
 			}
 		}
+
+		//Delete so we don't leak memory because
+		//we are done with these
+		delete rayHits;
+		delete collisionRay;
 	}
 
+	
 	//If we have hit a container then calculate our force otherwise we will just return 0
 	if (bHeadingForCollision)
 	{
 		//Get the normal and return our force in that direction so we turn away from the object,
 		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
-		v3ContainmentForce = containerHit->m_v3HitNormal;
+		v3ContainmentForce = containerHit.m_v3HitNormal;
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
-		//v3ContainmentForce -= m_v3CurrentVelocity;
+		v3ContainmentForce -= m_v3CurrentVelocity;
 	}
 
 	return v3ContainmentForce;
@@ -432,39 +412,44 @@ glm::vec3 BrainComponent::CalculateContainmentForce(std::vector<RayCastHit*>& a_
 /// Calculate the force needed to avoid any collision with obstacles
 /// </summary>
 /// <returns>Force to avoid any collision</returns>
-glm::vec3 BrainComponent::CalculateAvoidanceForce(std::vector<RayCastHit*>& a_vRayCastHits) const
+glm::vec3 BrainComponent::CalculateAvoidanceForce(RayCastHitsInfo* a_rayResult) const
 {
 	glm::vec3 v3AvoidForce(0.f);
+	//The distance (normalised from our raycast min to max distance)
+	//until we hit the obstacle
+	float distToCollision = 1.f;
 
-	//Infomation about what we hit
-	RayCastHit* containerHit = nullptr;
-	float closestHitDist = 0.f; //Store the closest collision distance with the wall
-	
-	//Check our raycast hits if they have hit a containter then check it is the closest collision
-	for (int i = 0; i < a_vRayCastHits.size(); ++i)
+	if(a_rayResult == nullptr)
 	{
-		RayCastHit* currentHit = a_vRayCastHits[i];
-		ENTITY_TYPE hitType = currentHit->m_pHitEntity->GetEntityType();
-		if (hitType == ENTITY_TYPE::ENTITY_TYPE_OBSTACLE || hitType == ENTITY_TYPE::ENTITY_TYPE_BOID)
+		return v3AvoidForce;
+	}
+
+	RayCastHit* containerHit = nullptr;
+	
+	//If the detection ray hits a obstacle then we are heading for a collision
+	if(!a_rayResult->m_vRayCastHits.empty())
+	{
+		for (RayCastHit* vRayCastHit : a_rayResult->m_vRayCastHits)
 		{
-			//Get the closest collision so we don't end up getting
-			//the normal of the otherside of the obstacle
-			float hitDist = (currentHit->m_fHitFraction);
-			if (hitDist > closestHitDist)
-			{
-				containerHit = currentHit;
-				closestHitDist = hitDist;
+			Entity* hitEntity = vRayCastHit->m_pHitEntity;
+			if (hitEntity) {
+				ENTITY_TYPE hitType = hitEntity->GetEntityType();
+				if (hitType == ENTITY_TYPE::ENTITY_TYPE_BOID || hitType == ENTITY_TYPE::ENTITY_TYPE_OBSTACLE)
+				{
+					containerHit = vRayCastHit;
+					break;
+				}
 			}
 		}
 	}
-	
+
 	//If we have hit a container then calculate our force otherwise we will just return 0
 	if (containerHit != nullptr)
 	{
 		//Get the normal and return our force in that direction so we turn away from the object,
 		//mutiply it by the distance to the wall, so our force gets more agressive the closer we get
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
-		v3AvoidForce = containerHit->m_v3HitNormal * (1 - containerHit->m_fHitFraction);
+		v3AvoidForce = containerHit->m_v3HitNormal * (containerHit->m_fHitFraction);
 		v3AvoidForce = glm::length(v3AvoidForce) != 0 ? glm::normalize(v3AvoidForce) : v3AvoidForce;
 	}
 	
@@ -476,7 +461,7 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(std::vector<RayCastHit*>& a_vR
 /// Generates a list of rays to use when checking for collisions
 /// </summary>
 /// <returns></returns>
-std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays() const
+std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays()
 {
 	//Create Vector
 	std::vector<rp3d::Ray*> vRays;

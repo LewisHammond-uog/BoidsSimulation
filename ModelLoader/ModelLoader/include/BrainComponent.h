@@ -20,7 +20,6 @@ class Entity;
 class Shader;
 class DebugUI;
 struct UIInputValues;
-struct RayCastHit;
 
 
 class BrainComponent : public Component
@@ -44,15 +43,14 @@ private:
 	glm::vec3 CalculateFlockingForces(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;
 	void ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;
 	//Collision Avoidance
-	glm::vec3 CalculateCollisionForces(glm::vec3& a_v3ContainmentForce, glm::vec3& a_v3CollisionAvoidForce) const;
-	glm::vec3 CalculateContainmentForce(std::vector<RayCastHit*>& a_vRayCastHits) const;
-	glm::vec3 CalculateAvoidanceForce(std::vector<RayCastHit*>& a_vRayCastHits) const;
+	glm::vec3 CalculateContainmentForce(ColliderComponent* a_pRayCaster);
+	glm::vec3 CalculateAvoidanceForce(RayCastHitsInfo* a_rayResults) const;
 
 	//Steering Helper Functions
 	inline glm::vec3 GetPointDirection(const glm::vec3& a_v3Start, const glm::vec3& a_v3End) const;
 
 	//Function for getting the current ray directions
-	std::vector<rp3d::Ray*> GetCollisionRays() const;
+	std::vector<rp3d::Ray*> GetCollisionRays();
 	
 	//Current Velocity of the boid
 	glm::vec3 m_v3CurrentVelocity;

@@ -428,44 +428,6 @@ RayCastHitsInfo* ColliderComponent::RayCast(rp3d::Ray* a_ray) const
 	return callback;
 }
 
-/// <summary>
-/// Performs Mutiple Raycasts and returns all of the hits from those casts
-/// </summary>
-/// <param name="a_vRays">Rays to process</param>
-/// <returns>All of the Hits from the raycasts</returns>
-std::vector<RayCastHitsInfo*> ColliderComponent::MutiRayCast(std::vector<rp3d::Ray*> a_vRays, bool a_bDeleteRays /*=false*/) const
-{
-	//List of hits to return
-	std::vector<RayCastHitsInfo*> vAllRayHits;
-
-	//Loop through all of the rays and cast them, if they have a collision
-	//add them to the ray hits otherwise they are not usefull delete them.
-	for(int rayIndex = 0; rayIndex < a_vRays.size(); ++rayIndex)
-	{
-		//Cast and check for hit
-		rp3d::Ray* pCurrentRay = a_vRays[rayIndex];
-		RayCastHitsInfo* pRayHit = RayCast(pCurrentRay);
-		if(!pRayHit->m_vRayCastHits.empty())
-		{
-			vAllRayHits.push_back(pRayHit);
-		}
-		else {
-			//Ray hit nothing delete it
-			delete pRayHit;
-		}
-		
-
-		//If we should delete the ray itself then delete it
-		if(a_bDeleteRays)
-		{
-			delete pCurrentRay;
-		}
-	}
-
-	//Return the vector of all the hits we have collected
-	return vAllRayHits;
-	
-}
 
 
 #pragma region Collision Callback Info
