@@ -8,6 +8,7 @@
 
 //Project Incldues
 #include "ColliderComponent.h"
+#include "RaycastComponent.h"
 #include "DebugUI.h"
 #include "Entity.h"
 #include "Gizmos.h"
@@ -339,7 +340,7 @@ glm::vec3 BrainComponent::CalculateCollisionForces(glm::vec3& a_v3ContainmentFor
 {
 
 	//Check we have a collider component
-	ColliderComponent* pRayCaster = m_pOwnerEntity->GetComponent<ColliderComponent*>();
+	RaycastComponent* pRayCaster = m_pOwnerEntity->GetComponent<RaycastComponent*>();
 	if(pRayCaster == nullptr)
 	{
 		return glm::vec3(0.f);

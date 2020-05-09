@@ -114,6 +114,9 @@
     <ClCompile Include="source\MathUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\RaycastComponent.cpp">
+      <Filter>Source Files\Components\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\deps\include\learnopengl\mesh.h">
@@ -174,6 +177,9 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\ColliderComponent.h">
+      <Filter>Header Files\Components\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RaycastComponent.h">
       <Filter>Header Files\Components\Collision</Filter>
     </ClInclude>
   </ItemGroup>

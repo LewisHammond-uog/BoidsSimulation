@@ -106,6 +106,7 @@
     <ClCompile Include="source\ModelComponent.cpp" />
     <ClCompile Include="source\ObstacleSpawnerComponent.cpp" />
     <ClCompile Include="source\PrimitiveComponent.cpp" />
+    <ClCompile Include="source\RaycastComponent.cpp" />
     <ClCompile Include="source\Scene.cpp" />
     <ClCompile Include="source\SpherePrimitiveComponent.cpp" />
     <ClCompile Include="source\TransformComponent.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="include\ModelComponent.h" />
     <ClInclude Include="include\ObstacleSpawnerComponent.h" />
     <ClInclude Include="include\PrimitiveComponent.h" />
+    <ClInclude Include="include\RaycastComponent.h" />
     <ClInclude Include="include\resource.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\SpherePrimitiveComponent.h" />

@@ -402,71 +402,6 @@ Entity* ColliderComponent::GetEntityFromCollisionBody(rp3d::CollisionBody* a_col
 	return nullptr;
 }
 
-/// <summary>
-/// Ray casts between 2 points in the world
-/// </summary>
-/// <param name="a_v3StartPoint">World Start Point</param>
-/// <param name="a_v3EndPoint">World End Point</param>
-/// <returns>Infomation about all of the objects that the raycast has hit</returns>
-RayCastHitsInfo* ColliderComponent::RayCast(const glm::vec3 a_v3StartPoint, const glm::vec3 a_v3EndPoint) const
-{
-	//Create a ray from the given start and end point
-	const rp3d::Vector3 v3StartPoint(a_v3StartPoint.x, a_v3StartPoint.y, a_v3StartPoint.z);
-	const rp3d::Vector3 v3EndPoint(a_v3EndPoint.x, a_v3EndPoint.y, a_v3EndPoint.z);
-	rp3d::Ray raycastRay(v3StartPoint, v3EndPoint);
-
-	//Call function that takes ray as parameter and return the result of that
-	return RayCast(&raycastRay);
-}
-
-RayCastHitsInfo* ColliderComponent::RayCast(rp3d::Ray* a_ray) const
-{
-	RayCastHitsInfo* callback = new RayCastHitsInfo();
-
-	//Perform Raycast and return the resulting info
-	m_pCollisionWorld->raycast(*a_ray, callback);
-	return callback;
-}
-
-/// <summary>
-/// Performs Mutiple Raycasts and returns all of the hits from those casts
-/// </summary>
-/// <param name="a_vRays">Rays to process</param>
-/// <returns>All of the Hits from the raycasts</returns>
-std::vector<RayCastHitsInfo*> ColliderComponent::MutiRayCast(std::vector<rp3d::Ray*> a_vRays, bool a_bDeleteRays /*=false*/) const
-{
-	//List of hits to return
-	std::vector<RayCastHitsInfo*> vAllRayHits;
-
-	//Loop through all of the rays and cast them, if they have a collision
-	//add them to the ray hits otherwise they are not usefull delete them.
-	for(int rayIndex = 0; rayIndex < a_vRays.size(); ++rayIndex)
-	{
-		//Cast and check for hit
-		rp3d::Ray* pCurrentRay = a_vRays[rayIndex];
-		RayCastHitsInfo* pRayHit = RayCast(pCurrentRay);
-		if(!pRayHit->m_vRayCastHits.empty())
-		{
-			vAllRayHits.push_back(pRayHit);
-		}
-		else {
-			//Ray hit nothing delete it
-			delete pRayHit;
-		}
-		
-
-		//If we should delete the ray itself then delete it
-		if(a_bDeleteRays)
-		{
-			delete pCurrentRay;
-		}
-	}
-
-	//Return the vector of all the hits we have collected
-	return vAllRayHits;
-	
-}
-
 
 #pragma region Collision Callback Info
 
@@ -480,6 +415,7 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 	//Get the entities for each of the bodies involved in the collision if they are both
 	//not nullptrs (as we need to have 2 bodies in a collision for it to be valid)
 	//then add them to the list
+	//then add them to the list
 	Entity* collisionEntity1 = ColliderComponent::GetEntityFromCollisionBody(a_pCollisionCallbackInfo.body1);
 	Entity* collisionEntity2 = ColliderComponent::GetEntityFromCollisionBody(a_pCollisionCallbackInfo.body2);
 
@@ -492,23 +428,3 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 
 #pragma endregion 
 
-#pragma region Raycast Callback Info
-//Function called when the ray cast hits a collider in the world
-rp3d::decimal RayCastHitsInfo::notifyRaycastHit(const rp3d::RaycastInfo& info)
-{
-	//Create a raycast hit and fill it with our info
-	RayCastHit* hit = new RayCastHit();
-	hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(info.body);
-	hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
-	hit->m_v3HitNormal = glm::vec3(info.worldNormal.x, info.worldNormal.y, info.worldNormal.z);
-	hit->m_fHitFraction = info.hitFraction;
-
-	//Add to hits list
-	m_vRayCastHits.push_back(hit);
-
-	// Return a decimal of 1.0 to gather all hits 
-	return reactphysics3d::decimal(1.f);
-}
-
-
-#pragma endregion 
