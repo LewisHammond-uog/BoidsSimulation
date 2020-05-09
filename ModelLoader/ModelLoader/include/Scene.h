@@ -33,10 +33,6 @@ public:
 
 private:
 	Scene();
-
-
-	//Load all of the fish models
-	void LoadAllModels();
 	
 	//Function to generate our bounds volume
 	void GenerateBoundsVolume(float a_fBoundsSize) const;
@@ -48,10 +44,6 @@ private:
 
 	CameraComponent* m_pCamera;
 	Shader* m_ourShader;
-
-	//All loaded models and number to load
-	const int m_iModelCount = 15;
-	std::vector<Model*> m_vpLoadedModels;
 
 	//Collision World
 	rp3d::CollisionWorld* m_pSceneCollisionWorld;

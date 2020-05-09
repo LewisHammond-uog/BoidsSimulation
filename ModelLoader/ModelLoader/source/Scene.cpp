@@ -22,6 +22,7 @@
 #include "DebugUI.h"
 
 //Components
+#include "BoidSpawner.h"
 #include "TransformComponent.h"
 #include "ModelComponent.h"
 #include "BrainComponent.h"
@@ -80,11 +81,6 @@ bool Scene::Initialize(const bool a_bInitApplication){
 	// -------------------------
 	m_ourShader = new Shader("shaders/model_loading.vs", "shaders/model_loading.fs");
 
-	// load models, if they aren't already
-	// -----------
-	if (m_vpLoadedModels.size() < m_iModelCount) {
-		LoadAllModels();
-	}
 
 	//Init Camera
 	Entity* pCameraEntity = new Entity();
@@ -106,10 +102,7 @@ bool Scene::Initialize(const bool a_bInitApplication){
 	GenerateBoundsVolume(DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds);
 	
 	//Create boids
-	for (int i = 0; i < mc_iBoidCount; i++) {
-		
-		
-	}
+	BoidSpawner::GetInstance()->SpawnBoids(100);
 	
 	return true;
 }
@@ -186,11 +179,7 @@ void Scene::DeInitialize(const bool a_bCloseApplication) {
 	//Delete all of our models, only is we are destroying
 	//the application, other wise we are likley to reuse them
 	if (a_bCloseApplication) {
-		for (int i = 0; i < m_vpLoadedModels.size(); ++i)
-		{
-			delete m_vpLoadedModels[i];
-		}
-		m_vpLoadedModels.clear();
+		BoidSpawner::GetInstance()->UnloadAllModels();
 	}
 		
 	//Delete Shader
@@ -207,6 +196,7 @@ void Scene::DeInitialize(const bool a_bCloseApplication) {
 		Entity* pEntity = xIter->second;
 		delete pEntity;
 	}
+	existingEntityMap.clear();
 
 	//Destory Collision World
 	delete m_pSceneCollisionWorld;
@@ -214,33 +204,6 @@ void Scene::DeInitialize(const bool a_bCloseApplication) {
 
 	//Destory Gizmos
 	Gizmos::destroy();
-
-}
-
-/// <summary>
-/// Load all of the models used by the program
-/// </summary>
-void Scene::LoadAllModels()
-{
-	/* Model Files are stored in the format
-	 * Fish01, Fish02 etc. so we just loop through
-	 * with the same prefix to load all of the models
-	 */
-	const std::string modelFilePrefix = "models/fish/Fish0";
-	const std::string modelFileSuffix = ".obj";
-
-	//Loop until we have loaded all models
-	for(int i = 1; i <= m_iModelCount; ++i)
-	{
-		//Generate file name and load model
-		const std::string modelFileName = modelFilePrefix + std::to_string(i) + modelFileSuffix;
-		Model* newModel = new Model(modelFileName);
-
-		if (newModel != nullptr) {
-			//Add to our loaded models
-			m_vpLoadedModels.push_back(newModel);
-		}
-	}
 
 }
 
