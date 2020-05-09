@@ -402,7 +402,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(ColliderComponent* a_pRayCas
 		//Invert the m_fHitFraction because 1 means it is a the very end of the ray, we want the opposite multiplication
 		v3ContainmentForce = containerHit.m_v3HitNormal;
 		v3ContainmentForce = glm::length(v3ContainmentForce) != 0 ? glm::normalize(v3ContainmentForce) : v3ContainmentForce;
-		v3ContainmentForce -= m_v3CurrentVelocity;
+		//v3ContainmentForce -= m_v3CurrentVelocity;
 	}
 
 	return v3ContainmentForce;
@@ -433,7 +433,7 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(RayCastHitsInfo* a_rayResult) 
 		{
 			Entity* hitEntity = vRayCastHit->m_pHitEntity;
 			if (hitEntity) {
-				ENTITY_TYPE hitType = hitEntity->GetEntityType();
+				const ENTITY_TYPE hitType = hitEntity->GetEntityType();
 				if (hitType == ENTITY_TYPE::ENTITY_TYPE_BOID || hitType == ENTITY_TYPE::ENTITY_TYPE_OBSTACLE)
 				{
 					containerHit = vRayCastHit;
