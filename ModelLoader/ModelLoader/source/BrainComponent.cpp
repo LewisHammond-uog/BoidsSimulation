@@ -58,8 +58,8 @@ void BrainComponent::Update(float a_fDeltaTime)
 	glm::vec3 v3ContainmentForce = glm::vec3(0.0f);
 	glm::vec3 v3AvoidanceForce = glm::vec3(0.0f);
 	CalculateCollisionForces(v3ContainmentForce, v3AvoidanceForce);
-	vV3WeightedForces.push(v3ContainmentForce);
-	vV3WeightedForces.push(v3AvoidanceForce);
+	vV3WeightedForces.push(v3ContainmentForce * m_pDebugUI->GetUIInputValues()->fInputContainmentForce);
+	vV3WeightedForces.push(v3AvoidanceForce * m_pDebugUI->GetUIInputValues()->fInputContainmentForce);
 
 	/*~~~~FLOCKING~~~~*/
 	//Get all of our flocking values - we call the function by ref so the values are populated
@@ -334,7 +334,7 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 /// Calculates both the containment and collision avoidance forces using a shared
 /// raycast between both
 /// </summary>
-/// <returns>The sum of the containent and collision avoidance forces</returns>
+/// <returns>(Unweighted) The sum of the containent and collision avoidance forces</returns>
 glm::vec3 BrainComponent::CalculateCollisionForces(glm::vec3& a_v3ContainmentForce, glm::vec3& a_v3CollisionAvoidForce) const
 {
 
