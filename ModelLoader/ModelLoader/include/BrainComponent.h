@@ -39,11 +39,9 @@ private:
 	glm::vec3 CalculateSeekForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const;
 	glm::vec3 CalculateFleeForce(const glm::vec3& a_v3Target, const glm::vec3& a_v3CurrentPos) const;
 	glm::vec3 CalculateWanderForce(UIInputValues* a_pUIValues);
-
 	//Flocking Behaviours
 	glm::vec3 CalculateFlockingForces(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;
 	void ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const;
-
 	//Collision Avoidance
 	glm::vec3 CalculateContainmentForce(ColliderComponent* a_pRayCaster);
 	glm::vec3 CalculateAvoidanceForce(RayCastHitsInfo* a_rayResults) const;
@@ -56,6 +54,7 @@ private:
 	
 	//Current Velocity of the boid
 	glm::vec3 m_v3CurrentVelocity;
+	
 	//Projected point we are wandering to
 	glm::vec3 m_v3WanderPoint;
 
@@ -64,13 +63,17 @@ private:
 
 	#pragma region Boid Defaults
 	
-	//Brain Defaults - Max force and our neighbour hood
-	const float mc_fMaxSpeed = 0.2f;
-	const glm::vec3 mc_v3MaxForce = glm::vec3(0.2f,0.2f,0.2f);
-	const glm::vec3 mc_v3MinForce = glm::vec3(-0.2f,-0.2f,-0.2f);
+	/*
+	 * Defaults for the boid, limitiing it's speed, velocity
+	 * and force per frame
+	 */
+	//Max force that can be applied each frame
+	const glm::vec3 mc_v3MaxForce = glm::vec3(20.f, 20.f, 20.f);
+	const glm::vec3 mc_v3MinForce = glm::vec3(-20.f,-20.f,-20.f);
+	//Overall maximum and minimum velocities
 	const glm::vec3 mc_v3MaxVelocity = glm::vec3(2.f, 2.f, 2.f);
 	const glm::vec3 mc_v3MinVelocity = glm::vec3(-2.f, -2.f, -2.f);
-	
+
 	float m_fNeighbourRadius = 5.0f;
 	
 	#pragma endregion 

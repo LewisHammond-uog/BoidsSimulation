@@ -16,6 +16,9 @@
 class CollisionInfo;
 class RayCastHitsInfo;
 
+/// <summary>
+/// Component used for detecting collisions between 2 entities in the world
+/// </summary>
 class ColliderComponent : public Component {
 	friend class CollisionInfo;
 	friend class RayCastHitsInfo;

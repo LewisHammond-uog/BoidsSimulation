@@ -107,11 +107,8 @@ void BrainComponent::Update(float a_fDeltaTime)
 	v3FinalForce = glm::clamp(v3FinalForce, mc_v3MinForce, mc_v3MaxForce);
 
 	//Calculate Speed and direction, apply limits on speed 
-	m_v3CurrentVelocity = v3FinalForce;
-	float fSpeed = glm::length(m_v3CurrentVelocity);
-	fSpeed = glm::clamp(fSpeed, 2.f, 5.f); //Limit our Speed
-	glm::vec3 v3Dir = m_v3CurrentVelocity / fSpeed; //Get our direction, if direction is 0 make it our forward
-	m_v3CurrentVelocity = fSpeed * v3Dir; //Re add speed with direction to get new velocity
+	m_v3CurrentVelocity += v3FinalForce;
+	m_v3CurrentVelocity = glm::clamp(m_v3CurrentVelocity, mc_v3MinVelocity, mc_v3MaxVelocity);
 	
 	v3CurrentPos += m_v3CurrentVelocity * a_fDeltaTime;
 	v3Forward = glm::length(m_v3CurrentVelocity) > 0.f ? glm::normalize(m_v3CurrentVelocity) : glm::vec3(0.f, 0.f, 1.f);
@@ -136,7 +133,7 @@ glm::vec3 BrainComponent::CalculateSeekForce(const glm::vec3& a_v3Target, const 
 	const glm::vec3 v3TargetDir = GetPointDirection(a_v3Target, a_v3CurrentPos);
 
 	//Calc New Velocity
-	const glm::vec3 v3NewVelocity = v3TargetDir * mc_fMaxSpeed;
+	const glm::vec3 v3NewVelocity = v3TargetDir;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
@@ -154,7 +151,7 @@ glm::vec3 BrainComponent::CalculateFleeForce(const glm::vec3& a_v3Target, const 
 	const glm::vec3 v3TargetDir = GetPointDirection(a_v3CurrentPos, a_v3Target);
 
 	//Calc New Velocity
-	const glm::vec3 v3NewVelocity = v3TargetDir * mc_fMaxSpeed;
+	const glm::vec3 v3NewVelocity = v3TargetDir;
 
 	//Force is target velocity - current velocity
 	return (v3NewVelocity - m_v3CurrentVelocity);
