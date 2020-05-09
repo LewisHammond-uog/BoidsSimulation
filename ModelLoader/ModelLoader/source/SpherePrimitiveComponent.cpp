@@ -9,7 +9,7 @@
 //Typedefs
 typedef PrimitiveComponent PARENT;
 
-SpherePrimitiveComponent::SpherePrimitiveComponent(Entity* a_pOwner, float a_fSphereRadius) :
+SpherePrimitiveComponent::SpherePrimitiveComponent(Entity* a_pOwner, const float a_fSphereRadius) :
 	PARENT(a_pOwner),
 	m_fSphereRadius(a_fSphereRadius)
 {

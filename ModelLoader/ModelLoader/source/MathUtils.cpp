@@ -11,7 +11,7 @@ void MathsUtils::SeedRandom()
 	static bool isSeeded = false;
 	if (!isSeeded)
 	{
-		srand(time(NULL));
+		srand(time(nullptr));
 		isSeeded = true;
 	}
 }

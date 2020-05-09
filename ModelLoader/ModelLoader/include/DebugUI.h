@@ -8,13 +8,15 @@
 typedef enum class ForceWeight {
 	FORCE_WEIGHT_CONTAINMENT,
 	FORCE_WEIGHT_COLLISION_AVOID,
-	FORCE_WEIGHT_SEPERATION,
+	FORCE_WEIGHT_Separation,
 	FORCE_WEIGHT_ALIGNMENT,
 	FORCE_WEIGHT_COHESION,
 	FORCE_WEIGHT_WANDER,
 
 	FORCE_WEIGHT_COUNT //Number of force weights
 }FlockingBehaviourType;
+
+// ReSharper disable CppInconsistentNaming
 
 /// <summary>
 /// Struct for storing all of the values that the user has input
@@ -24,9 +26,10 @@ struct UIInputValues
 {
 public:
 	//FORCES
+
 	float fInputContainmentForce = 5.f;
 	float fInputCollisionAvoidForce = 0.f;
-	float fInputSeperationForce = 0.f;
+	float fInputSeparationForce = 0.f;
 	float fInputAlignmentForce = 0.f;
 	float fInputCohesionForce = 0.f;
 	float fInputWanderForce = 0.f;
@@ -42,6 +45,8 @@ public:
 	bool bShowColliders = false;
 };
 
+// ReSharper restore CppInconsistentNaming
+
 class DebugUI {
 
 public:
@@ -56,13 +61,13 @@ public:
 	UIInputValues* GetUIInputValues();
 
 	//Get if this UI has the mouse in focus
-	bool HasMouseFocus();
+	static bool HasMouseFocus();
 	
 private:
 	//Private Constructors/Destructors
 	//that prevent duplicaton of the singleton
-	DebugUI();
-	~DebugUI();
+	DebugUI() = default;
+	~DebugUI() = default;
 
 	//Instance of the debug UI
 	static DebugUI* s_pUIInstance; //Single instance of this UI

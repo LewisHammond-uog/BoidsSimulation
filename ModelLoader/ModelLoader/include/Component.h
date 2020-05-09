@@ -10,7 +10,7 @@ class Shader;
 class Component
 {
 public:
-	Component(Entity* a_pOwner);
+	explicit Component(Entity* a_pOwner);
 	virtual ~Component();
 
 	virtual void Update(float a_fDeltaTime) = 0; //Pure Virtual Function

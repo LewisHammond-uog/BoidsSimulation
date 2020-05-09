@@ -26,7 +26,7 @@ struct RayCastHit;
 class BrainComponent : public Component
 {
 public:
-	BrainComponent(Entity* a_pOwner);
+	explicit BrainComponent(Entity* a_pOwner);
 	~BrainComponent() = default;
 
 	void Update(float a_fDeltaTime) override;

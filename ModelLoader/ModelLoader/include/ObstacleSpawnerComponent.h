@@ -14,16 +14,16 @@
 class ObstacleSpawnerComponent : public Component
 {
 public:
-	ObstacleSpawnerComponent(Entity* a_pOwner);
+	explicit ObstacleSpawnerComponent(Entity* a_pOwner);
 	~ObstacleSpawnerComponent() = default;
 
 	//Update/Draw Functions
-	virtual void Update(float a_fDeltaTime) override;
-	virtual void Draw(Shader* a_pShader) override;
+	void Update(float a_fDeltaTime) override;
+	void Draw(Shader* a_pShader) override;
 
 private:
 
-	void SpawnObstacle(glm::vec3 a_v3Position);
+	void SpawnObstacle(glm::vec3 a_v3Position) const;
 
 	glm::vec3 GetObstacleSpawnPos() const;
 

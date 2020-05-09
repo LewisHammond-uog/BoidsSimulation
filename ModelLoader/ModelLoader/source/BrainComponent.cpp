@@ -1,8 +1,6 @@
 #include "BrainComponent.h"
 
 //C++ Includes
-#define _USE_MATH_DEFINES //Use Math Defines so we can use pi
-#include <math.h>
 #include <queue>
 
 
@@ -237,7 +235,7 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 		return glm::vec3(0.f);
 	}
 	//Get our position it is the only part of the transform we use
-	glm::vec3 v3OwnerPos = pOwnerTransform->GetCurrentPosition();
+	const glm::vec3 v3OwnerPos = pOwnerTransform->GetCurrentPosition();
 
 	/*
 	Loop through all of our entities and calculate
@@ -326,7 +324,7 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 	UIInputValues* pForceValues = m_pDebugUI->GetUIInputValues();
 		
 	//Apply the UI weights to the forces
-	a_v3SeparationForce *= pForceValues->fInputSeperationForce;
+	a_v3SeparationForce *= pForceValues->fInputSeparationForce;
 	a_v3AlignmentForce *= pForceValues->fInputAlignmentForce;
 	a_v3CohesionForce *= pForceValues->fInputCohesionForce;
 }
@@ -405,7 +403,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(std::vector<RayCastHit*>& a_
 		{
 			//Get the closest collision so we don't end up getting
 			//the normal of the otherside of the containing wall
-			const float hitDist = (currentHit->m_fHitFraction);
+			const float hitDist = currentHit->m_fHitFraction;
 			if (hitDist > closestHitDist)
 			{
 				containerHit = currentHit;
@@ -445,12 +443,12 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(std::vector<RayCastHit*>& a_vR
 	for (int i = 0; i < a_vRayCastHits.size(); ++i)
 	{
 		RayCastHit* currentHit = a_vRayCastHits[i];
-		ENTITY_TYPE hitType = currentHit->m_pHitEntity->GetEntityType();
+		const ENTITY_TYPE hitType = currentHit->m_pHitEntity->GetEntityType();
 		if (hitType == ENTITY_TYPE::ENTITY_TYPE_OBSTACLE || hitType == ENTITY_TYPE::ENTITY_TYPE_BOID)
 		{
 			//Get the closest collision so we don't end up getting
 			//the normal of the otherside of the obstacle
-			float hitDist = (currentHit->m_fHitFraction);
+			const float hitDist = currentHit->m_fHitFraction;
 			if (hitDist > closestHitDist)
 			{
 				containerHit = currentHit;
@@ -494,15 +492,15 @@ std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays() const
 	}
 	
 	//Get our current position, so we can make our rays relative
-	glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();
+	const glm::vec3 v3CurrentPos = pTransform->GetCurrentPosition();
 
 	//Number of directions we have (6 all directions around the boid)
 	constexpr int iDirectionCount = 6;
 	
 	//Get all of the directions that we want to cast in
-	glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
-	glm::vec3 v3Right = pTransform->GetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR);
-	glm::vec3 v3Up = pTransform->GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
+	const glm::vec3 v3Forward = pTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
+	const glm::vec3 v3Right = pTransform->GetEntityMatrixRow(MATRIX_ROW::RIGHT_VECTOR);
+	const glm::vec3 v3Up = pTransform->GetEntityMatrixRow(MATRIX_ROW::UP_VECTOR);
 	glm::vec3 vV3PositiveDirections[3] = { v3Forward,v3Right,v3Up };
 
 	//Loop through the directions and mutiply half of them by -1 so we have the inverse's
@@ -511,7 +509,7 @@ std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays() const
 		//Divide the current direction by 2 so that we grab
 		//the direction twice and on 1 of those times * it by -1 so
 		//we get the inverse
-		int iCurrentDirectionIndex = floor(i / 2);
+		const int iCurrentDirectionIndex = floor(i / 2);
 		
 		glm::vec3 v3CurrentRayDir = vV3PositiveDirections[iCurrentDirectionIndex];
 		
@@ -522,7 +520,7 @@ std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays() const
 		}
 
 		//Create a ray from the direction and our current position
-		glm::vec3 v3EndPos = v3CurrentPos + (v3CurrentRayDir * m_fNeighbourRadius); //End pos is direction * distance, in this case our neighbourbood radius plus our velcityy
+		const glm::vec3 v3EndPos = v3CurrentPos + (v3CurrentRayDir * m_fNeighbourRadius); //End pos is direction * distance, in this case our neighbourbood radius plus our velcityy
 		rp3d::Ray* pCreatedRay = new rp3d::Ray(v3CurrentPos, v3EndPos);
 		vRays.push_back(pCreatedRay);
 	}

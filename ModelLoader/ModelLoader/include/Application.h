@@ -14,15 +14,15 @@ class Application
 protected:
 
 	Application();
-	virtual ~Application();
+	virtual ~Application() = default;
 
-	//Iniitalise/Deinitalise the application
-	bool Initalise();
-	void Deinitalise();
+	//Iniitalise/Deinitialize the application
+	bool Initialize();
+	void Deinitialize();
 
 	//Update Application
-	void Update();
-	void Render();
+	virtual bool Update();
+	virtual void Render();
 	
 
 	//Window that the application is rendering to
@@ -39,7 +39,7 @@ protected:
 private:
 
 	//OpenGL Callback functions
-	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+	static void framebuffer_size_callback(GLFWwindow* a_window, int a_width, int a_height);
 
 
 };

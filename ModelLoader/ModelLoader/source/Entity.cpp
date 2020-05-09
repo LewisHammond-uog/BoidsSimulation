@@ -3,7 +3,7 @@
 //Typedefs
 typedef std::pair<const unsigned int, Entity*> EntityPair;
 
-//Initalise Statics
+//Initialize Statics
 unsigned int Entity::s_uEntityCount = 0;
 std::map<const unsigned int, Entity*> Entity::s_xEntityMap;
 
@@ -66,7 +66,7 @@ void Entity::Draw(Shader* a_pShader)
 /// Set this entity's type
 /// </summary>
 /// <param name="a_eType">Type to set</param>
-void Entity::SetEntityType(ENTITY_TYPE a_eType)
+void Entity::SetEntityType(const ENTITY_TYPE a_eType)
 {
 	if(a_eType < ENTITY_TYPE::ENTITY_TYPE_COUNT)
 	{
@@ -97,7 +97,7 @@ void Entity::AddComponent(Component* a_pComponentToAdd)
 /// Remove a component from this entity 
 /// </summary>
 /// <param name="a_pComponentToRemove">Component to Remove</param>
-/// <param name="deleteComponent">If we should delete this component after it is removed</param>
+/// <param name="a_bDeleteComponent">If we should delete this component after it is removed</param>
 void Entity::RemoveComponent(Component* a_pComponentToRemove, const bool a_bDeleteComponent /*= false*/)
 {
 	//Loop through all of the components and check to see if we

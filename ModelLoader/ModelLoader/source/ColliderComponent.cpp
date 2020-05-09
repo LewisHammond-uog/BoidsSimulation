@@ -231,7 +231,7 @@ bool ColliderComponent::IsColliding(const bool a_bUseAABB) const
 /// <param name="a_bUseAABB">Whether we should use AABB testing for collisions, rather than more
 /// precise methods (i.e mesh)</param>
 /// <returns>If a collision is occouring</returns>
-bool ColliderComponent::IsColliding(ColliderComponent* a_pOtherCollider, bool a_bUseAABB) const
+bool ColliderComponent::IsColliding(ColliderComponent* a_pOtherCollider, const bool a_bUseAABB) const
 {
 	//Check if the collision check is valid - all pointers are not null
 	if (IsCollisionCheckValid(a_pOtherCollider)) {

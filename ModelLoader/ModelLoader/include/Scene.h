@@ -23,10 +23,10 @@ public:
 	
 	static Scene* GetInstance();
 
-	bool Initalise(bool a_bInitApplication);
-	bool Update();
-	void Render();
-	void DeInitlise(bool a_bCloseApplication);
+	bool Initialize(bool a_bInitApplication);
+	virtual bool Update();
+	void Render() override;
+	void DeInitialize(bool a_bCloseApplication);
 
 	//Get the collision world - used for collider components
 	rp3d::CollisionWorld* GetCollisionWorld() const;
@@ -48,7 +48,6 @@ private:
 
 	CameraComponent* m_pCamera;
 	Shader* m_ourShader;
-	Model* m_pNanoSuitModel;
 
 	//All loaded models and number to load
 	const int m_iModelCount = 15;

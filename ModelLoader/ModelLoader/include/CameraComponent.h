@@ -33,7 +33,7 @@ public:
 
 	
 	//Reqiured Update/Draw Functions
-	virtual void Update(float a_fDeltaTime) override;
+	void Update(float a_fDeltaTime) override;
 	void Draw(Shader* a_pShader) override {};
 
 	glm::mat4 GetViewMatrix() const;
@@ -59,7 +59,7 @@ private:
 	GLFWwindow* m_pWindow;
 
 	//Mouse button for allowing camera movement
-	int mc_iCamUseBtn = GLFW_MOUSE_BUTTON_1;
+	int m_iCamUseBtn = GLFW_MOUSE_BUTTON_1;
 
 	//Camera Attributes
 	glm::vec3 m_v3WorldUp;

@@ -13,8 +13,7 @@ int main()
 	Scene* pScene = Scene::GetInstance();
 
 	if (pScene) {
-
-		bool bIsInitalised = pScene->Initalise(true);
+		const bool bIsInitalised = pScene->Initialize(true);
 
 		if (bIsInitalised) {
 
@@ -25,7 +24,7 @@ int main()
 				pScene->Render();
 			}
 
-			pScene->DeInitlise(true);
+			pScene->DeInitialize(true);
 		}
 	}
 

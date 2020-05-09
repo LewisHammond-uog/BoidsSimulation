@@ -25,7 +25,7 @@ public:
 	
 protected:
 	//Protected Constructors so that we cannot instantiate this class
-	PrimitiveComponent(Entity* a_pOwner);
+	explicit PrimitiveComponent(Entity* a_pOwner);
 	~PrimitiveComponent() = default;
 
 	enum PrimitiveTypes

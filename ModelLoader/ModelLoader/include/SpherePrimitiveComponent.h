@@ -1,15 +1,12 @@
 #ifndef __SPHERE_PRIMITIVE_COMPONENT_H__
 #define __SPHERE_PRIMITIVE_COMPONENT_H__
 
-//Project Includes
-#include <glm/glm.hpp>
-
 #include "PrimitiveComponent.h"
 
 class SpherePrimitiveComponent : public PrimitiveComponent
 {
 public:
-	SpherePrimitiveComponent(Entity* a_pOwner, float a_fSphereRadius = 1.0f);
+	explicit SpherePrimitiveComponent(Entity* a_pOwner, float a_fSphereRadius = 1.0f);
 	~SpherePrimitiveComponent() = default;
 
 	//Function to set size

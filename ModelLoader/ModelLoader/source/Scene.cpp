@@ -14,11 +14,8 @@
 
 //Imgui Includes
 #include <imgui/imgui.h>
-#include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-//C++ Includes
-#include <iostream>
 
 //Project Includes
 #include "Entity.h"
@@ -30,9 +27,7 @@
 #include "BrainComponent.h"
 #include "ColliderComponent.h"
 #include "CameraComponent.h"
-#include "BoxPrimitiveComponent.h"
 #include "MathsUtils.h"
-#include "SpherePrimitiveComponent.h"
 #include "ObstacleSpawnerComponent.h"
 #include "RaycastComponent.h"
 
@@ -59,11 +54,11 @@ Scene::Scene() : Application() {
 
 
 
-bool Scene::Initalise(bool a_bInitApplication){
+bool Scene::Initialize(const bool a_bInitApplication){
 
 	//Call Application Init Function
 	if (a_bInitApplication) {
-		if (!Application::Initalise()) {
+		if (!Application::Initialize()) {
 			//return false if application did not
 			//initalise properly
 			return false;
@@ -135,6 +130,7 @@ bool Scene::Initalise(bool a_bInitApplication){
 
 		//Raycast Component
 		RaycastComponent* pRayCaster = new RaycastComponent(pEntity, m_pSceneCollisionWorld);
+		pEntity->AddComponent(pRayCaster);
 		
 	}
 	
@@ -207,7 +203,7 @@ void Scene::Render() {
 }
 
 
-void Scene::DeInitlise(bool a_bCloseApplication) {
+void Scene::DeInitialize(const bool a_bCloseApplication) {
 
 	
 	//Delete all of our models, only is we are destroying
@@ -232,16 +228,12 @@ void Scene::DeInitlise(bool a_bCloseApplication) {
 	for (xIter = existingEntityMap.begin(); xIter != existingEntityMap.end(); ++xIter)
 	{
 		Entity* pEntity = xIter->second;
-		if (pEntity) {
-			delete pEntity;
-		}
+		delete pEntity;
 	}
 
 	//Destory Collision World
-	if (m_pSceneCollisionWorld != nullptr) {
-
-		delete m_pSceneCollisionWorld;
-	}
+	delete m_pSceneCollisionWorld;
+	
 
 	//Destory Gizmos
 	Gizmos::destroy();
@@ -295,10 +287,10 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 
 	//todo - there has to be a better way to do this
 	//Array of the wall sizes and positions that we need
-	glm::vec3 aV3wallSizes[3] = {	glm::vec3(a_fBoundsSize + fWallThickness,a_fBoundsSize,fWallThickness + fWallThickness),
+	glm::vec3 aV3WallSizes[3] = {	glm::vec3(a_fBoundsSize + fWallThickness,a_fBoundsSize,fWallThickness + fWallThickness),
 									glm::vec3(a_fBoundsSize + fWallThickness,fWallThickness,a_fBoundsSize + fWallThickness),
 									glm::vec3(fWallThickness,	a_fBoundsSize + fWallThickness,a_fBoundsSize + fWallThickness) };
-	glm::vec3 aV3wallPositions[iWallCount] = {	glm::vec3(0.f,0.f,a_fBoundsSize), glm::vec3(0.f,0.f,-a_fBoundsSize),
+	glm::vec3 aV3WallPositions[iWallCount] = {	glm::vec3(0.f,0.f,a_fBoundsSize), glm::vec3(0.f,0.f,-a_fBoundsSize),
 										glm::vec3(0.f,a_fBoundsSize,0.0f), glm::vec3(0.f,-a_fBoundsSize,0.f),
 										glm::vec3(a_fBoundsSize,0.0f,0.0f), glm::vec3(-a_fBoundsSize,0.0f,0.f), };
 
@@ -307,9 +299,9 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 	for(int i = 0; i < iWallCount; ++i)
 	{
 		//Get the size of the current wall
-		const glm::vec3 currentWallSize = aV3wallSizes[i / 2];
+		const glm::vec3 currentWallSize = aV3WallSizes[i / 2];
 		//Get the position of the current Wall
-		const glm::vec3 currentWallPosition = aV3wallPositions[i];
+		const glm::vec3 currentWallPosition = aV3WallPositions[i];
 
 		//Create an entity to represent our wall
 		Entity* pWallEntity = new Entity();
@@ -334,7 +326,7 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 // -------------------------------------------------------
 void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	Scene* pScene = Scene::GetInstance();
+	Scene* pScene = GetInstance();
 	if (!pScene) {
 		return;
 	}
@@ -364,7 +356,7 @@ void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 // ----------------------------------------------------------------------
 void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	Scene* pScene = Scene::GetInstance();
+	Scene* pScene = GetInstance();
 	if (!pScene && !pScene->m_pCamera) {
 		return;
 	}
@@ -377,7 +369,7 @@ void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void Scene::toggle_mouse_input_mode(GLFWwindow* window, int button, int action, int mods)
 {
 
-	Scene* pScene = Scene::GetInstance();
+	Scene* pScene = GetInstance();
 	if (!pScene && !pScene->m_pCamera) {
 		return;
 	}

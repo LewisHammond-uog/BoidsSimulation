@@ -56,7 +56,7 @@ void CameraComponent::Update(float a_fDeltaTime)
 	
 	//Get if we should be moving the camera, if we are process movement
 	//and set GLFW mouse mode
-	if(glfwGetMouseButton(m_pWindow, mc_iCamUseBtn) == GLFW_PRESS)
+	if(glfwGetMouseButton(m_pWindow, m_iCamUseBtn) == GLFW_PRESS)
 	{
 		//Process the input that we have received
 		ProcessInput(a_fDeltaTime);
@@ -123,7 +123,7 @@ void CameraComponent::ProcessMouseScroll(float a_fYOffset)
 /// <returns>GLFW_MOUSE_BUTTON</returns>
 int CameraComponent::GetActivateCamBtn() const
 {
-	return mc_iCamUseBtn;
+	return m_iCamUseBtn;
 }
 
 /// <summary>

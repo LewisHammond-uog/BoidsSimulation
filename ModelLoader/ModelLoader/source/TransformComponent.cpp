@@ -18,7 +18,7 @@ TransformComponent::TransformComponent(Entity* a_pOwner) :
 void TransformComponent::SetEntityMatrixRow(MATRIX_ROW a_eRow, const glm::vec3 a_v3Vec)
 {
 	const float finalVec4Value = a_eRow == MATRIX_ROW::POSITION_VECTOR ? 1.f : 0.0f;
-	m_m4EntityMatrix[(int)a_eRow] = glm::vec4(a_v3Vec, finalVec4Value);
+	m_m4EntityMatrix[static_cast<int>(a_eRow)] = glm::vec4(a_v3Vec, finalVec4Value);
 }
 
 /// <summary>
@@ -28,7 +28,7 @@ void TransformComponent::SetEntityMatrixRow(MATRIX_ROW a_eRow, const glm::vec3 a
 /// <returns>Matrix Row as Vector 3</returns>
 glm::vec3 TransformComponent::GetEntityMatrixRow(MATRIX_ROW a_eRow)
 {
-	return m_m4EntityMatrix[(int)a_eRow];
+	return m_m4EntityMatrix[static_cast<int>(a_eRow)];
 }
 
 ///<summary>

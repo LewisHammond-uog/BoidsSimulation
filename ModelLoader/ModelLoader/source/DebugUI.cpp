@@ -54,8 +54,8 @@ void DebugUI::Update() {
 		if (ImGui::Button("Restart Scene"))
 		{
 			ImGui::Text("Restarting...");
-			Scene::GetInstance()->DeInitlise(false);
-			Scene::GetInstance()->Initalise(false);
+			Scene::GetInstance()->DeInitialize(false);
+			Scene::GetInstance()->Initialize(false);
 		}
 	}
 
@@ -86,7 +86,7 @@ void DebugUI::Update() {
 
 		//Flocking Forces
 		ImGui::Text("Flocking Forces");
-		ImGui::SliderFloat("Seperation Force Weight", &m_uiValues.fInputSeperationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Seperation Force Weight", &m_uiValues.fInputSeparationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Alignment Force Weight", &m_uiValues.fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Cohension Force Weight", &m_uiValues.fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Wander Force Weight", &m_uiValues.fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
@@ -129,12 +129,4 @@ UIInputValues* DebugUI::GetUIInputValues()
 bool DebugUI::HasMouseFocus()
 {
 	return ImGui::GetIO().WantCaptureMouse;
-}
-
-DebugUI::DebugUI()
-{
-}
-
-DebugUI::~DebugUI()
-{
 }

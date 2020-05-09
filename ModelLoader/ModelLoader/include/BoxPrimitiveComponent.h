@@ -9,7 +9,7 @@
 class BoxPrimitiveComponent : public PrimitiveComponent
 {
 public:
-	BoxPrimitiveComponent(Entity* a_pOwner, glm::vec3 a_v3BoxDimensions = glm::vec3(1, 1, 1));
+	explicit BoxPrimitiveComponent(Entity* a_pOwner, glm::vec3 a_v3BoxDimensions = glm::vec3(1, 1, 1));
 	~BoxPrimitiveComponent() = default;
 
 	//Function to set size

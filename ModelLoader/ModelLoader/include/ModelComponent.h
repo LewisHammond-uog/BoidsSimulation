@@ -12,7 +12,7 @@ class Model;
 class ModelComponent : public Component
 {
 public:
-	ModelComponent(Entity* a_pOwner);
+	explicit ModelComponent(Entity* a_pOwner);
 	~ModelComponent() = default;
 
 	void Update(float a_fDeltaTime) override {};

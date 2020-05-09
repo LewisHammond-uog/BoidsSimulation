@@ -87,14 +87,14 @@ std::vector<RayCastHitsInfo*> RaycastComponent::MutiRayCast(std::vector<rp3d::Ra
 #pragma region Raycast Callback Info
 
 //Function called when the ray cast hits a collider in the world
-rp3d::decimal RayCastHitsInfo::notifyRaycastHit(const rp3d::RaycastInfo& info)
+rp3d::decimal RayCastHitsInfo::notifyRaycastHit(const rp3d::RaycastInfo& a_pRaycastInfo)
 {
 	//Create a raycast hit and fill it with our info
 	RayCastHit* hit = new RayCastHit();
-	hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(info.body);
-	hit->m_v3HitPoint = glm::vec3(info.worldPoint.x, info.worldPoint.y, info.worldPoint.z);
-	hit->m_v3HitNormal = glm::vec3(info.worldNormal.x, info.worldNormal.y, info.worldNormal.z);
-	hit->m_fHitFraction = info.hitFraction;
+	hit->m_pHitEntity = ColliderComponent::GetEntityFromCollisionBody(a_pRaycastInfo.body);
+	hit->m_v3HitPoint = glm::vec3(a_pRaycastInfo.worldPoint.x, a_pRaycastInfo.worldPoint.y, a_pRaycastInfo.worldPoint.z);
+	hit->m_v3HitNormal = glm::vec3(a_pRaycastInfo.worldNormal.x, a_pRaycastInfo.worldNormal.y, a_pRaycastInfo.worldNormal.z);
+	hit->m_fHitFraction = a_pRaycastInfo.hitFraction;
 
 	//Add to hits list
 	m_vRayCastHits.push_back(hit);

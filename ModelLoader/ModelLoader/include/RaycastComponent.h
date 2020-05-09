@@ -64,7 +64,7 @@ public:
 	~RayCastHitsInfo()
 	{
 		if (!m_vRayCastHits.empty()) {
-			for (int i = 0; i < m_vRayCastHits.size(); ++i)
+			for (unsigned int i = 0; i < m_vRayCastHits.size(); ++i)
 			{
 				delete m_vRayCastHits[i];
 			}
@@ -72,7 +72,7 @@ public:
 		}
 	}
 
-	rp3d::decimal notifyRaycastHit(const reactphysics3d::RaycastInfo& raycastInfo) override;
+	rp3d::decimal notifyRaycastHit(const reactphysics3d::RaycastInfo& a_pRaycastInfo) override;
 
 	//List of hits from this raycast
 	std::vector<RayCastHit*> m_vRayCastHits;

@@ -17,7 +17,7 @@ const float ObstacleSpawnerComponent::sc_fDefaultSpawnDistance = 3.0f;
 const float ObstacleSpawnerComponent::sc_fDefaultObstacleRadius = 0.25f;
 const unsigned int ObstacleSpawnerComponent::sc_fObstacleResolution = 10u;
 
-ObstacleSpawnerComponent::ObstacleSpawnerComponent(Entity* a_pOwner):
+ObstacleSpawnerComponent::ObstacleSpawnerComponent(Entity* a_pOwner) :
 	PARENT(a_pOwner),
 	m_bSpawnBtnThisFrame(false),
 	m_bSpawnBtnLastFrame(false),
@@ -70,7 +70,7 @@ void ObstacleSpawnerComponent::Draw(Shader* a_pShader)
 /// Spawns an obstacle at a given position
 /// </summary>
 /// <param name="a_v3Position">Position to spawn at</param>
-void ObstacleSpawnerComponent::SpawnObstacle(glm::vec3 a_v3Position)
+void ObstacleSpawnerComponent::SpawnObstacle(const glm::vec3 a_v3Position) const
 {
 	//Create an Entity
 	Entity* pObstacleEntity = new Entity();
@@ -100,7 +100,7 @@ void ObstacleSpawnerComponent::SpawnObstacle(glm::vec3 a_v3Position)
 /// <returns></returns>
 glm::vec3 ObstacleSpawnerComponent::GetObstacleSpawnPos() const
 {
-	//Initalise spawn pos to 0, so we can just return this if we fail
+	//Initialize spawn pos to 0, so we can just return this if we fail
 	glm::vec3 v3SpawnPos(0.f);
 	
 	if(!m_pOwnerEntity)
