@@ -14,7 +14,7 @@ typedef Component PARENT;
 
 //Declare Statics - Spawner Defaults
 const float ObstacleSpawnerComponent::sc_fDefaultSpawnDistance = 3.0f;
-const float ObstacleSpawnerComponent::sc_fDefaultObstacleRadius = 0.25f;
+const float ObstacleSpawnerComponent::sc_fDefaultObstacleRadius = 1.f;
 const unsigned int ObstacleSpawnerComponent::sc_fObstacleResolution = 10u;
 
 /// <summary>

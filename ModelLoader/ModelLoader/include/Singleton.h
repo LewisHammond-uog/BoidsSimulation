@@ -16,7 +16,7 @@ public:
 	/// <returns></returns>
 	static T* GetInstance()
 	{
-		static MemGuard memg; // clean up on program end
+		static MemGuard destroyMemG; // clean up on program end
 		if(m_pInstance == nullptr)
 		{
 			m_pInstance = new T();
@@ -36,7 +36,8 @@ private:
 	static T* m_pInstance;
 
 
-	//Class for deletion on program end
+	//Class for deletion on program end,
+	//using c++ magic statics
 	class MemGuard {
       public: 
         ~MemGuard() {

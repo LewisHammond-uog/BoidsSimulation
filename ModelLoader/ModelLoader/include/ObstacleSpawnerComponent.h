@@ -45,7 +45,7 @@ private:
 	float m_fSpawnDistance; //Distance from the spawner that we create the obstacle
 	float m_fObstacleRadius; //Radius of the obstacle to create
 
-	const char* m_szName = "Obstacle";
+	const char* m_szName = "Obstacle Spawner";
 	
 	#pragma region Spawner Defaults
 	const static float sc_fDefaultSpawnDistance;
