@@ -20,10 +20,6 @@ typedef std::pair<const unsigned int, Entity*> BoidPair;
 BoidSpawner::BoidSpawner() :
 	m_iBoidCount(0u)
 {
-	//bug - This is not changed on scene restart and thus passes the wrong collision world to the boids
-	//Get the collision world
-	m_pBoidCollisionWorld = Scene::GetInstance()->GetCollisionWorld();
-
 	//Load all of the models 
 	LoadAllModels();
 }
@@ -36,12 +32,17 @@ BoidSpawner::~BoidSpawner()
 	m_lpActiveEntities.Clear();
 }
 
-
 /// <summary>
 /// Spawns a single boid
 /// </summary>
 void BoidSpawner::SpawnBoid()
 {
+	//Check that our collision world is valid
+	if(m_pBoidCollisionWorld == nullptr)
+	{
+		return;
+	}
+	
 	Entity* pEntity = new Entity();
 	pEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_BOID);
 
@@ -147,6 +148,14 @@ void BoidSpawner::DestroyBoids(const unsigned a_iCount)
 		m_lpActiveEntities.Pop(currentBoid);
 		DestroyBoid(currentBoid);
 	}
+}
+
+/// <summary>
+/// Sets the collision world used the spawn boids in to
+/// </summary>
+void BoidSpawner::SetCollisionWorld(rp3d::CollisionWorld* a_pCollisionWorld)
+{
+	m_pBoidCollisionWorld = a_pCollisionWorld;
 }
 
 /// <summary>

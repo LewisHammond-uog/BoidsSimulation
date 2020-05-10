@@ -26,8 +26,11 @@ public:
 	
 	void DestroyBoid(Entity* a_pEntity);
 	void DestroyBoids(unsigned int a_iCount);
+
+	void SetCollisionWorld(rp3d::CollisionWorld* a_pCollisionWorld);
 	
 	void UnloadAllModels();
+	
 private:
 	BoidSpawner();
 	~BoidSpawner();
@@ -42,7 +45,6 @@ private:
 
 	//Collision world to pass to boids
 	rp3d::CollisionWorld* m_pBoidCollisionWorld;
-
 
 	//All loaded models and number to load
 	const int m_iModelCount = 15;

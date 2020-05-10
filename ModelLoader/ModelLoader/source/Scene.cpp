@@ -102,6 +102,7 @@ bool Scene::Initialize(const bool a_bInitApplication){
 	GenerateBoundsVolume(DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds);
 	
 	//Create boids
+	BoidSpawner::GetInstance()->SetCollisionWorld(m_pSceneCollisionWorld);
 	BoidSpawner::GetInstance()->SpawnBoids(DebugUI::GetInstance()->GetUIInputValues()->iBoidCount);
 	
 	return true;
@@ -201,7 +202,6 @@ void Scene::DeInitialize(const bool a_bCloseApplication) {
 	//Destory Collision World
 	delete m_pSceneCollisionWorld;
 	
-
 	//Destory Gizmos
 	Gizmos::destroy();
 

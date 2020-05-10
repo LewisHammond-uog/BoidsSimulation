@@ -24,7 +24,7 @@ public:
 	static Scene* GetInstance();
 
 	bool Initialize(bool a_bInitApplication);
-	virtual bool Update();
+	bool Update() override;
 	void Render() override;
 	void DeInitialize(bool a_bCloseApplication);
 
@@ -52,9 +52,6 @@ private:
 	float m_fLastX; //Last X Position of the mouse
 	float m_fLastY; //Last Y Position of the mouse
 	bool m_bFirstMouse; //If this is the first time that we are geting mouse info
-
-	//Number of boids to spawn
-	const unsigned int mc_iBoidCount = 100;
 	
 	static Scene* s_pSceneInstance; //Single instance of this scene;
 };
