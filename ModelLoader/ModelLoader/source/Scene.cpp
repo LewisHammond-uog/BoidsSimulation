@@ -99,11 +99,11 @@ bool Scene::Initialize(const bool a_bInitApplication){
 	m_pSceneCollisionWorld = new rp3d::CollisionWorld();
 
 	//Create our world bounds
-	GenerateBoundsVolume(DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds);
+	GenerateBoundsVolume(DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds.value);
 	
 	//Create boids
 	BoidSpawner::GetInstance()->SetCollisionWorld(m_pSceneCollisionWorld);
-	BoidSpawner::GetInstance()->SpawnBoids(DebugUI::GetInstance()->GetUIInputValues()->iBoidCount);
+	BoidSpawner::GetInstance()->SpawnBoids(DebugUI::GetInstance()->GetUIInputValues()->iBoidCount.value);
 	
 	return true;
 }

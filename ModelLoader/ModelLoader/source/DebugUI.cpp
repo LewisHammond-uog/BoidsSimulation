@@ -61,32 +61,32 @@ void DebugUI::Update() {
 		ImGui::Text("Detection Values");
 
 		//Nehbourhood Radius
-		ImGui::SliderFloat("Neighbourhood Radius", &m_uiValues.fInputNeighbourRadius, 1.0f, 20.f);
+		ImGui::SliderFloat("Neighbourhood Radius", &m_uiValues.fInputNeighbourRadius.value, m_uiValues.fInputNeighbourRadius.min, m_uiValues.fInputNeighbourRadius.max);
 
 		ImGui::Spacing();
 		
 		//Collision Avoidance Forces
 		ImGui::Text("Collision Avoidance");
-		ImGui::SliderFloat("Containment Force Weight", &m_uiValues.fInputContainmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Collision Avoidance Force Weight", &m_uiValues.fInputCollisionAvoidForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Containment Force Weight", &m_uiValues.fInputContainmentForce.value, m_uiValues.fInputContainmentForce.min, m_uiValues.fInputContainmentForce.max);
+		ImGui::SliderFloat("Collision Avoidance Force Weight", &m_uiValues.fInputCollisionAvoidForce.value, m_uiValues.fInputCollisionAvoidForce.min, m_uiValues.fInputCollisionAvoidForce.max);
 		
 		ImGui::Spacing();
 
 		//Flocking Forces
 		ImGui::Text("Flocking Forces");
-		ImGui::SliderFloat("Seperation Force Weight", &m_uiValues.fInputSeparationForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Alignment Force Weight", &m_uiValues.fInputAlignmentForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Cohension Force Weight", &m_uiValues.fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
-		ImGui::SliderFloat("Wander Force Weight", &m_uiValues.fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
+		ImGui::SliderFloat("Separation Force Weight", &m_uiValues.fInputSeparationForce.value, m_uiValues.fInputSeparationForce.min, m_uiValues.fInputSeparationForce.max);
+		ImGui::SliderFloat("Alignment Force Weight", &m_uiValues.fInputAlignmentForce.value, m_uiValues.fInputAlignmentForce.min, m_uiValues.fInputAlignmentForce.max);
+		ImGui::SliderFloat("Cohesion Force Weight", &m_uiValues.fInputCohesionForce.value, m_uiValues.fInputCohesionForce.min, m_uiValues.fInputCohesionForce.max);
+		ImGui::SliderFloat("Wander Force Weight", &m_uiValues.fInputWanderForce.value, m_uiValues.fInputWanderForce.min, m_uiValues.fInputWanderForce.max);
 
 		//Wander Settings
 		if(ImGui::CollapsingHeader("Wander Settings"))
 		{
 			ImGui::Text("Settings for the sphere that is projected in front of the sphere.");
 			
-			ImGui::SliderFloat("Sphere Forward Projection", &m_uiValues.fInputWanderForward, 0.f, 5.f);
-			ImGui::SliderFloat("Sphere Jitter", &m_uiValues.fInputWanderJitter, 0.01f, 5.f);
-			ImGui::SliderFloat("Sphere Radius", &m_uiValues.fInputWanderRadius, 0.01f, 5.f);
+			ImGui::SliderFloat("Sphere Forward Projection", &m_uiValues.fInputWanderForward.value, m_uiValues.fInputWanderForward.min, m_uiValues.fInputWanderForward.max);
+			ImGui::SliderFloat("Sphere Jitter", &m_uiValues.fInputWanderJitter.value, m_uiValues.fInputWanderJitter.min, m_uiValues.fInputWanderJitter.max);
+			ImGui::SliderFloat("Sphere Radius", &m_uiValues.fInputWanderRadius.value, m_uiValues.fInputWanderRadius.min, m_uiValues.fInputWanderRadius.max);
 		}
 
 		
@@ -97,13 +97,13 @@ void DebugUI::Update() {
 	{
 		ImGui::Text("Adjust the world bounds size (Requires Scene Restart)");
 		
-		ImGui::SliderInt("World Bounds Size", &m_uiValues.iInputWorldBounds, 10.f, 50.f);
+		ImGui::SliderInt("World Bounds Size", &m_uiValues.iInputWorldBounds.value, 10.f, 50.f);
 		//Boid Count
-		if(ImGui::SliderInt("Boid Count", &m_uiValues.iBoidCount, 1.f, 250.f))
+		if(ImGui::SliderInt("Boid Count", &m_uiValues.iBoidCount.value, 1.f, 250.f))
 		{
 			//This is triggered when our boid count slider changes, when this happens
 			//we call the boid spawner to adjust the number of boids
-			BoidSpawner::GetInstance()->AdjustBoidCount(m_uiValues.iBoidCount);
+			BoidSpawner::GetInstance()->AdjustBoidCount(m_uiValues.iBoidCount.value);
 		}
 	}
 

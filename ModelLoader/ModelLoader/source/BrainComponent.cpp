@@ -35,7 +35,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 	UIInputValues* pForceValues = m_pDebugUI->GetUIInputValues();
 	
 	//Update Radius
-	m_fNeighbourRadius = pForceValues->fInputNeighbourRadius;
+	m_fNeighbourRadius = pForceValues->fInputNeighbourRadius.value;
 	
 	//Get transform component
 	TransformComponent* pTransform = m_pOwnerEntity->GetComponent<TransformComponent*>();
@@ -57,8 +57,8 @@ void BrainComponent::Update(float a_fDeltaTime)
 	glm::vec3 v3ContainmentForce = glm::vec3(0.0f);
 	glm::vec3 v3AvoidanceForce = glm::vec3(0.0f);
 	CalculateCollisionForces(v3ContainmentForce, v3AvoidanceForce);
-	vV3WeightedForces.push(v3ContainmentForce * m_pDebugUI->GetUIInputValues()->fInputContainmentForce);
-	vV3WeightedForces.push(v3AvoidanceForce * m_pDebugUI->GetUIInputValues()->fInputContainmentForce);
+	vV3WeightedForces.push(v3ContainmentForce * m_pDebugUI->GetUIInputValues()->fInputContainmentForce.value);
+	vV3WeightedForces.push(v3AvoidanceForce * m_pDebugUI->GetUIInputValues()->fInputContainmentForce.value);
 
 	/*~~~~FLOCKING~~~~*/
 	//Get all of our flocking values - we call the function by ref so the values are populated
@@ -73,7 +73,7 @@ void BrainComponent::Update(float a_fDeltaTime)
 
 	/*~~~~WANDER~~~~*/
 	//Get and weight wander force
-	glm::vec3 v3WanderForce = CalculateWanderForce(pForceValues) * pForceValues->fInputWanderForce;
+	glm::vec3 v3WanderForce = CalculateWanderForce(pForceValues) * pForceValues->fInputWanderForce.value;
 	vV3WeightedForces.push(v3WanderForce);
 
 	//Do weighted sum calcuations. Apply forces with their weighting and then check if
@@ -170,24 +170,24 @@ glm::vec3 BrainComponent::CalculateWanderForce(UIInputValues* a_pUIValues)
 	const glm::vec3 v3CurrentForward = pParentTransform->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR);
 	
 	//Project a point in front of us for the center of our sphere
-	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * a_pUIValues->fInputWanderForward);
+	const glm::vec3 v3SphereOrigin = v3CurrentPos + (v3CurrentForward * a_pUIValues->fInputWanderForward.value);
 
 	//If the magnitude of the vector is 0 then initalize our
 	//first wander point
 	if (glm::length(m_v3WanderPoint) == 0.0f) 
 	{
 		//Find a random point omn a sphere
-		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(a_pUIValues->fInputWanderRadius);
+		const glm::vec3 v3RandomPointOnSphere = glm::sphericalRand(a_pUIValues->fInputWanderRadius.value);
 		//Add this point on a sphere to the sphere we are casting out infront of us
 		m_v3WanderPoint = v3SphereOrigin + v3RandomPointOnSphere;
 	}
 
 	//Calculate direction to move to
-	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * a_pUIValues->fInputWanderRadius;
+	const glm::vec3 v3DirectionToTarget = GetPointDirection(m_v3WanderPoint, v3SphereOrigin) * a_pUIValues->fInputWanderRadius.value;
 	//Find out final target point
 	m_v3WanderPoint = v3SphereOrigin + v3DirectionToTarget;
 	//Add Jitter
-	m_v3WanderPoint += glm::sphericalRand(a_pUIValues->fInputWanderJitter);
+	m_v3WanderPoint += glm::sphericalRand(a_pUIValues->fInputWanderJitter.value);
 
 	return CalculateSeekForce(m_v3WanderPoint, v3CurrentPos);
 }
@@ -324,9 +324,9 @@ void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::v
 	UIInputValues* pForceValues = m_pDebugUI->GetUIInputValues();
 		
 	//Apply the UI weights to the forces
-	a_v3SeparationForce *= pForceValues->fInputSeparationForce;
-	a_v3AlignmentForce *= pForceValues->fInputAlignmentForce;
-	a_v3CohesionForce *= pForceValues->fInputCohesionForce;
+	a_v3SeparationForce *= pForceValues->fInputSeparationForce.value;
+	a_v3AlignmentForce *= pForceValues->fInputAlignmentForce.value;
+	a_v3CohesionForce *= pForceValues->fInputCohesionForce.value;
 }
 
 /// <summary>

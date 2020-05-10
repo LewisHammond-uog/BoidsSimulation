@@ -6,19 +6,20 @@
 
 #include "Singleton.h"
 
-//Enum for types of flocking values
-typedef enum class ForceWeight {
-	FORCE_WEIGHT_CONTAINMENT,
-	FORCE_WEIGHT_COLLISION_AVOID,
-	FORCE_WEIGHT_Separation,
-	FORCE_WEIGHT_ALIGNMENT,
-	FORCE_WEIGHT_COHESION,
-	FORCE_WEIGHT_WANDER,
+/// <summary>
+/// Struct for values that are used in the UI
+/// Containts the current value, minimum and maximum
+/// </summary>
+template <class T>
+struct UIRange
+{
+	UIRange(const T a_startValue, const  T a_minValue, const  T a_maxValue) :
+		value(a_startValue), min(a_minValue), max(a_maxValue) {};
 
-	FORCE_WEIGHT_COUNT //Number of force weights
-}FlockingBehaviourType;
-
-// ReSharper disable CppInconsistentNaming
+	T value; //Current Value
+	const T min;
+	const T max;
+};
 
 /// <summary>
 /// Struct for storing all of the values that the user has input
@@ -27,23 +28,22 @@ typedef enum class ForceWeight {
 struct UIInputValues
 {
 public:
-	//FORCES
-
-	float fInputContainmentForce = 5.f;
-	float fInputCollisionAvoidForce = 0.f;
-	float fInputSeparationForce = 0.f;
-	float fInputAlignmentForce = 0.f;
-	float fInputCohesionForce = 0.f;
-	float fInputWanderForce = 0.f;
+	//FORCES									//RANGE(start, min, max)	
+	UIRange<float> fInputContainmentForce		= UIRange<float>(5.f, 0.f, 5.f);
+	UIRange<float> fInputCollisionAvoidForce	= UIRange<float>(5.f, 0.f, 5.f);
+	UIRange<float> fInputSeparationForce		= UIRange<float>(0.f, 0.f, 5.f);
+	UIRange<float> fInputAlignmentForce			= UIRange<float>(0.f, 0.f, 5.f);
+	UIRange<float> fInputCohesionForce			= UIRange<float>(0.f, 0.f, 5.f);
+	UIRange<float> fInputWanderForce			= UIRange<float>(0.f, 0.f, 5.f);
 	//WANDER SETTINGS
-	float fInputWanderForward = 2.f;
-	float fInputWanderJitter = 0.05f;
-	float fInputWanderRadius = 0.33f;
+	UIRange<float> fInputWanderForward			= UIRange<float>(2.f, 0.f, 5.f);
+	UIRange<float> fInputWanderJitter			= UIRange<float>(0.05f, 0.f, 0.2f);
+	UIRange<float> fInputWanderRadius			= UIRange<float>(0.33f, 0.f, 1.f);
 	//NEIGHBOUR RADIUSS
-	float fInputNeighbourRadius = 5.0f;
+	UIRange<float> fInputNeighbourRadius		= UIRange<float>(0.f, 0.f, 5.f);
 	//WORLD SETTINGS
-	int iInputWorldBounds = 10;
-	int iBoidCount = 10;
+	UIRange<int> iInputWorldBounds				= UIRange<int>(10, 0, 100);
+	UIRange<int> iBoidCount						= UIRange<int>(25, 0, 250);;
 	//DEBUG
 	bool bShowColliders = false;
 };
@@ -51,7 +51,7 @@ public:
 // ReSharper restore CppInconsistentNaming
 
 class DebugUI : public Singleton<DebugUI> {
-	friend class Singleton<DebugUI>;
+	friend class Singleton<DebugUI>; //Friend for singleton management
 public:
 
 	void Update();
@@ -70,10 +70,6 @@ private:
 	//UI Position
 	const ImVec2 m_v2WindowPos = ImVec2(0, 0);
 	const ImVec2 m_v2WindowSize = ImVec2(300, 600);
-
-	//Max and min values
-	const float mc_fMinForceWeight = 0.0f;
-	const float mc_fMaxForceWeight = 5.0f;
 
 	//All of the UI Values
 	UIInputValues m_uiValues;
