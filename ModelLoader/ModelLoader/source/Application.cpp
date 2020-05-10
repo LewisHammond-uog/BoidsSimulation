@@ -15,16 +15,6 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-/*
-Application* Application::GetInstance()
-{
-	if (s_pAppInstance == nullptr) {
-		s_pAppInstance = new Application();
-	}
-
-	return s_pAppInstance;
-}
-*/
 
 Application::Application()
 {
@@ -44,7 +34,7 @@ bool Application::Initialize()
 
 	// glfw window creation
 	// --------------------
-	m_window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", nullptr, nullptr);
+	m_window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Boids - Under the Sea", nullptr, nullptr);
 	if (m_window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;

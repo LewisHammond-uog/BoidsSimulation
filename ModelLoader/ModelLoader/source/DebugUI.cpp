@@ -20,20 +20,52 @@ const float mc_fDefaultForce = 0.0f;
 /// </summary>
 void DebugUI::Update() {
 
+	//Draw general UI
+	DrawDebugUI();
+	
+	//Draw Inspector Window
+	DrawInspector();
+}
+
+/// <summary>
+/// Gets all of the values the user has input to the UI
+/// </summary>
+/// <returns></returns>
+UIInputValues* DebugUI::GetUIInputValues()
+{
+	return &m_uiValues;
+}
+
+
+/// <summary>
+/// Gets if the UI has the mouse hovered, clicked or
+/// otherwise interacting with
+/// </summary>
+/// <returns>If mouse is focused on the UI</returns>
+bool DebugUI::HasMouseFocus()
+{
+	return ImGui::GetIO().WantCaptureMouse;
+}
+
+/// <summary>
+/// Draw the debug UI
+/// </summary>
+void DebugUI::DrawDebugUI()
+{
 	//Setup Imgui window size and position
 	ImGuiIO& io = ImGui::GetIO();
-	ImGui::SetNextWindowPos(m_v2WindowPos, ImGuiCond_Always);
-	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(m_v2DebugWindowPos, ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(m_v2DebugWindowSize, ImGuiCond_FirstUseEver);
 
 	//Begin the drawing of the Window
 	ImGui::Begin("Boids UI");
-	
+
 	//FPS info tab
 	if (ImGui::CollapsingHeader("Game Info")) {
 		ImGui::Text("Application Average: %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 		ImGui::Spacing();
-		
+
 		//Tickbox to draw colliders
 		ImGui::Checkbox("Draw Collider Bounds", &m_uiValues.bShowColliders);
 
@@ -65,12 +97,12 @@ void DebugUI::Update() {
 		ImGui::SliderFloat("Neighbourhood Radius", &m_uiValues.fInputNeighbourRadius.value, m_uiValues.fInputNeighbourRadius.min, m_uiValues.fInputNeighbourRadius.max);
 
 		ImGui::Spacing();
-		
+
 		//Collision Avoidance Forces
 		ImGui::Text("Collision Avoidance");
 		ImGui::SliderFloat("Containment Force Weight", &m_uiValues.fInputContainmentForce.value, m_uiValues.fInputContainmentForce.min, m_uiValues.fInputContainmentForce.max);
 		ImGui::SliderFloat("Collision Avoidance Force Weight", &m_uiValues.fInputCollisionAvoidForce.value, m_uiValues.fInputCollisionAvoidForce.min, m_uiValues.fInputCollisionAvoidForce.max);
-		
+
 		ImGui::Spacing();
 
 		//Flocking Forces
@@ -81,10 +113,10 @@ void DebugUI::Update() {
 		ImGui::SliderFloat("Wander Force Weight", &m_uiValues.fInputWanderForce.value, m_uiValues.fInputWanderForce.min, m_uiValues.fInputWanderForce.max);
 
 		//Wander Settings
-		if(ImGui::CollapsingHeader("Wander Settings"))
+		if (ImGui::CollapsingHeader("Wander Settings"))
 		{
 			ImGui::Text("Settings for the sphere that is projected in front of the sphere.");
-			
+
 			ImGui::SliderFloat("Sphere Forward Projection", &m_uiValues.fInputWanderForward.value, m_uiValues.fInputWanderForward.min, m_uiValues.fInputWanderForward.max);
 			ImGui::SliderFloat("Sphere Jitter", &m_uiValues.fInputWanderJitter.value, m_uiValues.fInputWanderJitter.min, m_uiValues.fInputWanderJitter.max);
 			ImGui::SliderFloat("Sphere Radius", &m_uiValues.fInputWanderRadius.value, m_uiValues.fInputWanderRadius.min, m_uiValues.fInputWanderRadius.max);
@@ -92,13 +124,13 @@ void DebugUI::Update() {
 	}
 
 	//World Settings
-	if(ImGui::CollapsingHeader("World Settings"))
+	if (ImGui::CollapsingHeader("World Settings"))
 	{
 		ImGui::Text("Adjust the world bounds size (Requires Scene Restart)");
-		
+
 		ImGui::SliderInt("World Bounds Size", &m_uiValues.iInputWorldBounds.value, 10.f, 50.f);
 		//Boid Count
-		if(ImGui::SliderInt("Boid Count", &m_uiValues.iBoidCount.value, 1.f, 250.f))
+		if (ImGui::SliderInt("Boid Count", &m_uiValues.iBoidCount.value, 1.f, 250.f))
 		{
 			//This is triggered when our boid count slider changes, when this happens
 			//we call the boid spawner to adjust the number of boids
@@ -108,40 +140,17 @@ void DebugUI::Update() {
 
 	//End the drawing of the window
 	ImGui::End();
-
-	//Draw Inspector Window
-	DrawInspector();
-}
-
-/// <summary>
-/// Gets all of the values the user has input to the UI
-/// </summary>
-/// <returns></returns>
-UIInputValues* DebugUI::GetUIInputValues()
-{
-	return &m_uiValues;
-}
-
-
-/// <summary>
-/// Gets if the UI has the mouse hovered, clicked or
-/// otherwise interacting with
-/// </summary>
-/// <returns>If mouse is focused on the UI</returns>
-bool DebugUI::HasMouseFocus()
-{
-	return ImGui::GetIO().WantCaptureMouse;
 }
 
 /// <summary>
 /// Draw an inspector window to show boid infomation
 /// </summary>
-void DebugUI::DrawInspector()
+void DebugUI::DrawInspector() const
 {
 	//Setup Imgui window size and position
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui::SetNextWindowPos(m_v2InspectorPos, ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(m_v2InspectorSize, ImGuiCond_FirstUseEver);
 
 	//Begin the drawing of the Window
 	ImGui::Begin("Entity Inspector");
@@ -178,18 +187,6 @@ void DebugUI::DrawInspector()
 		{
 			ImGui::Text(m_vEntityComponents[i]->GetComponentName());
 		}
-
-		//If we are a boid allow the user to destroy
-		if(pEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_BOID)
-		{
-			if(ImGui::Button("Destroy"))
-			{
-				BoidSpawner::GetInstance()->DestroyBoid(pEntity);
-				//Decrease boid count value so it matches the real number of boids
-				m_uiValues.iBoidCount.value--;
-			}
-		}
-
 		
 	}else
 	{

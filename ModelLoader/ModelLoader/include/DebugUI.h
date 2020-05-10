@@ -39,9 +39,9 @@ struct UIInputValues
 	UIRange<float> fInputWanderJitter			= UIRange<float>(0.025f, 0.001f, 0.1f); //0.001 as we cannot have 0 jitter as we use spehere rand
 	UIRange<float> fInputWanderRadius			= UIRange<float>(0.625f, 0.001f, 2.f); //0.001 as we cannot have a 0 radius sphere
 	//NEIGHBOUR RADIUS
-	UIRange<float> fInputNeighbourRadius		= UIRange<float>(4.f, 0.01f, 7.5f);
+	UIRange<float> fInputNeighbourRadius		= UIRange<float>(4.f, 0.01f, 5.0f);
 	//WORLD SETTINGS
-	UIRange<int> iInputWorldBounds				= UIRange<int>(10, 0, 100);
+	UIRange<int> iInputWorldBounds				= UIRange<int>(20, 0, 100);
 	UIRange<int> iBoidCount						= UIRange<int>(25, 0, 250);;
 	//DEBUG
 	bool bShowColliders = false;
@@ -66,12 +66,15 @@ private:
 	DebugUI() : Singleton() {};
 	~DebugUI(){};
 
-	void DrawInspector();
+	void DrawDebugUI();
+	void DrawInspector() const;
 
 	//UI Position
-	const ImVec2 m_v2WindowPos = ImVec2(0, 0);
-	const ImVec2 m_v2InspectorPos = ImVec2(500, 0);
-	const ImVec2 m_v2WindowSize = ImVec2(300, 600);
+	const ImVec2 m_v2DebugWindowPos = ImVec2(0, 0);
+	const ImVec2 m_v2DebugWindowSize = ImVec2(550, 460);
+	const ImVec2 m_v2InspectorPos = ImVec2(976, 0);
+	const ImVec2 m_v2InspectorSize = ImVec2(300, 600);
+
 
 	//All of the UI Values
 	UIInputValues m_uiValues;
