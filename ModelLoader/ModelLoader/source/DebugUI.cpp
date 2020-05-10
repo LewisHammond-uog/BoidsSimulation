@@ -12,9 +12,6 @@
 #include "Scene.h"
 #include "Entity.h"
 
-//Default Values
-const float mc_fDefaultForce = 0.0f;
-
 /// <summary>
 /// Updates the UI by passing ImGUI elements to draw
 /// </summary>

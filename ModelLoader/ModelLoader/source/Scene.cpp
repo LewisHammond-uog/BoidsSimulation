@@ -33,7 +33,19 @@
 //Static Declareations
 Scene* Scene::s_pSceneInstance = nullptr;
 
-///Get singleton instance of scene
+/// <summary>
+/// Create the scene
+/// </summary>
+Scene::Scene() : Application() {
+	//Init camera
+	m_pCamera = nullptr;
+}
+
+
+/// <summary>
+/// Get the instance of the scene
+/// </summary>
+/// <returns>Scene Instance</returns>
 Scene* Scene::GetInstance() {
 
 	//Create an instance if we don't have one
@@ -44,11 +56,6 @@ Scene* Scene::GetInstance() {
 	return s_pSceneInstance;
 }
 
-
-Scene::Scene() : Application() {
-	//Init camera
-	m_pCamera = nullptr;
-}
 
 
 /// <summary>
@@ -109,6 +116,10 @@ bool Scene::Initialize(const bool a_bInitApplication){
 	return true;
 }
 
+/// <summary>
+/// Update the scene by updating openGL and all of the boids
+/// </summary>
+/// <returns>If scene should keep running</returns>
 bool Scene::Update() {
 
 	//Update the application values
@@ -134,6 +145,9 @@ bool Scene::Update() {
 	return !glfwWindowShouldClose(m_window);
 }
 
+/// <summary>
+/// Render all of the elements of scene
+/// </summary>
 void Scene::Render() {
 	
 	//Call Render on Application
@@ -174,7 +188,10 @@ void Scene::Render() {
 	glfwPollEvents();
 }
 
-
+/// <summary>
+/// Deinitalise the scene
+/// </summary>
+/// <param name="a_bCloseApplication">If we should close the application with our deinitalise</param>
 void Scene::DeInitialize(const bool a_bCloseApplication) {
 
 	
@@ -226,7 +243,6 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 	constexpr float fWallThickness = 0.5f;
 	constexpr int iWallCount = 6;
 
-	//todo - there has to be a better way to do this
 	//Array of the wall sizes and positions that we need
 	glm::vec3 aV3WallSizes[3] = {	glm::vec3(a_fBoundsSize + fWallThickness,a_fBoundsSize,fWallThickness + fWallThickness),
 									glm::vec3(a_fBoundsSize + fWallThickness,fWallThickness,a_fBoundsSize + fWallThickness),
@@ -262,6 +278,7 @@ void Scene::GenerateBoundsVolume(const float a_fBoundsSize) const
 	
 }
 
+#pragma region GLFW Callback Functions
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
@@ -328,3 +345,5 @@ void Scene::toggle_mouse_input_mode(GLFWwindow* window, int button, int action, 
 		}
 	}
 }
+
+#pragma endregion 

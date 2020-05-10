@@ -15,7 +15,9 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-
+/// <summary>
+/// Create the application
+/// </summary>
 Application::Application()
 {
 	m_window = nullptr;
@@ -23,6 +25,10 @@ Application::Application()
 	m_fLastFrameTime = 0.0f;
 }
 
+/// <summary>
+/// Initalise the application
+/// </summary>
+/// <returns>If application initalises successfully</returns>
 bool Application::Initialize()
 {
 	// glfw: initialize and configure

@@ -7,6 +7,9 @@ typedef std::pair<const unsigned int, Entity*> EntityPair;
 unsigned int Entity::s_uNextEntityID = 0;
 std::map<const unsigned int, Entity*> Entity::s_xEntityMap;
 
+/// <summary>
+/// Create an entity
+/// </summary>
 Entity::Entity() :
 	m_eEntityType(ENTITY_TYPE::ENTITY_TYPE_UNDEFINED)
 {
@@ -16,6 +19,9 @@ Entity::Entity() :
 	
 }
 
+/// <summary>
+/// Destroy an entity
+/// </summary>
 Entity::~Entity()
 {
 	//Loop all of the components that this object owns and remove them
@@ -33,7 +39,11 @@ Entity::~Entity()
 	}
 }
 
-///Update this entity
+/// <summary>
+/// Update the entity by updating all of the components
+/// that we own
+/// </summary>
+/// <param name="a_fDeltaTime">Delta Time</param>
 void Entity::Update(float a_fDeltaTime)
 {
 	//Loop through all of the components and update
@@ -47,7 +57,10 @@ void Entity::Update(float a_fDeltaTime)
 	}
 }
 
-///Draw all elements of this entity
+/// <summary>
+/// Draw all of the entity components
+/// </summary>
+/// <param name="a_pShader">Shader to draw using</param>
 void Entity::Draw(Shader* a_pShader)
 {
 	//Loop through all of the components and draw
