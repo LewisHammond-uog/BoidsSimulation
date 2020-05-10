@@ -127,6 +127,7 @@
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\Gizmos.h" />
     <ClInclude Include="include\BoidSpawner.h" />
+    <ClInclude Include="include\DoubleLinkedList.h" />
     <ClInclude Include="include\ModelComponent.h" />
     <ClInclude Include="include\ObstacleSpawnerComponent.h" />
     <ClInclude Include="include\PrimitiveComponent.h" />

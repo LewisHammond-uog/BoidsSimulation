@@ -191,6 +191,9 @@
     <ClInclude Include="include\DebugUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\DoubleLinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelLoader.rc">
