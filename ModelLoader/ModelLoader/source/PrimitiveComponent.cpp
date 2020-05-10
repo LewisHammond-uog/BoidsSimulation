@@ -3,11 +3,13 @@
 //Typedefs
 typedef Component PARENT;
 
-
+/// <summary>
+/// Create a primitive, shared function between all primatives
+/// </summary>
+/// <param name="a_pOwner"></param>
 PrimitiveComponent::PrimitiveComponent(Entity* a_pOwner) : PARENT(a_pOwner)
 {
 }
-
 
 /// <summary>
 /// Set the colour of the primitive

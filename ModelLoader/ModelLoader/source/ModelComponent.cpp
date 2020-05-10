@@ -14,6 +14,10 @@
 //Typedefs
 typedef Component PARENT;
 
+/// <summary>
+/// Create a model coponent
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
 ModelComponent::ModelComponent(Entity* a_pOwner): 
 	PARENT(a_pOwner),
 	m_pModelData(nullptr),
@@ -21,6 +25,10 @@ ModelComponent::ModelComponent(Entity* a_pOwner):
 {
 }
 
+/// <summary>
+/// Draw the model we have been provided
+/// </summary>
+/// <param name="a_pShader">Shader to draw model with</param>
 void ModelComponent::Draw(Shader* a_pShader)
 {
 	//Null Check shader

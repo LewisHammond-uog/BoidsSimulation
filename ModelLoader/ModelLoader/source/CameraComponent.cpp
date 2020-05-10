@@ -19,6 +19,15 @@ const float CameraComponent::sc_fDefaultSpeed = 2.5f;
 const float CameraComponent::sc_fDefaultSensitivity = 0.1f;
 const float CameraComponent::sc_fDefaultZoom = 45.f;
 
+/// <summary>
+/// Create a camera component
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
+/// <param name="a_pWindow">Window to draw cameras from</param>
+/// <param name="a_v3Pos">Position to start the camera at</param>
+/// <param name="a_v3Up">Up vector of the world</param>
+/// <param name="a_fYaw">Starting Yaw of the Camera</param>
+/// <param name="a_fPitch">Starting Pitch of the Camera</param>
 CameraComponent::CameraComponent(Entity* a_pOwner, GLFWwindow* a_pWindow, glm::vec3 a_v3Pos, glm::vec3 a_v3Up, float a_fYaw, float a_fPitch) :
 	PARENT(a_pOwner),
 	m_pWindow(a_pWindow),
@@ -81,12 +90,22 @@ glm::mat4 CameraComponent::GetViewMatrix() const
 	return glm::lookAt(v3CurrentPos, v3CurrentPos + v3Forward, v3Up);
 }
 
+/// <summary>
+/// Gets the current zoom level of the camera
+/// </summary>
+/// <returns>Current camera zoom</returns>
 float CameraComponent::GetCameraZoom() const
 {
 	return m_fZoom;
 }
 
-void CameraComponent::ProcessMouseMovement(float a_fXOffset, float a_fYOffset, bool a_constrainPitch)
+/// <summary>
+/// Process movement from the mouse
+/// </summary>
+/// <param name="a_fXOffset">X difference of the mouse</param>
+/// <param name="a_fYOffset">Y difference of the mouse</param>
+/// <param name="a_constrainPitch">If the camera pitch should be limited</param>
+void CameraComponent::ProcessMouseMovement(float a_fXOffset, float a_fYOffset, const bool a_constrainPitch)
 {
 	a_fXOffset *= m_fMouseSensitivity;
 	a_fYOffset *= m_fMouseSensitivity;
@@ -107,6 +126,10 @@ void CameraComponent::ProcessMouseMovement(float a_fXOffset, float a_fYOffset, b
 	UpdateCameraVectors();
 }
 
+/// <summary>
+/// Process the scroll of the mouse
+/// </summary>
+/// <param name="a_fYOffset">Mouse scroll amount</param>
 void CameraComponent::ProcessMouseScroll(float a_fYOffset)
 {
 	if (m_fZoom >= 1.0f && m_fZoom <= 45.0f)
@@ -120,7 +143,7 @@ void CameraComponent::ProcessMouseScroll(float a_fYOffset)
 /// <summary>
 /// Gets the mouse button we use for activating the camera
 /// </summary>
-/// <returns>GLFW_MOUSE_BUTTON</returns>
+/// <returns>GLFW_MOUSE_BUTTON used to activate the camera</returns>
 int CameraComponent::GetActivateCamBtn() const
 {
 	return m_iCamUseBtn;
@@ -151,7 +174,13 @@ void CameraComponent::UpdateCameraVectors() const
 	m_pCameraTransform->SetEntityMatrixRow(MATRIX_ROW::UP_VECTOR, glm::normalize(glm::cross(v3Right, v3Forward)));
 }
 
-void CameraComponent::ProcessKeyboard(CameraMove direction, float deltaTime) const
+/// <summary>
+/// Processes the movement based on input we have received from
+/// the keyboard
+/// </summary>
+/// <param name="direction">Direction to move the camera in</param>
+/// <param name="deltaTime">Delta time</param>
+void CameraComponent::ProcessKeyboard(const CameraMove direction, const float deltaTime) const
 {
 	if(!m_pCameraTransform)
 	{
@@ -181,7 +210,7 @@ void CameraComponent::ProcessKeyboard(CameraMove direction, float deltaTime) con
 /// Processes Input directly and polls the keys that the user has pressed
 /// </summary>
 /// <param name="a_fDeltaTime">Delta Time</param>
-void CameraComponent::ProcessInput(const float a_fDeltaTime)
+void CameraComponent::ProcessInput(const float a_fDeltaTime) const
 {
 	if (m_pWindow) {
 		if (glfwGetKey(m_pWindow, GLFW_KEY_W) == GLFW_PRESS)

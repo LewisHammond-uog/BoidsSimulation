@@ -12,7 +12,10 @@
 #include "Gizmos.h"
 #include "TransformComponent.h"
 
-
+/// <summary>
+/// Create the brain component
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
 BrainComponent::BrainComponent(Entity* a_pOwner)
 	: Component(a_pOwner),
 	m_v3CurrentVelocity(0.0f),
@@ -21,6 +24,11 @@ BrainComponent::BrainComponent(Entity* a_pOwner)
 {
 }
 
+/// <summary>
+/// Update the brain component. Calcuating new forces for flocking, steering and
+/// collision avoidance
+/// </summary>
+/// <param name="a_fDeltaTime">Delta Time</param>
 void BrainComponent::Update(float a_fDeltaTime)
 {
 
@@ -312,7 +320,6 @@ glm::vec3 BrainComponent::CalculateFlockingForces(glm::vec3& a_v3SeparationForce
 /// <param name="a_v3SeparationForce">ByRef Separation Force to modify</param>
 /// <param name="a_v3AlignmentForce">ByRef Alignment Force to modify</param>
 /// <param name="a_v3CohesionForce">ByRef Cohesion Force to modify</param>
-/// <returns></returns>
 void BrainComponent::ApplyFlockingWeights(glm::vec3& a_v3SeparationForce, glm::vec3& a_v3AlignmentForce, glm::vec3& a_v3CohesionForce) const
 {
 	if(m_pDebugUI == nullptr)
@@ -430,7 +437,7 @@ glm::vec3 BrainComponent::CalculateContainmentForce(std::vector<RayCastHit*>& a_
 /// <summary>
 /// Calculate the force needed to avoid any collision with obstacles
 /// </summary>
-/// <returns>Force to avoid any collision</returns>
+/// <returns>(Unweighted) Force to avoid any collision</returns>
 glm::vec3 BrainComponent::CalculateAvoidanceForce(std::vector<RayCastHit*>& a_vRayCastHits) const
 {
 	glm::vec3 v3AvoidForce(0.f);
@@ -474,7 +481,7 @@ glm::vec3 BrainComponent::CalculateAvoidanceForce(std::vector<RayCastHit*>& a_vR
 /// <summary>
 /// Generates a list of rays to use when checking for collisions
 /// </summary>
-/// <returns></returns>
+/// <returns>List of a rays the use for collision</returns>
 std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays() const
 {
 	//Create Vector
@@ -531,7 +538,7 @@ std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays() const
 /// <summary>
 /// Get the name of the component to display in text
 /// </summary>
-/// <returns></returns>
+/// <returns>Name of the component</returns>
 const char* BrainComponent::GetComponentName() const
 {
 	return m_szName;

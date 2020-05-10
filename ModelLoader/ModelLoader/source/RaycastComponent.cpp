@@ -8,6 +8,11 @@
 //Typedefs
 typedef Component PARENT;
 
+/// <summary>
+/// Create a Raycaster Component
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
+/// <param name="a_pCollisionWorld">Collision World to test raycasts in</param>
 RaycastComponent::RaycastComponent(Entity* a_pOwner, reactphysics3d::CollisionWorld* a_pCollisionWorld) :
 	PARENT(a_pOwner),
 	m_pCollisionWorld(a_pCollisionWorld)

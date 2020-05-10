@@ -3,11 +3,18 @@
 //Project Include
 #include "Entity.h"
 
+/// <summary>
+/// Create a component
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
 Component::Component(Entity* a_pOwner) : m_pOwnerEntity(a_pOwner)
 {
 }
 
 
+/// <summary>
+/// Destroy a component, removing it from it's owner entity
+/// </summary>
 Component::~Component()
 {
 	//When we are destroyed remove ourselves from our

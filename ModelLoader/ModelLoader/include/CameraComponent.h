@@ -56,7 +56,7 @@ private:
 	void UpdateCameraVectors() const;
 
 	//Input Processing
-	void ProcessInput(float a_fDeltaTime);
+	void ProcessInput(float a_fDeltaTime) const;
 	void ProcessKeyboard(CameraMove a_eDirection, float a_fDeltaTime) const;
 
 	//Pointer to our transform

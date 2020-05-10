@@ -9,6 +9,11 @@
 //Typedefs
 typedef PrimitiveComponent PARENT;
 
+/// <summary>
+/// Create a sphere primative
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
+/// <param name="a_fSphereRadius">Radius of the Sphere</param>
 SpherePrimitiveComponent::SpherePrimitiveComponent(Entity* a_pOwner, const float a_fSphereRadius) :
 	PARENT(a_pOwner),
 	m_fSphereRadius(a_fSphereRadius)

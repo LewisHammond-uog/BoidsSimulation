@@ -10,6 +10,11 @@
 //Typedefs
 typedef PrimitiveComponent PARENT;
 
+/// <summary>
+/// Create a box primitive
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
+/// <param name="a_v3BoxDimensions">Dimentions of the box</param>
 BoxPrimitiveComponent::BoxPrimitiveComponent(Entity* a_pOwner, const glm::vec3 a_v3BoxDimensions/* = glm::vec3(1,1,1)*/) :
 	PARENT(a_pOwner),
 	m_v3BoxDimensions(a_v3BoxDimensions)

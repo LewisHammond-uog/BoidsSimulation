@@ -17,6 +17,10 @@ const float ObstacleSpawnerComponent::sc_fDefaultSpawnDistance = 3.0f;
 const float ObstacleSpawnerComponent::sc_fDefaultObstacleRadius = 0.25f;
 const unsigned int ObstacleSpawnerComponent::sc_fObstacleResolution = 10u;
 
+/// <summary>
+/// Create the obstacle spawner component
+/// </summary>
+/// <param name="a_pOwner">Owner Entity</param>
 ObstacleSpawnerComponent::ObstacleSpawnerComponent(Entity* a_pOwner) :
 	PARENT(a_pOwner),
 	m_bSpawnBtnThisFrame(false),
