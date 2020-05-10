@@ -22,7 +22,10 @@ class DebugUI;
 struct UIInputValues;
 struct RayCastHit;
 
-
+/// <summary>
+/// Component to control all of the flocking, steering and collision avoidance
+/// behaviours of a boid
+/// </summary>
 class BrainComponent : public Component
 {
 public:

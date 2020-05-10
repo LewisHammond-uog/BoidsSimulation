@@ -6,7 +6,9 @@ class Entity;
 class Shader;
 
 
-
+/// <summary>
+/// Abstract class for component types to inherit from
+/// </summary>
 class Component
 {
 public:

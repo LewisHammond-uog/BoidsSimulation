@@ -8,6 +8,7 @@ template<typename  T>
 class Singleton
 {
 public:
+	
 	/// <summary>
 	/// Get an instance of the singleton. Creates one if
 	/// one doesn't exist

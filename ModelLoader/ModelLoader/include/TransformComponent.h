@@ -15,6 +15,10 @@ enum class MATRIX_ROW
 	POSITION_VECTOR
 };
 
+/// <summary>
+/// Component to represent a transform within the world
+/// Contains a rotation nad position
+/// </summary>
 class TransformComponent : public Component
 {
 public:

@@ -23,6 +23,10 @@ enum class CameraMove {
 	RIGHT
 };
 
+/// <summary>
+/// Component that deals with camera functionality
+/// (i.e processing mouse/keyboard inputs and updating view) 
+/// </summary>
 class CameraComponent : public Component
 {
 public:

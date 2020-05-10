@@ -2,12 +2,13 @@
 #define __LINKED_LIST_H__
 
 /// <summary>
-/// Template class for a doubly linked list
+/// Template class for a doubl-y linked list
 /// </summary>
 template <class T>
 class DoubleLinkedList
 {
 public:
+	
 	/// <summary>
 	/// Node for a double linked list
 	/// With a prev and next

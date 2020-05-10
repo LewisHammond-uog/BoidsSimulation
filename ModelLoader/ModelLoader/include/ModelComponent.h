@@ -9,6 +9,9 @@
 //Forward Declare
 class Model;
 
+/// <summary>
+/// Component to deal with the rendering of a model
+/// </summary>
 class ModelComponent : public Component
 {
 public:

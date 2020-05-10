@@ -15,6 +15,10 @@ class CameraComponent;
 class Shader;
 class Model;
 
+/// <summary>
+/// Class to deal with everything going on within our scene
+/// (i.e creation of UI, World Bounds and Spawning of boids)
+/// </summary>
 class Scene : private Application
 {
 public:

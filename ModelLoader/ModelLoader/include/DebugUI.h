@@ -42,7 +42,7 @@ struct UIInputValues
 	UIRange<float> fInputNeighbourRadius		= UIRange<float>(4.f, 0.01f, 5.0f);
 	//WORLD SETTINGS
 	UIRange<int> iInputWorldBounds				= UIRange<int>(20, 0, 100);
-	UIRange<int> iBoidCount						= UIRange<int>(25, 0, 250);;
+	UIRange<int> iBoidCount						= UIRange<int>(100, 0, 250);
 	//DEBUG
 	bool bShowColliders = false;
 };

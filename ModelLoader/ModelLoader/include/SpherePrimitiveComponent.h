@@ -3,6 +3,9 @@
 
 #include "PrimitiveComponent.h"
 
+/// <summary>
+/// Component to draw a sphere in the world
+/// </summary>
 class SpherePrimitiveComponent : public PrimitiveComponent
 {
 public:
