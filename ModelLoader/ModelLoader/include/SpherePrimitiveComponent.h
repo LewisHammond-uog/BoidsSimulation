@@ -17,11 +17,16 @@ public:
 	void Update(float a_fDeltaTime) override {};
 	void Draw(Shader* a_pShader) override;
 
+	//Get text name of the component
+	const char* GetComponentName() const override;
+
 private:
 	float m_fSphereRadius;
 	//Number of rows/columns to draw the circle our of
 	//a higher number means a more precise sphere
 	int m_iSphereResolution = 10;
+
+	const char* m_szName = "Primitive (Box)";
 };
 
 

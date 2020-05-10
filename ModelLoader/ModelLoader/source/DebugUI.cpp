@@ -10,6 +10,7 @@
 //Project Includes
 #include "BoidSpawner.h"
 #include "Scene.h"
+#include "Entity.h"
 
 //Default Values
 const float mc_fDefaultForce = 0.0f;
@@ -88,8 +89,6 @@ void DebugUI::Update() {
 			ImGui::SliderFloat("Sphere Jitter", &m_uiValues.fInputWanderJitter.value, m_uiValues.fInputWanderJitter.min, m_uiValues.fInputWanderJitter.max);
 			ImGui::SliderFloat("Sphere Radius", &m_uiValues.fInputWanderRadius.value, m_uiValues.fInputWanderRadius.min, m_uiValues.fInputWanderRadius.max);
 		}
-
-		
 	}
 
 	//World Settings
@@ -109,6 +108,9 @@ void DebugUI::Update() {
 
 	//End the drawing of the window
 	ImGui::End();
+
+	//Draw Inspector Window
+	DrawInspector();
 }
 
 /// <summary>
@@ -129,4 +131,71 @@ UIInputValues* DebugUI::GetUIInputValues()
 bool DebugUI::HasMouseFocus()
 {
 	return ImGui::GetIO().WantCaptureMouse;
+}
+
+/// <summary>
+/// Draw an inspector window to show boid infomation
+/// </summary>
+void DebugUI::DrawInspector()
+{
+	//Setup Imgui window size and position
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::SetNextWindowPos(m_v2InspectorPos, ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(m_v2WindowSize, ImGuiCond_FirstUseEver);
+
+	//Begin the drawing of the Window
+	ImGui::Begin("Entity Inspector");
+
+	//Selector for boid
+	static int iSelectedEntityID = 0;
+	ImGui::InputInt("Boid ID:", &iSelectedEntityID);
+
+	//Get entity info
+	Entity* pEntity = Entity::GetEntityMap().find(iSelectedEntityID)->second;
+	if (pEntity != nullptr) {
+
+		//Show Entity ID Type
+		ImGui::Text("Entity ID: %i", pEntity->GetEntityID());
+		ImGui::Text("Entity Type: %s", pEntity->GetEntityTypeName());
+		
+		ImGui::Spacing();
+		
+		//Show Transform
+		TransformComponent* pBoidTransform = pEntity->GetComponent<TransformComponent*>();
+		if(pBoidTransform){
+			const glm::vec3 v3BoidPos = pEntity->GetComponent<TransformComponent*>()->GetCurrentPosition();
+			const glm::vec3 v3BoidDir = pEntity->GetComponent<TransformComponent*>()->GetEntityMatrixRow(MATRIX_ROW::FORWARD_VECTOR) * 360.f;
+
+			ImGui::Text("Position: (%f,%f,%f)", v3BoidPos.x, v3BoidPos.y, v3BoidPos.z);
+			ImGui::Text("Direction: (%f,%f,%f)", v3BoidDir.x, v3BoidDir.y, v3BoidDir.z);
+		}
+
+		//List out all of the components that we have
+		ImGui::Spacing();
+		ImGui::Text("Components:");
+		std::vector<Component*> m_vEntityComponents = pEntity->GetComponentList();
+		for(int i = 0; i < m_vEntityComponents.size(); ++i)
+		{
+			ImGui::Text(m_vEntityComponents[i]->GetComponentName());
+		}
+
+		//If we are a boid allow the user to destroy
+		if(pEntity->GetEntityType() == ENTITY_TYPE::ENTITY_TYPE_BOID)
+		{
+			if(ImGui::Button("Destroy"))
+			{
+				BoidSpawner::GetInstance()->DestroyBoid(pEntity);
+				//Decrease boid count value so it matches the real number of boids
+				m_uiValues.iBoidCount.value--;
+			}
+		}
+
+		
+	}else
+	{
+		//No Entity - show error
+		ImGui::Text("No Entity exists with ID %i", iSelectedEntityID);
+	}
+	
+	ImGui::End();
 }

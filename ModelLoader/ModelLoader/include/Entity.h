@@ -6,6 +6,8 @@
 #include <map>
 
 //Project Includes
+#include <string>
+
 #include "Component.h"
 
 //Forward Declare
@@ -18,9 +20,11 @@ enum class ENTITY_TYPE
 	ENTITY_TYPE_BOID,
 	ENTITY_TYPE_CONTAINER,
 	ENTITY_TYPE_OBSTACLE,
+	ENTITY_TYPE_CAMERA,
 
 	ENTITY_TYPE_COUNT //Total number of entity types
 };
+
 
 class Entity
 {
@@ -34,10 +38,13 @@ public:
 	//Entity Type Functions
 	void SetEntityType(ENTITY_TYPE a_eType);
 	ENTITY_TYPE GetEntityType() const;
+	const char* GetEntityTypeName() const;
 
 	//Component Functions
 	void AddComponent(Component* a_pComponentToAdd);
 	void RemoveComponent(Component* a_pComponentToRemove, bool a_bDeleteComponent = false);
+	std::vector<Component*> GetComponentList();
+	
 	//Function for getting a component of this entity based on it's return type
 	template<class returnType>
 	returnType GetComponent() const;

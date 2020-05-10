@@ -194,3 +194,12 @@ void CameraComponent::ProcessInput(const float a_fDeltaTime)
 			ProcessKeyboard(CameraMove::RIGHT, a_fDeltaTime);
 	}
 }
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* CameraComponent::GetComponentName() const
+{
+	return m_szName;
+}

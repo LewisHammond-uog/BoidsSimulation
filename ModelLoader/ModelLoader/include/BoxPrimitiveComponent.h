@@ -19,8 +19,12 @@ public:
 	void Update(float a_fDeltaTime) override = 0;
 	void Draw(Shader* a_pShader) override;
 
+	//Get text name of the component
+	const char* GetComponentName() const override;
 private:
 	glm::vec3 m_v3BoxDimensions;
+
+	const char* m_szName = "Primitive (Box)";
 };
 
 #endif //!__BOX_PRIMITIVE_COMPONENT_H__

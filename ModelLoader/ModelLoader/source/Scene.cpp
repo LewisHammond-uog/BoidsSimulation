@@ -24,13 +24,10 @@
 //Components
 #include "BoidSpawner.h"
 #include "TransformComponent.h"
-#include "ModelComponent.h"
-#include "BrainComponent.h"
 #include "ColliderComponent.h"
 #include "CameraComponent.h"
 #include "MathsUtils.h"
 #include "ObstacleSpawnerComponent.h"
-#include "RaycastComponent.h"
 
 
 //Static Declareations
@@ -84,10 +81,14 @@ bool Scene::Initialize(const bool a_bInitApplication){
 
 	//Init Camera
 	Entity* pCameraEntity = new Entity();
+	pCameraEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_CAMERA);
+	//Transform
 	TransformComponent* pCameraTransform = new TransformComponent(pCameraEntity);
 	pCameraEntity->AddComponent(pCameraTransform);
+	//Camera
 	m_pCamera = new CameraComponent(pCameraEntity, m_window, glm::vec3(0.0f, 1.2f, 4.0f));
 	pCameraEntity->AddComponent(m_pCamera);
+	//Obstacle Spawner
 	ObstacleSpawnerComponent* pObstSpawner = new ObstacleSpawnerComponent(pCameraEntity);
 	pCameraEntity->AddComponent(pObstSpawner);
 	

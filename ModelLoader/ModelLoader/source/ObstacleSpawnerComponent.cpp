@@ -121,3 +121,12 @@ glm::vec3 ObstacleSpawnerComponent::GetObstacleSpawnPos() const
 	
 	return v3SpawnPos;
 }
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* ObstacleSpawnerComponent::GetComponentName() const
+{
+	return m_szName;
+}

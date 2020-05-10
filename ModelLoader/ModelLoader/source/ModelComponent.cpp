@@ -63,3 +63,12 @@ void ModelComponent::ChooseRandomModel(std::vector<Model*>& a_vpModels)
 		}
 	}
 }
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* ModelComponent::GetComponentName() const
+{
+	return m_szName;
+}

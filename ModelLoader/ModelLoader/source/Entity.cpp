@@ -82,6 +82,30 @@ ENTITY_TYPE Entity::GetEntityType() const
 	return m_eEntityType;
 }
 
+
+/// <summary>
+/// Gets the name of our entity ID
+/// </summary>
+/// <returns>Entity ID Name string</returns>
+const char* Entity::GetEntityTypeName() const
+{
+	switch (m_eEntityType) {
+	case ENTITY_TYPE::ENTITY_TYPE_UNDEFINED:
+		return "UNDEFINED";
+	case ENTITY_TYPE::ENTITY_TYPE_BOID:
+		return "BOID";
+	case ENTITY_TYPE::ENTITY_TYPE_CONTAINER:
+		return "CONTAINER";
+	case ENTITY_TYPE::ENTITY_TYPE_OBSTACLE:
+		return "OBSTACLE";
+	case ENTITY_TYPE::ENTITY_TYPE_CAMERA:
+		return "CAMERA";
+	default:
+		return "NULL";
+	}
+}
+
+
 /// <summary>
 /// Adds a component to this entity
 /// </summary>
@@ -115,4 +139,14 @@ void Entity::RemoveComponent(Component* a_pComponentToRemove, const bool a_bDele
 			break;
 		}
 	}
+}
+
+/// <summary>
+/// Gets the list of all of the components attached to
+/// this entity
+/// </summary>
+/// <returns></returns>
+std::vector<Component*> Entity::GetComponentList()
+{
+	return m_apComponentList;
 }

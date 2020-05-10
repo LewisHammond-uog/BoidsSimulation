@@ -22,9 +22,14 @@ public:
 	void ChooseRandomModel(std::vector<Model*>& a_vpModels);
 	void SetScale(const float a_fNewScale) { m_fModelScale = a_fNewScale; };
 
+
+	//Get text name of the component
+	const char* GetComponentName() const override;
 private:
 	Model* m_pModelData;
 	float m_fModelScale;
+
+	const char* m_szName = "Model";
 
 };
 

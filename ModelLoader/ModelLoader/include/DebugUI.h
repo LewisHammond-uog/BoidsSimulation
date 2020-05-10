@@ -38,7 +38,7 @@ struct UIInputValues
 	UIRange<float> fInputWanderForward			= UIRange<float>(5.f, 1.f, 10.f);
 	UIRange<float> fInputWanderJitter			= UIRange<float>(0.025f, 0.001f, 0.1f); //0.001 as we cannot have 0 jitter as we use spehere rand
 	UIRange<float> fInputWanderRadius			= UIRange<float>(0.625f, 0.001f, 2.f); //0.001 as we cannot have a 0 radius sphere
-	//NEIGHBOUR RADIUSS
+	//NEIGHBOUR RADIUS
 	UIRange<float> fInputNeighbourRadius		= UIRange<float>(4.f, 0.01f, 7.5f);
 	//WORLD SETTINGS
 	UIRange<int> iInputWorldBounds				= UIRange<int>(10, 0, 100);
@@ -66,13 +66,15 @@ private:
 	DebugUI() : Singleton() {};
 	~DebugUI(){};
 
+	void DrawInspector();
+
 	//UI Position
 	const ImVec2 m_v2WindowPos = ImVec2(0, 0);
+	const ImVec2 m_v2InspectorPos = ImVec2(500, 0);
 	const ImVec2 m_v2WindowSize = ImVec2(300, 600);
 
 	//All of the UI Values
 	UIInputValues m_uiValues;
-
 };
 
 #endif // ! __DEBUG_UI_H__

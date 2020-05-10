@@ -151,6 +151,17 @@ void BoidSpawner::DestroyBoids(const unsigned a_iCount)
 }
 
 /// <summary>
+/// Get a pointer to a boid from a given position in
+/// the boid linked list
+/// </summary>
+/// <param name="a_iBoidPos">Position in linked list</param>
+/// <returns></returns>
+Entity* BoidSpawner::GetBoidInfo(const unsigned int a_iBoidPos)
+{
+	return m_lpActiveEntities.Search(a_iBoidPos);
+}
+
+/// <summary>
 /// Sets the collision world used the spawn boids in to
 /// </summary>
 void BoidSpawner::SetCollisionWorld(rp3d::CollisionWorld* a_pCollisionWorld)

@@ -105,3 +105,12 @@ rp3d::decimal RayCastHitsInfo::notifyRaycastHit(const rp3d::RaycastInfo& a_pRayc
 
 
 #pragma endregion 
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* RaycastComponent::GetComponentName() const
+{
+	return m_szName;
+}

@@ -45,6 +45,9 @@ public:
 
 	//Get Controls function
 	int GetActivateCamBtn() const;
+
+	//Get text name of the component
+	const char* GetComponentName() const override;
 private:
 	void UpdateCameraVectors() const;
 
@@ -71,6 +74,8 @@ private:
 	float m_fMouseSensitivity;
 	float m_fZoom;
 
+	const char* m_szName = "Camera";
+	
 	#pragma region Camera Defaults
 	//Default Camera values
 	const static glm::vec3 sc_v3DefaultPosition;

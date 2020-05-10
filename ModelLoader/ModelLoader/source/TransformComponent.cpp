@@ -78,3 +78,12 @@ const glm::mat4& TransformComponent::GetEntityMatrix() const
 {
 	return m_m4EntityMatrix;
 }
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* TransformComponent::GetComponentName() const
+{
+	return m_szName;
+}

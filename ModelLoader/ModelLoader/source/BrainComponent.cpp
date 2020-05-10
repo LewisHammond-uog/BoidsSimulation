@@ -527,3 +527,12 @@ std::vector<rp3d::Ray*> BrainComponent::GetCollisionRays() const
 
 	return vRays;
 }
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* BrainComponent::GetComponentName() const
+{
+	return m_szName;
+}

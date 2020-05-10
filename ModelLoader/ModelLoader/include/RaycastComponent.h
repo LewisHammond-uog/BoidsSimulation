@@ -31,9 +31,13 @@ public:
 	RayCastHitsInfo* RayCast(glm::vec3 a_v3StartPoint, glm::vec3 a_v3EndPoint) const;
 	RayCastHitsInfo* RayCast(rp3d::Ray* a_ray) const;
 	std::vector<RayCastHitsInfo*> MutiRayCast(std::vector<rp3d::Ray*> a_vRays, bool a_bDeleteRays = false) const;
+
+	//Get text name of the component
+	const char* GetComponentName() const override;
 	
 private:
 	rp3d::CollisionWorld* m_pCollisionWorld; //Pointer to the physics world that this object is using
+	const char* m_szName = "Raycast";
 };
 
 /// <summary>

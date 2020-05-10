@@ -44,3 +44,12 @@ void BoxPrimitiveComponent::Draw(Shader* a_pShader)
 	//Draw a box to the sphere at our current position, with the given dimentions, in the specified colour, and have the trasform of our owner entity
 	Gizmos::addBox(pTransform->GetCurrentPosition(), m_v3BoxDimensions, true, m_v4DrawColour, pTransform->GetEntityMatrix());
 }
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* BoxPrimitiveComponent::GetComponentName() const
+{
+	return m_szName;
+}

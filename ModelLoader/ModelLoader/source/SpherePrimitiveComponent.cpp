@@ -40,3 +40,12 @@ void SpherePrimitiveComponent::Draw(Shader* a_pShader)
 	Gizmos::addSphere(pTransform->GetCurrentPosition(), m_iSphereResolution, m_iSphereResolution, m_fSphereRadius,
 		m_v4DrawColour, &pTransform->GetEntityMatrix());
 }
+
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* SpherePrimitiveComponent::GetComponentName() const
+{
+	return m_szName;
+}

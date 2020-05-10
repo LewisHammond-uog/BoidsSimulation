@@ -27,6 +27,8 @@ public:
 	void DestroyBoid(Entity* a_pEntity);
 	void DestroyBoids(unsigned int a_iCount);
 
+	Entity* GetBoidInfo(unsigned int a_iBoidPos);
+	
 	void SetCollisionWorld(rp3d::CollisionWorld* a_pCollisionWorld);
 	
 	void UnloadAllModels();

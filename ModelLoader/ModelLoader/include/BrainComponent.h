@@ -34,6 +34,9 @@ public:
 
 	glm::vec3 GetCurrentVelocity() const { return m_v3CurrentVelocity; }
 
+	//Get text name of the component
+	const char* GetComponentName() const override;
+	
 private:
 	
 	//Steering Behaviours
@@ -63,6 +66,8 @@ private:
 	//Debug UI Instance used to apply weights
 	DebugUI* m_pDebugUI;
 
+	const char* m_szName = "Brain";
+	
 	#pragma region Boid Defaults
 	
 	/*

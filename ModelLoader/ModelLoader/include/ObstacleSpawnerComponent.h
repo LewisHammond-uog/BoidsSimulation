@@ -21,6 +21,9 @@ public:
 	void Update(float a_fDeltaTime) override;
 	void Draw(Shader* a_pShader) override;
 
+	//Get text name of the component
+	const char* GetComponentName() const override;
+	
 private:
 
 	void SpawnObstacle(glm::vec3 a_v3Position) const;
@@ -40,6 +43,8 @@ private:
 	float m_fSpawnDistance;
 	float m_fObstacleRadius;
 
+	const char* m_szName = "Obstacle";
+	
 	#pragma region Spawner Defaults
 	const static float sc_fDefaultSpawnDistance;
 	const static float sc_fDefaultObstacleRadius;

@@ -27,7 +27,6 @@ public:
 	ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_pCollisionWorld);
 	~ColliderComponent();
 
-
 	void Update(float a_fDeltaTime) override;
 	void Draw(Shader* a_pShader) override;
 
@@ -43,6 +42,9 @@ public:
 	std::vector<CollisionInfo*> GetCollisionInfo() const;
 	CollisionInfo* GetCollisionInfo(ColliderComponent* a_pOtherCollider) const;
 
+	//Get text name of the component
+	const char* GetComponentName() const override;
+	
 private:
 	
 	//Checks if a collision check between 2 colliders is valid - performs null checks on
@@ -63,7 +65,9 @@ private:
 	//Constants for debug collider drawing
 	const glm::vec4 mc_v4ColliderDrawCol = glm::vec4(0, 0, 0, 1);
 	const unsigned int mc_iColliderDrawRes = 10u;
-	
+
+
+	const char* m_szName = "Collider";
 };
 
 /// <summary>

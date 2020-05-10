@@ -32,6 +32,9 @@ public:
 	glm::vec3 GetEntityMatrixRow(MATRIX_ROW a_eRow);
 	glm::vec3 GetCurrentPosition();
 
+	//Get text name of the component
+	const char* GetComponentName() const override;
+
 private:
 
 	/*
@@ -40,6 +43,8 @@ private:
 	*/
 	const glm::vec3 mc_v3WorldUp = glm::vec3(0.f, 1.f, 0.f);
 	const glm::vec3 mc_v3WorldRight = glm::vec3(1.f, 0.f, 0.f);
+
+	const char* m_szName = "Transform";
 	
 	glm::mat4 m_m4EntityMatrix;
 };

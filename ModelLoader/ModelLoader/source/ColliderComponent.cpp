@@ -429,3 +429,11 @@ void CollisionInfo::notifyContact(const CollisionCallbackInfo& a_pCollisionCallb
 
 #pragma endregion 
 
+/// <summary>
+/// Get the name of the component to display in text
+/// </summary>
+/// <returns></returns>
+const char* ColliderComponent::GetComponentName() const
+{
+	return m_szName;
+}
