@@ -25,7 +25,10 @@ enum class ENTITY_TYPE
 	ENTITY_TYPE_COUNT //Total number of entity types
 };
 
-
+/// <summary>
+/// Class to represent any object that exists within the world
+/// Has a number of components that are updated by this entity
+/// </summary>
 class Entity
 {
 public:

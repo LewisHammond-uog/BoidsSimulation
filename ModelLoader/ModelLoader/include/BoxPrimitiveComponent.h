@@ -6,6 +6,9 @@
 
 #include "PrimitiveComponent.h"
 
+/// <summary>
+/// Component to draw a box in the world
+/// </summary>
 class BoxPrimitiveComponent : public PrimitiveComponent
 {
 public:

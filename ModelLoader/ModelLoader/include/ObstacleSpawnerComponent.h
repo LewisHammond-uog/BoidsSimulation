@@ -10,7 +10,9 @@
 
 #include "Component.h"
 
-
+/// <summary>
+/// Component to deal with the spawning of obstacles in the world
+/// </summary>
 class ObstacleSpawnerComponent : public Component
 {
 public:

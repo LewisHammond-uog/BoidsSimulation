@@ -15,7 +15,7 @@ class RayCastHitsInfo;
 
 
 /// <summary>
-/// Component to do raycasting
+/// Component to Raycast in the world
 /// </summary>
 class RaycastComponent : public Component
 {

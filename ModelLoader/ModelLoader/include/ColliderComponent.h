@@ -18,7 +18,7 @@ class RayCastHitsInfo;
 struct RayCastHit;
 
 /// <summary>
-/// Component used for detecting collisions between 2 entities in the world
+/// Component used for detecting collisions between entities in the world
 /// </summary>
 class ColliderComponent : public Component {
 	friend class CollisionInfo;
