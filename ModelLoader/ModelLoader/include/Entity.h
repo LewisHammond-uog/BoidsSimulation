@@ -52,7 +52,7 @@ private:
 	unsigned int m_uEntityID;
 	std::vector<Component*> m_apComponentList;
 
-	static unsigned int s_uEntityCount;
+	static unsigned int s_uNextEntityID;
 	static std::map<const unsigned int, Entity*> s_xEntityMap;
 };
 

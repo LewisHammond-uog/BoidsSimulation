@@ -9,6 +9,9 @@
 //React Physics incluides
 #include "ReactPhysics3D/reactphysics3d.h"
 
+//Project Includes
+#include "DoubleLinkedList.h"
+
 //Forward Declares
 class Model;
 
@@ -19,18 +22,17 @@ public:
 	void SpawnBoid();
 	void SpawnBoids(unsigned int a_iCount);
 
-	void DestroyBoid();
-	void DestroyBoid(unsigned int a_id);
+	void DestroyBoid(Entity* a_pEntity);
 	
 	void UnloadAllModels();
 private:
 	BoidSpawner();
-	~BoidSpawner() = default;
+	~BoidSpawner();
 
 	void LoadAllModels();
 
-	//List of all of the boids that we have spawned
-	static std::map<const unsigned int, Entity*> s_xBoidMap;
+	//Linked list of all of the boids
+	DoubleLinkedList<Entity> m_lpeActiveEntities;
 	
 	//Number of boids
 	unsigned int m_iBoidCount;

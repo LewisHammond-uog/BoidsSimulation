@@ -13,8 +13,6 @@
 #include "ModelComponent.h"
 #include "RaycastComponent.h"
 
-std::map<const unsigned int, Entity*> BoidSpawner::s_xBoidMap;
-
 //Typedefs
 typedef std::pair<const unsigned int, Entity*> BoidPair;
 
@@ -22,10 +20,22 @@ typedef std::pair<const unsigned int, Entity*> BoidPair;
 BoidSpawner::BoidSpawner() :
 	m_iBoidCount(0u)
 {
+	//bug - This is not changed on scene restart and thus passes the wrong collision world to the boids
 	//Get the collision world
 	m_pBoidCollisionWorld = Scene::GetInstance()->GetCollisionWorld();
+
+	//Load all of the models 
 	LoadAllModels();
 }
+
+//Destructor
+BoidSpawner::~BoidSpawner()
+{
+	//Remove all of the boids from the linked list
+	//entity cleanup is dealt with by the scene
+	m_lpeActiveEntities.Clear();
+}
+
 
 /// <summary>
 /// Spawns a single boid
@@ -61,44 +71,32 @@ void BoidSpawner::SpawnBoid()
 	RaycastComponent* pRayCaster = new RaycastComponent(pEntity, m_pBoidCollisionWorld);
 	pEntity->AddComponent(pRayCaster);
 
-	m_iBoidCount++;
-
-	//Add boid to boid map
-	s_xBoidMap.insert(BoidPair(m_iBoidCount, pEntity));
+	//Add to linked list
+	m_lpeActiveEntities.Push(pEntity);
 }
 
 /// <summary>
 /// Spawn a given number of boids
 /// </summary>
 /// <param name="a_iCount">Number of boids to spawn</param>
-void BoidSpawner::SpawnBoids(const unsigned a_iCount)
+void BoidSpawner::SpawnBoids(unsigned int a_iCount)
 {
-	for(int i = 0; i < a_iCount; ++i)
+	for (int i = 0; i < a_iCount; ++i)
 	{
 		SpawnBoid();
 	}
 }
 
 /// <summary>
-/// Destroys the last created boid
+/// Destroy a boid
 /// </summary>
-void BoidSpawner::DestroyBoid()
+/// <param name="m_pEntity"></param>
+void BoidSpawner::DestroyBoid(Entity* a_pEntity)
 {
-
-}
-
-
-/// <summary>
-/// Destory a boid of a given ID
-/// </summary>
-/// <param name="a_id">ID of boid to destroy</param>
-void BoidSpawner::DestroyBoid(unsigned a_id)
-{
-	//Check that boid ID exists then delete
-	if(s_xBoidMap.find(a_id) != s_xBoidMap.end())
-	{
-		delete s_xBoidMap[a_id];
-	}
+	//Remove the entity from the linked list
+	m_lpeActiveEntities.Pop(a_pEntity);
+	//Delete Entity
+	delete a_pEntity;
 }
 
 /// <summary>

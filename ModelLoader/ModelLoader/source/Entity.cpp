@@ -4,14 +4,14 @@
 typedef std::pair<const unsigned int, Entity*> EntityPair;
 
 //Initialize Statics
-unsigned int Entity::s_uEntityCount = 0;
+unsigned int Entity::s_uNextEntityID = 0;
 std::map<const unsigned int, Entity*> Entity::s_xEntityMap;
 
 Entity::Entity() :
 	m_eEntityType(ENTITY_TYPE::ENTITY_TYPE_UNDEFINED)
 {
 	//Increment entity count and add to entity list
-	m_uEntityID = s_uEntityCount++;
+	m_uEntityID = s_uNextEntityID++;
 	s_xEntityMap.insert(EntityPair(m_uEntityID, this));
 	
 }
@@ -30,7 +30,6 @@ Entity::~Entity()
 	//reduce entity count
 	if (s_xEntityMap.count(m_uEntityID) > 0) {
 		s_xEntityMap.erase(m_uEntityID);
-		--s_uEntityCount;
 	}
 }
 
