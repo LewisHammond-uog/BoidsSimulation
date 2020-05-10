@@ -25,6 +25,7 @@ public:
 	//Get text name of the component
 	const char* GetComponentName() const override;
 private:
+	//Dimentions of the box
 	glm::vec3 m_v3BoxDimensions;
 
 	const char* m_szName = "Primitive (Box)";

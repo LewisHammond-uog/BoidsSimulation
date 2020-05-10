@@ -16,8 +16,8 @@ public:
 	struct Node
 	{
 		T* m_pData;
-		Node* m_pPrev;
-		Node* m_pNext;
+		Node* m_pPrev; //Previous node in the list
+		Node* m_pNext; //Next node in the list
 	};
 
 	//Constructor and destructor

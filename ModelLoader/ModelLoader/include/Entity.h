@@ -57,13 +57,13 @@ public:
 
 private:
 
-	ENTITY_TYPE m_eEntityType;
+	ENTITY_TYPE m_eEntityType; //Type of entity, used for collision resolution
 	
-	unsigned int m_uEntityID;
+	unsigned int m_uEntityID; //ID of this entity
 	std::vector<Component*> m_apComponentList;
 
-	static unsigned int s_uNextEntityID;
-	static std::map<const unsigned int, Entity*> s_xEntityMap;
+	static unsigned int s_uNextEntityID; //ID of the next entity to spawn
+	static std::map<const unsigned int, Entity*> s_xEntityMap; //Map of all entites that exist
 };
 
 /// <summary>

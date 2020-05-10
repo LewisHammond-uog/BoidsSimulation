@@ -69,7 +69,7 @@ private:
 	void DrawDebugUI();
 	void DrawInspector() const;
 
-	//UI Position
+	//UI Positions
 	const ImVec2 m_v2DebugWindowPos = ImVec2(0, 0);
 	const ImVec2 m_v2DebugWindowSize = ImVec2(550, 460);
 	const ImVec2 m_v2InspectorPos = ImVec2(976, 0);

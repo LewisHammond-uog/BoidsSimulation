@@ -24,9 +24,10 @@ public:
 	const char* GetComponentName() const override;
 
 private:
+	//Radius of the sphere
 	float m_fSphereRadius;
-	//Number of rows/columns to draw the circle our of
-	//a higher number means a more precise sphere
+
+	//Number of rows/columns to draw the circle our of a higher number means a more precise sphere
 	int m_iSphereResolution = 10;
 
 	const char* m_szName = "Primitive (Box)";

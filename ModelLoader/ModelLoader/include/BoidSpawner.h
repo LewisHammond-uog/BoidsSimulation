@@ -47,7 +47,7 @@ private:
 	//Linked list of all of the boids
 	DoubleLinkedList<Entity> m_lpActiveEntities;
 	
-	//Number of boids
+	//Number of boids currently active
 	unsigned int m_iBoidCount;
 
 	//Collision world to pass to boids

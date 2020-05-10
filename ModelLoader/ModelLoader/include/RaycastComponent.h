@@ -23,7 +23,7 @@ public:
 	RaycastComponent(Entity* a_pOwner, reactphysics3d::CollisionWorld* a_pCollisionWorld);
 	~RaycastComponent() = default;
 
-
+	//Component Functions
 	void Update(float a_fDeltaTime) override {};
 	void Draw(Shader* a_pShader) override {};
 	

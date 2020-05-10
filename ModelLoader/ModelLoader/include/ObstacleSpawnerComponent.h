@@ -42,8 +42,8 @@ private:
 	//Mouse Button used to spawn
 	int m_iSpawnBtn = GLFW_MOUSE_BUTTON_2;
 
-	float m_fSpawnDistance;
-	float m_fObstacleRadius;
+	float m_fSpawnDistance; //Distance from the spawner that we create the obstacle
+	float m_fObstacleRadius; //Radius of the obstacle to create
 
 	const char* m_szName = "Obstacle";
 	
