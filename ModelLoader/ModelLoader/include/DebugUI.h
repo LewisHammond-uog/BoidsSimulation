@@ -27,20 +27,19 @@ struct UIRange
 /// </summary>
 struct UIInputValues
 {
-public:
-	//FORCES									//RANGE(start, min, max)	
-	UIRange<float> fInputContainmentForce		= UIRange<float>(5.f, 0.f, 5.f);
-	UIRange<float> fInputCollisionAvoidForce	= UIRange<float>(5.f, 0.f, 5.f);
-	UIRange<float> fInputSeparationForce		= UIRange<float>(0.f, 0.f, 5.f);
-	UIRange<float> fInputAlignmentForce			= UIRange<float>(0.f, 0.f, 5.f);
-	UIRange<float> fInputCohesionForce			= UIRange<float>(0.f, 0.f, 5.f);
-	UIRange<float> fInputWanderForce			= UIRange<float>(0.f, 0.f, 5.f);
+	//FORCES									//RANGE(start/default, min, max)	
+	UIRange<float> fInputContainmentForce		= UIRange<float>(1.10f, 0.f, 2.f);
+	UIRange<float> fInputCollisionAvoidForce	= UIRange<float>(0.72f, 0.f, 2.f);
+	UIRange<float> fInputSeparationForce		= UIRange<float>(1.029f, 0.f, 1.5f);
+	UIRange<float> fInputAlignmentForce			= UIRange<float>(0.260f, 0.f, 1.5f);
+	UIRange<float> fInputCohesionForce			= UIRange<float>(1.016f, 0.f, 1.5f);
+	UIRange<float> fInputWanderForce			= UIRange<float>(0.247f, 0.f, 1.f);
 	//WANDER SETTINGS
-	UIRange<float> fInputWanderForward			= UIRange<float>(2.f, 0.f, 5.f);
-	UIRange<float> fInputWanderJitter			= UIRange<float>(0.05f, 0.f, 0.2f);
-	UIRange<float> fInputWanderRadius			= UIRange<float>(0.33f, 0.f, 1.f);
+	UIRange<float> fInputWanderForward			= UIRange<float>(5.f, 1.f, 10.f);
+	UIRange<float> fInputWanderJitter			= UIRange<float>(0.025f, 0.001f, 0.1f); //0.001 as we cannot have 0 jitter as we use spehere rand
+	UIRange<float> fInputWanderRadius			= UIRange<float>(0.625f, 0.001f, 2.f); //0.001 as we cannot have a 0 radius sphere
 	//NEIGHBOUR RADIUSS
-	UIRange<float> fInputNeighbourRadius		= UIRange<float>(0.f, 0.f, 5.f);
+	UIRange<float> fInputNeighbourRadius		= UIRange<float>(4.f, 0.01f, 7.5f);
 	//WORLD SETTINGS
 	UIRange<int> iInputWorldBounds				= UIRange<int>(10, 0, 100);
 	UIRange<int> iBoidCount						= UIRange<int>(25, 0, 250);;
