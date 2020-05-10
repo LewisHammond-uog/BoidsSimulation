@@ -89,7 +89,7 @@ void BoidSpawner::SpawnBoid()
 /// <param name="a_iCount">Number of boids to spawn</param>
 void BoidSpawner::SpawnBoids(const unsigned int a_iCount)
 {
-	for (int i = 0; i < a_iCount; ++i)
+	for (unsigned int i = 0; i < a_iCount; ++i)
 	{
 		SpawnBoid();
 	}
@@ -137,7 +137,7 @@ void BoidSpawner::DestroyBoids(const unsigned int a_iCount)
 {
 	//Destroy the given number of boids by destroying the
 	//boid at the start of the linked list
-	for(int i = 0; i < a_iCount; ++i)
+	for(unsigned int  i = 0; i < a_iCount; ++i)
 	{
 		//Get boid at the head of the linked list
 		Entity* currentBoid = m_lpActiveEntities.Search(0);

@@ -19,7 +19,8 @@ typedef Component PARENT;
 /// <param name="a_pCollisionWorld">Collision World this collider exists in</param>
 ColliderComponent::ColliderComponent(Entity* a_pOwner, rp3d::CollisionWorld* a_pCollisionWorld) :
 	PARENT(a_pOwner),
-	m_pCollisionWorld(a_pCollisionWorld)
+	m_pCollisionWorld(a_pCollisionWorld),
+	m_pCollisionBody(nullptr)
 {
 	/*
 	* Create the collision body, used by rp3d at the transform of

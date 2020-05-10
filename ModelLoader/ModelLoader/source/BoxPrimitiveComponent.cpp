@@ -21,7 +21,7 @@ BoxPrimitiveComponent::BoxPrimitiveComponent(Entity* a_pOwner, const glm::vec3 a
 {
 
 	//Set our Primitive type
-	m_ePrimitiveType = PrimitiveTypes::BOX;
+	m_ePrimitiveType = PrimitiveTypes::PRIMITIVE_TYPE_BOX;
 
 }
 

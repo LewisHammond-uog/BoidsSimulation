@@ -20,7 +20,7 @@ SpherePrimitiveComponent::SpherePrimitiveComponent(Entity* a_pOwner, const float
 {
 
 	//Set our Primitive type
-	m_ePrimitiveType = PrimitiveTypes::SPHERE;
+	m_ePrimitiveType = PrimitiveTypes::PRIMITIVE_TYPE_SPHERE;
 }
 
 /// <summary>

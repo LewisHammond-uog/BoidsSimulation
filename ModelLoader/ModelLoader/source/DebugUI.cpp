@@ -125,9 +125,9 @@ void DebugUI::DrawDebugUI()
 	{
 		ImGui::Text("Adjust the world bounds size (Requires Scene Restart)");
 
-		ImGui::SliderInt("World Bounds Size", &m_uiValues.iInputWorldBounds.value, 10.f, 50.f);
+		ImGui::SliderInt("World Bounds Size", &m_uiValues.iInputWorldBounds.value, m_uiValues.iInputWorldBounds.min, m_uiValues.iInputWorldBounds.max);
 		//Boid Count
-		if (ImGui::SliderInt("Boid Count", &m_uiValues.iBoidCount.value, 1.f, 250.f))
+		if (ImGui::SliderInt("Boid Count", &m_uiValues.iBoidCount.value, m_uiValues.iBoidCount.min, m_uiValues.iBoidCount.max))
 		{
 			//This is triggered when our boid count slider changes, when this happens
 			//we call the boid spawner to adjust the number of boids

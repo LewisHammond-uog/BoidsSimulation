@@ -36,9 +36,15 @@ Scene* Scene::s_pSceneInstance = nullptr;
 /// <summary>
 /// Create the scene
 /// </summary>
-Scene::Scene() : Application() {
-	//Init camera
-	m_pCamera = nullptr;
+Scene::Scene() :
+	Application(),
+	m_pCamera(nullptr),
+	m_pSceneCollisionWorld(nullptr),
+	m_bFirstMouse(true),
+	m_ourShader(nullptr),
+	m_fLastX(0.0f),
+	m_fLastY(0.0f)
+{
 }
 
 
@@ -315,7 +321,11 @@ void Scene::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void Scene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	Scene* pScene = GetInstance();
-	if (!pScene && !pScene->m_pCamera) {
+	if (!pScene) {
+		return;
+	}
+	if(!pScene->m_pCamera)
+	{
 		return;
 	}
 
@@ -328,7 +338,11 @@ void Scene::toggle_mouse_input_mode(GLFWwindow* window, int button, int action, 
 {
 
 	Scene* pScene = GetInstance();
-	if (!pScene && !pScene->m_pCamera) {
+	if (!pScene) {
+		return;
+	}
+	if(!pScene->m_pCamera)
+	{
 		return;
 	}
 

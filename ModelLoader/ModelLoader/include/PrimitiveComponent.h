@@ -28,10 +28,12 @@ protected:
 	explicit PrimitiveComponent(Entity* a_pOwner);
 	~PrimitiveComponent() = default;
 
-	enum PrimitiveTypes
+	enum class PrimitiveTypes
 	{
-		SPHERE,
-		BOX,
+		PRIMITIVE_TYPE_SPHERE,
+		PRIMITIVE_TYPE_BOX,
+
+		PRIMITIVE_TYPE_COUNT //Number of primitive types
 	};
 
 	//Type of Primitive that we are

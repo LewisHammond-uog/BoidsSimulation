@@ -7,7 +7,8 @@ typedef Component PARENT;
 /// Create a primitive, shared function between all primatives
 /// </summary>
 /// <param name="a_pOwner"></param>
-PrimitiveComponent::PrimitiveComponent(Entity* a_pOwner) : PARENT(a_pOwner)
+PrimitiveComponent::PrimitiveComponent(Entity* a_pOwner) : PARENT(a_pOwner),
+	m_v4DrawColour(glm::vec4(0,0,0,1))
 {
 }
 

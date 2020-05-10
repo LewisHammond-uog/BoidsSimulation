@@ -1,0 +1,7 @@
+CONTROLS:
+
+Use WASD to move the camera while LEFT CLICK is held
+Hold LEFT CLICK to rotate the camera
+Hold RIGHT CLICK to preview and release to place an obstacle
+
+Camera movement is disabled while the mouse is interacting with the UI

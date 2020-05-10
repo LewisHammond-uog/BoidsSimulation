@@ -36,7 +36,8 @@ CameraComponent::CameraComponent(Entity* a_pOwner, GLFWwindow* a_pWindow, glm::v
 	m_fMovementSpeed(sc_fDefaultSpeed),
 	m_fZoom(sc_fDefaultZoom),
 	m_fMouseSensitivity(sc_fDefaultSensitivity),
-	m_v3WorldUp(a_v3Up)
+	m_v3WorldUp(a_v3Up),
+	m_pCameraTransform(a_pOwner->GetComponent<TransformComponent*>())
 {
 	//Get our Transform and apply position and up values
 	if(a_pOwner)
