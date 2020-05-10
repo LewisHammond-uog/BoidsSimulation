@@ -25,6 +25,7 @@ public:
 
 	void Push(T* a_pData);
 	void Pop(T* a_pData);
+	T* Search(unsigned int a_iPos);
 	void Clear();
 	
 private:
@@ -122,6 +123,34 @@ void DoubleLinkedList<T>::Pop(T* a_pData)
 }
 
 /// <summary>
+/// Searches for a boid at a given position in the list
+/// </summary>
+template <class T>
+T* DoubleLinkedList<T>::Search(const unsigned int a_iPos)
+{
+	Node* pCurrentNode = m_pHead;
+
+	//Loop through the list to find node at index,
+	//while we still have nodes in the list
+	unsigned int iCurrentIndex = 0;
+	while (pCurrentNode != nullptr)
+	{
+		//Found
+		if(iCurrentIndex == a_iPos)
+		{
+			return pCurrentNode->m_pData;
+		}
+
+		//Not found increment and contiue looping
+		iCurrentIndex++;
+		pCurrentNode = pCurrentNode->m_pNext;
+	}
+
+	//No node at the given position int the list (i.e over list size)
+	return nullptr;
+}
+
+/// <summary>
 /// Deletes all of the nodes in the list
 /// </summary>
 template <class T>
@@ -135,6 +164,9 @@ void DoubleLinkedList<T>::Clear()
 		delete currentNode;
 		currentNode = nextNode;	
 	}
+	
+	//Clear head
+	m_pHead = nullptr;
 }
 
 
