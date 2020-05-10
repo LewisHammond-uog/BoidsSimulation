@@ -6,6 +6,7 @@
 //Project Includes
 #include "Scene.h"
 #include "MathsUtils.h"
+#include "DebugUI.h"
 //Colliders
 #include "ColliderComponent.h"
 #include "BrainComponent.h"
@@ -42,15 +43,19 @@ void BoidSpawner::SpawnBoid()
 	{
 		return;
 	}
+
+	//Get the spawn bounds, the world size minus the padding
+	const float fWorldSize = DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds.value;
+	const float fSpawnBounds = fWorldSize - m_fSpawnMargin;
 	
 	Entity* pEntity = new Entity();
 	pEntity->SetEntityType(ENTITY_TYPE::ENTITY_TYPE_BOID);
 
 	//Transform Component
 	TransformComponent* pTransform = new TransformComponent(pEntity);
-	pTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, glm::vec3(MathsUtils::RandomRange(-5.0f, 5.0f),
-		MathsUtils::RandomRange(-5.0f, 5.0f),
-		MathsUtils::RandomRange(-5.0f, 5.0f)));
+	pTransform->SetEntityMatrixRow(MATRIX_ROW::POSITION_VECTOR, glm::vec3(MathsUtils::RandomRange(-fSpawnBounds, fSpawnBounds),
+																		MathsUtils::RandomRange(-fSpawnBounds, fSpawnBounds),
+																		MathsUtils::RandomRange(-fSpawnBounds, fSpawnBounds)));
 	pEntity->AddComponent(pTransform);
 
 	//Model Component
@@ -128,7 +133,7 @@ void BoidSpawner::DestroyBoid(Entity* a_pEntity)
 /// Destroy a given number of boids
 /// </summary>
 /// <param name="a_iCount"></param>
-void BoidSpawner::DestroyBoids(const unsigned a_iCount)
+void BoidSpawner::DestroyBoids(const unsigned int a_iCount)
 {
 	//Destroy the given number of boids by destroying the
 	//boid at the start of the linked list

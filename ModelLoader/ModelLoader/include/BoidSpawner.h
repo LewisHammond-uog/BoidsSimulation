@@ -4,7 +4,6 @@
 
 //C++ Includes
 #include <vector>
-#include <map>
 
 //React Physics incluides
 #include "ReactPhysics3D/reactphysics3d.h"
@@ -15,6 +14,9 @@
 //Forward Declares
 class Model;
 
+/// <summary>
+/// Class to spawn boids within the world
+/// </summary>
 class BoidSpawner : public Singleton<BoidSpawner>
 {
 	friend class Singleton<BoidSpawner>;
@@ -39,6 +41,9 @@ private:
 
 	void LoadAllModels();
 
+	//Margin from the world edges to spawn
+	const float m_fSpawnMargin = 1.0f;
+	
 	//Linked list of all of the boids
 	DoubleLinkedList<Entity> m_lpActiveEntities;
 	
