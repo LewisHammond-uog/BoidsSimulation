@@ -22,7 +22,10 @@ public:
 	void SpawnBoid();
 	void SpawnBoids(unsigned int a_iCount);
 
+	void AdjustBoidCount(unsigned int a_iTargetCount);
+	
 	void DestroyBoid(Entity* a_pEntity);
+	void DestroyBoids(unsigned int a_iCount);
 	
 	void UnloadAllModels();
 private:
@@ -32,7 +35,7 @@ private:
 	void LoadAllModels();
 
 	//Linked list of all of the boids
-	DoubleLinkedList<Entity> m_lpeActiveEntities;
+	DoubleLinkedList<Entity> m_lpActiveEntities;
 	
 	//Number of boids
 	unsigned int m_iBoidCount;
@@ -45,5 +48,7 @@ private:
 	const int m_iModelCount = 15;
 	std::vector<Model*> m_vpLoadedModels;
 };
+
+
 
 #endif //!__BOID_SPAWNER_H__

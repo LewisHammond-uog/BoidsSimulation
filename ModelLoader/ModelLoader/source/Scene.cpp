@@ -102,7 +102,7 @@ bool Scene::Initialize(const bool a_bInitApplication){
 	GenerateBoundsVolume(DebugUI::GetInstance()->GetUIInputValues()->iInputWorldBounds);
 	
 	//Create boids
-	BoidSpawner::GetInstance()->SpawnBoids(100);
+	BoidSpawner::GetInstance()->SpawnBoids(DebugUI::GetInstance()->GetUIInputValues()->iBoidCount);
 	
 	return true;
 }

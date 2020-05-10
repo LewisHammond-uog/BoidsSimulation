@@ -137,9 +137,6 @@
     <ClInclude Include="include\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -193,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="include\DoubleLinkedList.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\resource.h">
+      <Filter>Header Files\Deps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

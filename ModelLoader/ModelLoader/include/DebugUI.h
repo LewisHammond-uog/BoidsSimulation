@@ -43,6 +43,7 @@ public:
 	float fInputNeighbourRadius = 5.0f;
 	//WORLD SETTINGS
 	int iInputWorldBounds = 10;
+	int iBoidCount = 10;
 	//DEBUG
 	bool bShowColliders = false;
 };

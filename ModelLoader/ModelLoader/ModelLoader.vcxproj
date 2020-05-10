@@ -45,14 +45,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)deps\include;$(ProjectDir)include;$(ProjectDir)source;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>$(ProjectDir)\Build\$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(ProjectDir)\bin\$(Configuration)_$(Platform)\</IntDir>
+    <OutDir>$(ProjectDir)Build\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)bin\$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)deps\include;$(ProjectDir)include;$(ProjectDir)source;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>$(ProjectDir)\Build\$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(ProjectDir)\bin\$(Configuration)_$(Platform)\</IntDir>
+    <OutDir>$(ProjectDir)Build\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)bin\$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

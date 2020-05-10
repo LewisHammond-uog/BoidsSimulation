@@ -33,7 +33,7 @@ BoidSpawner::~BoidSpawner()
 {
 	//Remove all of the boids from the linked list
 	//entity cleanup is dealt with by the scene
-	m_lpeActiveEntities.Clear();
+	m_lpActiveEntities.Clear();
 }
 
 
@@ -72,14 +72,16 @@ void BoidSpawner::SpawnBoid()
 	pEntity->AddComponent(pRayCaster);
 
 	//Add to linked list
-	m_lpeActiveEntities.Push(pEntity);
+	m_lpActiveEntities.Push(pEntity);
+
+	++m_iBoidCount;
 }
 
 /// <summary>
 /// Spawn a given number of boids
 /// </summary>
 /// <param name="a_iCount">Number of boids to spawn</param>
-void BoidSpawner::SpawnBoids(unsigned int a_iCount)
+void BoidSpawner::SpawnBoids(const unsigned int a_iCount)
 {
 	for (int i = 0; i < a_iCount; ++i)
 	{
@@ -88,15 +90,63 @@ void BoidSpawner::SpawnBoids(unsigned int a_iCount)
 }
 
 /// <summary>
+/// Adjusts the boid count based on a target count of boids.
+/// Compares the target to the current count and spawns or
+/// destroy boids to get to this target
+/// </summary>
+/// <param name="a_iTargetCount"></param>
+void BoidSpawner::AdjustBoidCount(const unsigned int a_iTargetCount)
+{
+	const int iCountDiff = a_iTargetCount - m_iBoidCount;
+
+	//If we have too few boids spawn them, otherwise destroy
+	if(iCountDiff > 0)
+	{
+		SpawnBoids(iCountDiff);
+	}else if(iCountDiff < 0)
+	{
+		DestroyBoids(abs(iCountDiff));
+	}
+}
+
+/// <summary>
 /// Destroy a boid
 /// </summary>
-/// <param name="m_pEntity"></param>
+/// <param name="a_pEntity">Boid to destroy</param>
 void BoidSpawner::DestroyBoid(Entity* a_pEntity)
 {
 	//Remove the entity from the linked list
-	m_lpeActiveEntities.Pop(a_pEntity);
+	m_lpActiveEntities.Pop(a_pEntity);
+	
 	//Delete Entity
 	delete a_pEntity;
+	--m_iBoidCount;
+}
+
+/// <summary>
+/// Destroy a given number of boids
+/// </summary>
+/// <param name="a_iCount"></param>
+void BoidSpawner::DestroyBoids(const unsigned a_iCount)
+{
+	//Destroy the given number of boids by destroying the
+	//boid at the start of the linked list
+	for(int i = 0; i < a_iCount; ++i)
+	{
+		//Get boid at the head of the linked list
+		Entity* currentBoid = m_lpActiveEntities.Search(0);
+
+		//If the boid is a nullptr then the list is empty and thus we cannot destory
+		//anymore boids
+		if(currentBoid == nullptr)
+		{
+			return;
+		}
+
+		//Remove from Linked List and Destroy
+		m_lpActiveEntities.Pop(currentBoid);
+		DestroyBoid(currentBoid);
+	}
 }
 
 /// <summary>

@@ -8,6 +8,7 @@
 #include <iostream>
 
 //Project Includes
+#include "BoidSpawner.h"
 #include "Scene.h"
 
 //Default Values
@@ -78,6 +79,7 @@ void DebugUI::Update() {
 		ImGui::SliderFloat("Cohension Force Weight", &m_uiValues.fInputCohesionForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 		ImGui::SliderFloat("Wander Force Weight", &m_uiValues.fInputWanderForce, mc_fMinForceWeight, mc_fMaxForceWeight);
 
+		//Wander Settings
 		if(ImGui::CollapsingHeader("Wander Settings"))
 		{
 			ImGui::Text("Settings for the sphere that is projected in front of the sphere.");
@@ -86,12 +88,23 @@ void DebugUI::Update() {
 			ImGui::SliderFloat("Sphere Jitter", &m_uiValues.fInputWanderJitter, 0.01f, 5.f);
 			ImGui::SliderFloat("Sphere Radius", &m_uiValues.fInputWanderRadius, 0.01f, 5.f);
 		}
+
+		
 	}
 
+	//World Settings
 	if(ImGui::CollapsingHeader("World Settings"))
 	{
 		ImGui::Text("Adjust the world bounds size (Requires Scene Restart)");
+		
 		ImGui::SliderInt("World Bounds Size", &m_uiValues.iInputWorldBounds, 10.f, 50.f);
+		//Boid Count
+		if(ImGui::SliderInt("Boid Count", &m_uiValues.iBoidCount, 1.f, 250.f))
+		{
+			//This is triggered when our boid count slider changes, when this happens
+			//we call the boid spawner to adjust the number of boids
+			BoidSpawner::GetInstance()->AdjustBoidCount(m_uiValues.iBoidCount);
+		}
 	}
 
 	//End the drawing of the window
